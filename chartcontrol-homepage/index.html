@@ -7,9 +7,7 @@
 <meta name="description" content="ChartControl is an AI-native trading terminal. It reads the chart you are looking at and marks entry, invalidation and reward-to-risk on screen. Live on KuCoin and BitMart. Non-custodial by design.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script>(function(){try{var t=localStorage.getItem('cc-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
 <style>
@@ -47,7 +45,7 @@
   --grain-op:.32;
   --grain-invert:0;
   --field-op:.5;
-  --shadow-ink:var(--shadow-ink);
+  --shadow-ink:0 26px 64px -30px rgba(0,0,0,.92);
   --foot-bg:rgba(0,0,0,.32);
   --ov012:rgba(255,255,255,.012);
   --ov015:rgba(255,255,255,.015);
@@ -278,7 +276,7 @@ body{transition:background-color .45s ease,color .45s ease}
 .hero-lede{margin-top:24px;font-size:17.5px;line-height:1.62;color:var(--steel);max-width:50ch}
 .hero-lede b{color:var(--bone);font-weight:600}
 .hero-actions{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.hero-note{margin-top:15px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--dim)}
+.hero-note{margin-top:15px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--steel)}
 
 /* hero stat panel */
 .hstat{padding:22px 22px 20px}
@@ -290,22 +288,36 @@ body{transition:background-color .45s ease,color .45s ease}
 .hstat-foot .ic{width:15px;height:15px;color:var(--mag);margin-top:2px;stroke-width:1.9}
 .hstat-foot b{color:var(--bone);font-weight:600}
 
+html[data-theme="light"] .grad{background:linear-gradient(94deg,#171412 6%,var(--mag-deep) 52%,var(--mag) 96%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 /* ============ 3D object stage ============ */
 .stage3d{perspective:1000px;perspective-origin:50% 42%;height:290px;position:relative;margin-bottom:6px}
-.obj3d{position:absolute;inset:0;transform-style:preserve-3d;animation:spin 30s linear infinite}
-@keyframes spin{from{transform:rotateX(-16deg) rotateY(0)}to{transform:rotateX(-16deg) rotateY(360deg)}}
+.obj3d{position:absolute;inset:0;transform-style:preserve-3d;animation:spin 19s ease-in-out infinite alternate}
+@keyframes spin{from{transform:rotateX(-15deg) rotateY(-26deg)}to{transform:rotateX(-15deg) rotateY(26deg)}}
 .bar3d{position:absolute;left:50%;top:50%;width:16px;border-radius:3px;transform-style:preserve-3d;
   box-shadow:0 0 22px rgba(240,15,240,.34)}
 .bar3d span{position:absolute;left:50%;width:1.5px;background:var(--ov42);transform:translateX(-50%)}
 .floor3d{position:absolute;left:50%;top:76%;width:520px;height:520px;margin-left:-260px;
   transform:rotateX(76deg);transform-origin:center top;
-  background-image:linear-gradient(rgba(240,15,240,.30) 1px,transparent 1px),linear-gradient(90deg,rgba(240,15,240,.30) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(240,15,240,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(240,15,240,.15) 1px,transparent 1px);
   background-size:44px 44px;
   mask-image:radial-gradient(circle at 50% 50%,#000 12%,transparent 62%);
   -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 12%,transparent 62%)}
 .ring3d{position:absolute;left:50%;top:50%;width:340px;height:340px;margin:-170px 0 0 -170px;
-  border:1px solid rgba(240,15,240,.28);border-radius:50%;transform:rotateX(78deg);
+  border:1px solid rgba(240,15,240,.18);border-radius:50%;transform:rotateX(78deg);
   box-shadow:0 0 40px rgba(240,15,240,.2) inset}
+
+/* the 3D stage states the product promise: three marked levels cut across the candles */
+.lvl3d{position:absolute;left:6%;top:50%;width:54%;height:1px;
+  background:linear-gradient(90deg,transparent,currentColor 12%,currentColor 88%,transparent);
+  box-shadow:0 0 12px currentColor;opacity:.92}
+.lvl3d b{position:absolute;left:100%;top:-11px;margin-left:10px;font-family:var(--font-mono);
+  font-size:10.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;color:currentColor;
+  padding:3px 7px;border-radius:2px;background:rgba(7,7,11,.78);
+  border:1px solid currentColor;text-shadow:none}
+.lvl3d--e{color:var(--up)}
+.lvl3d--s{color:var(--dn)}
+.lvl3d--t{color:var(--mag-soft)}
+.bar3d--ai{box-shadow:0 0 30px rgba(240,15,240,.5)}
 
 /* ============ marquee ticker ============ */
 .tape{margin-top:56px;border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);
@@ -723,7 +735,7 @@ body{overflow-x:clip}
   --axis:var(--chart-axis-text); --cross-dot:var(--color-text-primary); --cross-ring:var(--color-bg-app);
   --scroll-track:var(--color-bg-surface); --scroll-thumb:var(--color-border-default);
   --shadow-ink:var(--color-border-strong);
-  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:var(--font-mono);
+  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:"JetBrains Mono","IBM Plex Mono","SFMono-Regular",Consolas,monospace;
 }
 </style>
 <style id="brand-pin">
@@ -1059,13 +1071,16 @@ body{overflow-x:clip}
       <aside>
         <div class="stage3d" aria-hidden="true">
           <div class="floor3d"></div>
-          <div class="obj3d">
+                    <div class="obj3d">
             <div class="ring3d"></div>
-            <div class="bar3d" style="height:52px;margin:-26px 0 0 -74px;transform:translateZ(-96px) rotateY(0deg);background:linear-gradient(180deg,var(--brand-primary-300),#0B7C8C)"><span style="top:-14px;height:14px"></span></div>
-            <div class="bar3d" style="height:104px;margin:-52px 0 0 -38px;transform:translateZ(-30px);background:linear-gradient(180deg,#25D07A,#0B6B44)"><span style="top:-16px;height:16px"></span></div>
-            <div class="bar3d" style="height:150px;margin:-75px 0 0 0;transform:translateZ(38px);background:linear-gradient(180deg,#FF6BFF,#A800A8)"><span style="top:-20px;height:20px"></span></div>
-            <div class="bar3d" style="height:86px;margin:-43px 0 0 38px;transform:translateZ(102px);background:linear-gradient(180deg,#25D07A,#0B6B44)"><span style="top:-14px;height:14px"></span></div>
-            <div class="bar3d" style="height:64px;margin:-32px 0 0 76px;transform:translateZ(166px);background:linear-gradient(180deg,#7C5CFF,#3A2496)"><span style="top:-12px;height:12px"></span></div>
+            <div class="bar3d" style="height:58px;margin:-29px 0 0 -74px;transform:translateZ(-96px);background:linear-gradient(180deg,#25D07A,#0B6B44)"><span style="top:-15px;height:15px"></span></div>
+            <div class="bar3d" style="height:96px;margin:-48px 0 0 -38px;transform:translateZ(-30px);background:linear-gradient(180deg,#FF4D6A,#8A1F31)"><span style="top:-14px;height:14px"></span></div>
+            <div class="bar3d bar3d--ai" style="height:162px;margin:-81px 0 0 0;transform:translateZ(38px);background:linear-gradient(180deg,#FF6BFF,#A800A8)"><span style="top:-21px;height:21px"></span></div>
+            <div class="bar3d" style="height:104px;margin:-52px 0 0 38px;transform:translateZ(102px);background:linear-gradient(180deg,#25D07A,#0B6B44)"><span style="top:-16px;height:16px"></span></div>
+            <div class="bar3d" style="height:72px;margin:-36px 0 0 76px;transform:translateZ(166px);background:linear-gradient(180deg,#FF4D6A,#8A1F31)"><span style="top:-13px;height:13px"></span></div>
+            <div class="lvl3d lvl3d--t" style="transform:translateZ(60px) translateY(-74px)"><b>TARGET 65,980</b></div>
+            <div class="lvl3d lvl3d--e" style="transform:translateZ(0) translateY(-30px)"><b>ENTRY 64,294</b></div>
+            <div class="lvl3d lvl3d--s" style="transform:translateZ(-40px) translateY(6px)"><b>INVALIDATION 63,180</b></div>
           </div>
         </div>
         <div class="glass hstat">
