@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design options — ChartControl chart page</title>
+<meta name="description" content="Visual and motion options for the ChartControl chart page. Pick by letter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --void:#07070B; --void-2:#0B0B12; --panel:rgba(255,255,255,.032);
+  --edge:rgba(255,255,255,.085); --edge-2:rgba(255,255,255,.16);
+  --mag:#F00FF0; --violet:#7C5CFF; --cyan:var(--brand-primary-300); --up:#25D07A; --dn:#FF4D6A;
+  --bone:#F2F3F7; --steel:#A7AEBD; --slate:#7A8292; --dim:#7E879A;
+  --btn-fg:#07070B; --shell:1280px; --gut:34px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--void);color:var(--bone);font-family:'Public Sans',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.5}
+h1,h2,h3,h4{font-family:Archivo,sans-serif;letter-spacing:-.02em;margin:0}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:var(--shell);margin:0 auto;padding:0 var(--gut)}
+header.top{padding:64px 0 30px;border-bottom:1px solid var(--edge)}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mag);margin-bottom:14px}
+h1{font-size:clamp(30px,4.4vw,52px);font-weight:800;line-height:1.04}
+header.top p{color:var(--steel);max-width:74ch;margin:16px 0 0;font-size:15px}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;font-size:12px;color:var(--dim)}
+.legend b{color:var(--steel);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;padding:34px 0 70px}
+.card{border:1px solid var(--edge);border-radius:18px;background:var(--panel);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .3s,transform .4s cubic-bezier(.22,.9,.3,1)}
+.card:hover{border-color:var(--edge-2);transform:translateY(-3px)}
+.pv{height:208px;position:relative;overflow:hidden;background:var(--void-2);border-bottom:1px solid var(--edge);isolation:isolate}
+.pv .mock{position:absolute;inset:0;display:flex;flex-direction:column}
+.meta{padding:17px 19px 20px}
+.tagline{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.letter{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#0C0E15;background:var(--mag);
+  width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex:none}
+.meta h3{font-size:16.5px;font-weight:700}
+.meta p{margin:7px 0 0;font-size:13px;color:var(--steel);line-height:1.6}
+.fit{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:10.5px;letter-spacing:.04em;border:1px solid var(--edge);border-radius:7px;padding:4px 8px;color:var(--slate)}
+.chip.ok{color:var(--up);border-color:rgba(37,208,122,.4)}
+.chip.warn{color:var(--dn);border-color:rgba(255,77,106,.35)}
+.chip.mag{color:var(--mag);border-color:rgba(240,15,240,.4)}
+.combo{border:1px solid var(--edge);border-radius:18px;background:var(--panel);padding:26px;margin-bottom:70px}
+.combo h3{font-size:17px;margin-bottom:12px}
+.combo ul{margin:0;padding-left:20px;color:var(--steel);font-size:13.5px;line-height:1.85}
+.combo b{color:var(--bone)}
+footer{border-top:1px solid var(--edge);padding:30px 0 44px;color:var(--dim);font-size:12.5px}
+
+/* ============ A · AURORA MESH ============ */
+.pvA::before{content:"";position:absolute;inset:-25%;z-index:0;
+  background:
+    radial-gradient(38% 52% at 24% 28%,rgba(240,15,240,.55),transparent 62%),
+    radial-gradient(34% 48% at 76% 32%,rgba(124,92,255,.55),transparent 64%),
+    radial-gradient(44% 44% at 52% 92%,rgba(59,232,255,.36),transparent 66%);
+  filter:blur(26px);animation:aurora 15s ease-in-out infinite alternate}
+@keyframes aurora{0%{transform:translate3d(-3%,-2%,0) scale(1.03)}100%{transform:translate3d(3%,3%,0) scale(1.1)}}
+.pvA .panelglass{position:absolute;left:16px;right:16px;top:24px;bottom:24px;z-index:1;border-radius:12px;
+  border:1px solid var(--edge-2);background:rgba(7,7,11,.55);backdrop-filter:blur(7px)}
+.pvA .bars{position:absolute;left:34px;right:34px;top:52px;height:106px;z-index:2;display:flex;align-items:flex-end;gap:6px}
+.pvA .bars i{flex:1;background:linear-gradient(180deg,var(--mag),rgba(240,15,240,.15));border-radius:3px;display:block}
+
+/* ============ B · NEON GRID FLOOR ============ */
+.pvB .floor{position:absolute;left:-40%;right:-40%;top:46%;bottom:-55%;
+  background-image:
+    repeating-linear-gradient(90deg,rgba(240,15,240,.55) 0 1px,transparent 1px 54px),
+    repeating-linear-gradient(0deg,rgba(59,232,255,.42) 0 1px,transparent 1px 54px);
+  transform:perspective(240px) rotateX(64deg);transform-origin:50% 0;
+  animation:gridrun 3.6s linear infinite}
+@keyframes gridrun{to{background-position:0 54px,0 54px}}
+.pvB .sun{position:absolute;left:50%;top:34%;width:150px;height:150px;transform:translate(-50%,-50%);
+  border-radius:50%;background:radial-gradient(circle,rgba(240,15,240,.55),transparent 68%);filter:blur(10px)}
+.pvB .hl{position:absolute;left:0;right:0;top:46%;height:1px;background:linear-gradient(90deg,transparent,var(--mag),transparent);opacity:.85}
+
+/* ============ C · GLASS DEPTH ============ */
+.pvC .stack{position:absolute;inset:0;display:grid;place-items:center}
+.pvC .lay{position:absolute;border-radius:12px;border:1px solid var(--edge-2);
+  background:linear-gradient(140deg,rgba(255,255,255,.10),rgba(255,255,255,.02));backdrop-filter:blur(6px);
+  box-shadow:0 22px 54px -20px rgba(0,0,0,.8)}
+.pvC .l1{width:66%;height:118px;transform:translate3d(-24px,10px,0) rotate(-4deg);opacity:.55}
+.pvC .l2{width:66%;height:118px;transform:translate3d(-10px,4px,0) rotate(-1.5deg);opacity:.75}
+.pvC .l3{width:66%;height:118px;transform:translate3d(6px,-4px,0) rotate(1.5deg)}
+.pvC .l3::after{content:"";position:absolute;left:14px;right:14px;top:16px;height:5px;border-radius:3px;
+  background:linear-gradient(90deg,var(--mag),transparent)}
+.pvC .l3::before{content:"";position:absolute;left:14px;right:34%;bottom:16px;height:5px;border-radius:3px;background:var(--edge-2)}
+
+/* ============ D · BEAM SWEEP ============ */
+.pvD .beam{position:absolute;top:-60%;bottom:-60%;width:170px;left:-30%;
+  background:linear-gradient(90deg,transparent,rgba(240,15,240,.34),rgba(255,255,255,.10),transparent);
+  transform:rotate(16deg);filter:blur(12px);animation:beam 4.4s ease-in-out infinite}
+@keyframes beam{0%{left:-34%}55%{left:112%}100%{left:112%}}
+.pvD .rows{position:absolute;inset:24px;display:flex;flex-direction:column;justify-content:center;gap:11px}
+.pvD .row{height:13px;border-radius:6px;background:var(--edge)}
+
+/* ============ E · SCANLINE TERMINAL ============ */
+.pvE .scan{position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.055) 0 1px,transparent 1px 3px);
+  animation:scanslide 8s linear infinite}
+@keyframes scanslide{to{background-position:0 3px}}
+.pvE .vig{position:absolute;inset:0;background:radial-gradient(72% 72% at 50% 50%,transparent 42%,rgba(0,0,0,.78))}
+.pvE .code{position:absolute;left:22px;top:22px;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+  line-height:1.85;color:var(--up);text-shadow:0 0 8px rgba(37,208,122,.6)}
+.pvE .code i{color:var(--cyan);font-style:normal}
+
+/* ============ F · DOT MATRIX ============ */
+.pvF .dots{position:absolute;inset:0;
+  background-image:radial-gradient(rgba(167,174,189,.5) 1px,transparent 1.4px);
+  background-size:15px 15px;animation:dotdrift 16s linear infinite}
+@keyframes dotdrift{to{background-position:15px 15px}}
+.pvF .glowdot{position:absolute;left:50%;top:50%;width:230px;height:230px;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(240,15,240,.42),transparent 62%);mix-blend-mode:screen;filter:blur(6px)}
+
+/* ============ G · CHART PULSE GLOW ============ */
+.pvG .card2{position:absolute;inset:22px;border-radius:12px;background:rgba(7,7,11,.72);border:1px solid var(--edge-2);
+  animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 1px rgba(37,208,122,.55),0 0 26px rgba(37,208,122,.28)}
+  50%{box-shadow:0 0 0 1px rgba(240,15,240,.7),0 0 38px rgba(240,15,240,.42)}}
+.pvG .bars2{position:absolute;left:40px;right:40px;bottom:44px;height:80px;display:flex;align-items:flex-end;gap:5px}
+.pvG .bars2 i{flex:1;border-radius:2px;display:block}
+
+/* ============ H · STARFIELD PARALLAX ============ */
+.pvH .sf,.pvH .sf2,.pvH .sf3{position:absolute;inset:-50%;
+  background-image:radial-gradient(#fff 1px,transparent 1.3px);background-size:70px 70px;opacity:.5}
+.pvH .sf{animation:star 22s linear infinite;background-size:110px 110px;opacity:.32}
+.pvH .sf2{animation:star 14s linear infinite}
+.pvH .sf3{animation:star 8s linear infinite;background-size:44px 44px;opacity:.22}
+@keyframes star{to{transform:translate3d(70px,70px,0)}}
+.pvH .core{position:absolute;left:50%;top:50%;width:120px;height:120px;transform:translate(-50%,-50%);
+  border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.6),transparent 66%);filter:blur(8px)}
+
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){
+  .pvA::before,.pvB .floor,.pvD .beam,.pvE .scan,.pvF .dots,.pvG .card2,.pvH .sf,.pvH .sf2,.pvH .sf3{animation:none}
+}
+</style>
+<style id="product-tokens">
+:root{
+
+  /* ---------- BRAND TOKENS (기본: Institutional Cool) ---------- */
+  --brand-primary-50:  oklch(96% 0.02 220);
+  --brand-primary-100: oklch(90% 0.04 220);
+  --brand-primary-200: oklch(80% 0.08 220);
+  --brand-primary-300: oklch(70% 0.11 220);
+  --brand-primary-400: oklch(62% 0.13 220);
+  --brand-primary-500: oklch(56% 0.15 220);   /* signature cyan */
+  --brand-primary-600: oklch(48% 0.14 220);
+  --brand-primary-700: oklch(38% 0.11 220);
+  --brand-primary-800: oklch(28% 0.08 220);
+  --brand-primary-900: oklch(20% 0.05 220);
+
+  --brand-accent-500: oklch(78% 0.13 210);    /* light cyan (highlight) */
+  --brand-neutral-hue: 240;                    /* cool blue-gray */
+
+  /* ---------- LONG / SHORT (기본: Teal / Magenta) ---------- */
+  --trade-long-500:  oklch(72% 0.14 175);
+  --trade-long-400:  oklch(78% 0.12 175);
+  --trade-long-600:  oklch(64% 0.15 175);
+  --trade-long-bg:   oklch(72% 0.14 175 / 0.12);
+  --trade-long-bg-2: oklch(72% 0.14 175 / 0.25);
+
+  --trade-short-500: oklch(68% 0.22 355);
+  --trade-short-400: oklch(74% 0.20 355);
+  --trade-short-600: oklch(60% 0.24 355);
+  --trade-short-bg:  oklch(68% 0.22 355 / 0.12);
+  --trade-short-bg-2:oklch(68% 0.22 355 / 0.25);
+
+  /* ---------- AI / SIGNAL (팔레트 독립) ---------- */
+  --ai-500: oklch(72% 0.15 285);
+  --ai-400: oklch(78% 0.13 285);
+  --ai-600: oklch(64% 0.16 285);
+  --ai-bg:  oklch(72% 0.15 285 / 0.10);
+  --ai-bg-2: oklch(72% 0.15 285 / 0.22);
+
+  --signal-draft:    var(--ai-500);
+  --signal-approved: oklch(78% 0.14 145);
+  --order-pending:   oklch(80% 0.13 85);
+  --order-filled:    oklch(75% 0.13 145);
+  --order-canceled:  oklch(60% 0.02 240);
+  --order-rejected:  var(--trade-short-500);
+
+  --warning-500: oklch(80% 0.14 75);
+  --danger-500:  oklch(64% 0.20 25);
+  --success-500: oklch(74% 0.14 150);
+  --info-500:    var(--brand-primary-500);
+
+  /* ---------- NEUTRALS (Dark 기본) ---------- */
+  --n-950: oklch(14% 0.012 240);
+  --n-925: oklch(17% 0.013 240);
+  --n-900: oklch(20% 0.014 240);
+  --n-850: oklch(24% 0.014 240);
+  --n-800: oklch(28% 0.013 240);
+  --n-700: oklch(38% 0.012 240);
+  --n-600: oklch(48% 0.010 240);
+  --n-500: oklch(58% 0.008 240);
+  --n-400: oklch(68% 0.006 240);
+  --n-300: oklch(78% 0.005 240);
+  --n-200: oklch(86% 0.004 240);
+  --n-100: oklch(92% 0.003 240);
+  --n-050: oklch(97% 0.002 240);
+  --n-000: oklch(100% 0 0);
+
+  /* ---------- SEMANTIC — Dark theme (default) ---------- */
+  --color-bg-app:       var(--n-950);
+  --color-bg-surface:   var(--n-925);
+  --color-bg-panel:     var(--n-900);
+  --color-bg-elevated:  var(--n-850);
+  --color-bg-hover:     oklch(28% 0.014 240 / 0.6);
+  --color-bg-active:    oklch(32% 0.016 240 / 0.7);
+  --color-bg-input:     var(--n-925);
+
+  --color-text-primary:   var(--n-050);
+  --color-text-secondary: var(--n-300);
+  --color-text-tertiary:  var(--n-500);
+  --color-text-disabled:  var(--n-700);
+  --color-text-inverse:   var(--n-950);
+
+  --color-border-subtle:  oklch(28% 0.014 240 / 0.6);
+  --color-border-default: oklch(38% 0.014 240 / 0.7);
+  --color-border-strong:  oklch(48% 0.014 240 / 0.9);
+  --color-border-focus:   var(--brand-primary-500);
+
+  --color-brand:          var(--brand-primary-500);
+  --color-brand-hover:    var(--brand-primary-400);
+  --color-brand-subtle:   oklch(56% 0.15 220 / 0.14);
+
+  --color-trade-long:     var(--trade-long-500);
+  --color-trade-short:    var(--trade-short-500);
+  --color-trade-long-bg:  var(--trade-long-bg);
+  --color-trade-short-bg: var(--trade-short-bg);
+
+  --color-ai:             var(--ai-500);
+  --color-ai-bg:          var(--ai-bg);
+  --color-signal-draft:   var(--signal-draft);
+  --color-signal-approved:var(--signal-approved);
+  --color-order-pending:  var(--order-pending);
+  --color-order-filled:   var(--order-filled);
+  --color-order-canceled: var(--order-canceled);
+  --color-order-rejected: var(--order-rejected);
+
+  --color-warning: var(--warning-500);
+  --color-danger:  var(--danger-500);
+  --color-success: var(--success-500);
+  --color-info:    var(--info-500);
+
+  /* ---------- CHART COLORS ---------- */
+  --chart-grid:       oklch(28% 0.014 240 / 0.5);
+  --chart-axis-text:  var(--n-500);
+  --chart-crosshair:  oklch(70% 0.03 240 / 0.6);
+  --chart-candle-up:  var(--color-trade-long);
+  --chart-candle-dn:  var(--color-trade-short);
+  --chart-ma-1:       oklch(80% 0.13 85);   /* MA20 amber */
+  --chart-ma-2:       oklch(78% 0.13 285);  /* MA60 violet */
+  --chart-ma-3:       oklch(76% 0.13 210);  /* MA120 cyan */
+  --chart-volume-up:  oklch(72% 0.14 175 / 0.35);
+  --chart-volume-dn:  oklch(68% 0.22 355 / 0.35);
+
+  /* ---------- TYPOGRAPHY ----------
+     No web font is downloaded (see apps/web/index.html): the preferred faces are used when the OS
+     has them, otherwise the stack falls through to the platform Korean/Latin UI faces so Hangul
+     never renders in a fallback serif. */
+  --font-sans: 'Pretendard Variable', 'IBM Plex Sans', 'Apple SD Gothic Neo', 'Noto Sans KR',
+               'Noto Sans CJK KR', 'Malgun Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
+  --font-num:  'IBM Plex Mono', 'Pretendard Variable', ui-monospace, 'DejaVu Sans Mono', monospace;
+  --font-en:   'IBM Plex Sans', 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-2xs: 10px;
+  --fs-xs:  11px;
+  --fs-sm:  12px;
+  --fs-md:  13px;
+  --fs-lg:  14px;
+  --fs-xl:  16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --fs-5xl: 36px;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.45;
+  --lh-loose: 1.6;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---------- SPACING (density: Comfortable 기본) ---------- */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+
+  --density-scale: 1;
+  --row-h-xs: calc(20px * var(--density-scale));
+  --row-h-sm: calc(24px * var(--density-scale));
+  --row-h-md: calc(28px * var(--density-scale));
+  --row-h-lg: calc(32px * var(--density-scale));
+  --input-h:  calc(32px * var(--density-scale));
+  --btn-h:    calc(32px * var(--density-scale));
+  --header-h: 48px;
+  --sub-header-h: 56px;
+
+  /* ---------- RADII ---------- */
+  --r-none: 0;
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 999px;
+
+  /* ---------- BORDER / SHADOW / OPACITY ---------- */
+  --bw-1: 1px;
+  --bw-2: 2px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-3: 0 12px 32px rgba(0,0,0,0.45);
+  --shadow-glow-ai: 0 0 0 1px var(--color-ai), 0 8px 24px oklch(72% 0.15 285 / 0.25);
+
+  --opacity-disabled: 0.4;
+  --opacity-hover: 0.85;
+
+  /* ---------- MOTION ---------- */
+  --dur-instant: 60ms;
+  --dur-fast: 120ms;
+  --dur-normal: 180ms;
+  --dur-slow: 280ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dropdown: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+  --z-max: 9999;
+
+  /* ---------- BREAKPOINTS (values only) ---------- */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
+  --bp-3xl: 1680px;
+  --bp-4xl: 1920px;
+
+  /* ---------- WIDGET GRID ---------- */
+  --grid-cols: 24;
+  --grid-gap: 6px;
+  --grid-row: 40px;
+}
+</style>
+<style id="product-bridge">
+/* ===== 제품 토큰 브리지 레이어 =====
+   목업의 자체 변수를 제품 디자인 토큰으로 연결한다.
+   구조는 목업 것을 유지하고, 색·폰트는 전부 제품 토큰이 결정한다. */
+:root{
+  --mag:var(--color-brand); --mag-soft:var(--brand-primary-300); --mag-deep:var(--brand-primary-700);
+  --violet:var(--color-ai); --cyan:var(--brand-primary-300);
+  --up:var(--color-trade-long); --dn:var(--color-trade-short);
+  --bone:var(--color-text-primary); --steel:var(--color-text-secondary);
+  --slate:var(--color-text-tertiary); --dim:var(--color-text-tertiary);
+  --void:var(--color-bg-app); --void-2:var(--color-bg-surface);
+  --panel:var(--color-bg-panel); --panel-2:var(--color-bg-elevated);
+  --foot-bg:var(--color-bg-surface); --glass-dark:var(--color-bg-panel); --glass-dark-2:var(--color-bg-surface);
+  --edge:var(--color-border-subtle); --edge-2:var(--color-border-default);
+  --btn-fg:var(--color-text-inverse);
+  --axis:var(--chart-axis-text); --cross-dot:var(--color-text-primary); --cross-ring:var(--color-bg-app);
+  --scroll-track:var(--color-bg-surface); --scroll-thumb:var(--color-border-default);
+  --shadow-ink:var(--color-border-strong);
+  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:var(--font-mono);
+}
+</style>
+<style id="brand-pin">
+/* 목업 잔여 시안 제거 — 기본 브랜드는 #F00FF0 하나뿐이다 */
+:root{
+  --brand-primary-50:oklch(96% 0.030 328.33);
+  --brand-primary-100:oklch(90% 0.060 328.33);
+  --brand-primary-200:oklch(82% 0.120 328.33);
+  --brand-primary-300:oklch(75% 0.200 328.33);
+  --brand-primary-400:oklch(71% 0.260 328.33);
+  --brand-primary-500:oklch(67.25% 0.3048 328.33);
+  --brand-primary-600:oklch(56% 0.240 328.33);
+  --brand-primary-700:oklch(46% 0.190 328.33);
+  --brand-primary-800:oklch(34% 0.130 328.33);
+  --brand-primary-900:oklch(24% 0.090 328.33);
+  --brand-accent-500:oklch(71% 0.260 328.33);
+  --color-brand:var(--brand-primary-500);
+  --color-brand-hover:var(--brand-primary-400);
+  --color-brand-subtle:oklch(67.25% 0.3048 328.33 / 0.14);
+  --cyan:var(--brand-primary-300);
+  --info-500:oklch(66% 0.16 250);
+}
+.btn-mag{background:var(--color-brand)!important;border-color:var(--color-brand)!important;color:var(--btn-fg)!important}
+.btn-mag:hover{background:var(--color-brand-hover)!important;border-color:var(--color-brand-hover)!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Options board</div>
+  <h1>Eight treatments for the chart page.</h1>
+  <p>Each panel below is the real effect, running live — not a mock-up image. They are built to sit <b>behind and around</b> a candlestick chart, so they can be dropped onto the terminal (<span class="mono">app.html</span>) without competing with the candles for attention. Reply with the letters you want and I will apply them.</p>
+  <div class="legend">
+    <span><b>Dark first</b> — all eight are tuned for the dark terminal</span>
+    <span><b>Light mode</b> — noted per option</span>
+    <span><b>Cost</b> — animation weight, noted per option</span>
+  </div>
+</div></header>
+
+<div class="wrap">
+<div class="grid">
+
+  <article class="card">
+    <div class="pv pvA"><div class="mock"><div class="panelglass"></div>
+      <div class="bars"><i style="height:34%"></i><i style="height:58%"></i><i style="height:44%"></i><i style="height:76%"></i><i style="height:62%"></i><i style="height:88%"></i><i style="height:70%"></i><i style="height:96%"></i><i style="height:80%"></i><i style="height:64%"></i></div>
+    </div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">A</span><h3>Aurora mesh</h3></div>
+      <p>Soft multi-colour light that drifts behind a frosted glass sheet. Reads as expensive and calm — the chart stays the sharpest thing on screen because the background is deliberately out of focus.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Dashboard</span><span class="chip">Light mode OK</span><span class="chip warn">Heaviest of the eight</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvB"><div class="mock"><div class="sun"></div><div class="floor"></div><div class="hl"></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">B</span><h3>Neon grid floor</h3></div>
+      <p>A perspective grid running toward the viewer under a magenta horizon. Signals "trading terminal" instantly and gives an empty page a floor and a direction.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Hero only</span><span class="chip warn">Too loud behind candles</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvC"><div class="mock"><div class="stack"><span class="lay l1"></span><span class="lay l2"></span><span class="lay l3"></span></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">C</span><h3>Glass depth stack</h3></div>
+      <p>Three translucent panes at slightly different angles. Communicates layers — the terminal above the analysis, the analysis above the market. Panels feel physical rather than flat.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Panels &amp; modals</span><span class="chip">Light mode OK</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvD"><div class="mock"><div class="rows">
+      <span class="row" style="width:74%"></span><span class="row" style="width:52%"></span><span class="row" style="width:86%"></span><span class="row" style="width:63%"></span><span class="row" style="width:44%"></span></div>
+      <div class="beam"></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">D</span><h3>Beam sweep</h3></div>
+      <p>A single band of light crossing the panel on a slow loop. Used to draw the eye to one card at a time — good on a loading state, an empty chart, or the panel you want read first.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Loading / empty states</span><span class="chip">Light mode OK</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvE"><div class="mock"><div class="code">&#62; kucoin.connect()<br>&#62; key <i>read+trade</i><br>&#62; withdraw <i>refused</i><br>&#62; candles <i>664 pairs</i><br>&#62; read <i>ok</i> 18ms</div>
+      <div class="scan"></div><div class="vig"></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">E</span><h3>Scanline terminal</h3></div>
+      <p>Faint CRT scanlines and a vignette over terminal text. Borrows the authority of a real console. Works on the connection and status panels where the product is literally talking to an exchange.</p>
+      <div class="fit"><span class="chip ok">Chart page · status</span><span class="chip ok">Connection wizard</span><span class="chip warn">Dark mode only</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvF"><div class="mock"><div class="dots"></div><div class="glowdot"></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">F</span><h3>Dot matrix</h3></div>
+      <p>A slow-drifting field of dots with a magenta glow behind it. The most restrained option here — it gives texture to large empty areas without adding a single strong shape.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Empty states</span><span class="chip">Light mode OK</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvG"><div class="mock"><div class="card2"></div>
+      <div class="bars2"><i style="height:40%;background:var(--up)"></i><i style="height:62%;background:var(--up)"></i><i style="height:34%;background:var(--dn)"></i><i style="height:70%;background:var(--up)"></i><i style="height:52%;background:var(--dn)"></i><i style="height:84%;background:var(--up)"></i><i style="height:60%;background:var(--dn)"></i><i style="height:92%;background:var(--up)"></i></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">G</span><h3>Chart pulse glow</h3></div>
+      <p>The panel border breathes between green and magenta. On the real terminal it can be driven by the live candle — green while price holds the entry, magenta when it approaches the invalidation. The interface reacts to the market.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Positions &amp; alerts</span><span class="chip mag">Reactive — needs JS</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="pv pvH"><div class="mock"><div class="sf"></div><div class="sf2"></div><div class="sf3"></div><div class="core"></div></div></div>
+    <div class="meta">
+      <div class="tagline"><span class="letter">H</span><h3>Starfield parallax</h3></div>
+      <p>Three layers of stars moving at different speeds, giving genuine depth behind the chart. The cheapest convincing 3D effect available without a WebGL engine or a downloaded 3D asset.</p>
+      <div class="fit"><span class="chip ok">Chart page</span><span class="chip ok">Hero</span><span class="chip">Light mode OK</span><span class="chip">Very cheap</span></div>
+    </div>
+  </article>
+
+</div>
+
+<div class="combo">
+  <h3>If you want my recommendation</h3>
+  <ul>
+    <li><b>A + C</b> — aurora behind, glass panes in front. The most "expensive" pairing and the safest for a chart, because both stay out of the candles' way.</li>
+    <li><b>B + E</b> — grid floor and scanlines. The strongest "this is a trading terminal" read. Best on the marketing page and the connection wizard, not behind a live chart.</li>
+    <li><b>G alone</b> — the only option that is <b>functional</b>, not decorative: the panel tells you the state of the trade before you read a number. Highest value per unit of visual noise.</li>
+    <li><b>F + H</b> — texture and depth with almost no cost. Good if you would rather the terminal stay visually quiet.</li>
+  </ul>
+</div>
+</div>
+
+<footer><div class="wrap">
+  Options board · built on the ChartControl design tokens so any of these drops straight into <span class="mono">app.html</span> or the marketing pages. Reply with letters (e.g. <span class="mono">A, C, G</span>) and I will apply them.
+</div></footer>
+</body>
+</html>

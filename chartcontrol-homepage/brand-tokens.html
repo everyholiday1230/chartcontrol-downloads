@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brand token unification — #F00FF0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--void:#07070B;--void2:#0B0B12;--panel:rgba(255,255,255,.034);--panel2:rgba(255,255,255,.06);
+--edge:rgba(255,255,255,.09);--edge2:rgba(255,255,255,.16);--bone:#F2F3F7;--steel:#A7AEBD;--slate:#7A8292;
+--dim:#7E879A;--mag:#F00FF0;--cyan:#4A9FD8;--up:#25D07A;--dn:#FF4D6A;
+--fd:"Archivo",sans-serif;--fb:"Public Sans",sans-serif;--fm:"JetBrains Mono",monospace;--shell:1140px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--void);color:var(--bone);font-family:var(--fb);font-size:15.5px;line-height:1.66;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--fm)}
+.wrap{max-width:var(--shell);margin:0 auto;padding:0 30px}
+header{padding:60px 0 26px;border-bottom:1px solid var(--edge)}
+.kick{display:flex;align-items:center;gap:11px;font-family:var(--fm);font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);margin-bottom:18px}
+.kick::before{content:"";width:26px;height:2px;background:var(--mag)}
+h1{font-family:var(--fd);font-weight:800;letter-spacing:-.03em;font-size:clamp(30px,4.4vw,48px);margin:0}
+.lede{margin-top:14px;color:var(--steel);max-width:70ch}
+.big{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-top:26px}
+.chip{width:112px;height:112px;border-radius:18px;background:var(--mag);border:1px solid var(--edge2);flex:none}
+h2{font-family:var(--fd);font-weight:700;font-size:23px;letter-spacing:-.02em;margin:56px 0 8px}
+h2 .n{font-family:var(--fm);font-size:12px;color:var(--mag);margin-right:10px;letter-spacing:.06em}
+p{color:var(--steel);margin:0 0 13px}
+strong{color:var(--bone)}
+table{border-collapse:collapse;width:100%;font-size:13.6px;margin:14px 0 8px}
+th{text-align:left;font-family:var(--fm);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--slate);padding:10px 12px;background:var(--panel2);border-bottom:1px solid var(--edge)}
+td{padding:9px 12px;border-bottom:1px solid var(--edge);color:var(--steel);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.sw{display:block;width:44px;height:18px;border-radius:5px;border:1px solid var(--edge2)}
+.ok{color:var(--up)}.bad{color:var(--dn)}
+.card{border:1px solid var(--edge);border-radius:15px;background:var(--panel);padding:20px 22px;margin:16px 0}
+.card.warn{border-color:rgba(255,77,106,.4);background:rgba(255,77,106,.05)}
+.card h4{margin:0 0 8px;font-family:var(--fd);font-size:15.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.spec{border:1px solid var(--edge);border-radius:13px;overflow:hidden}
+.spec .hd{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:9px 13px;background:var(--panel2);border-bottom:1px solid var(--edge);color:var(--slate)}
+.spec .bd{padding:18px 20px}
+.badge{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:5px;padding:3px 8px}
+.b-before{color:var(--cyan);border:1px solid rgba(74,159,216,.45)}
+.b-after{color:var(--mag);border:1px solid rgba(240,15,240,.5)}
+button.demo{font:inherit;font-weight:600;font-size:13.5px;border-radius:10px;padding:9px 17px;cursor:pointer;border:1px solid transparent}
+pre{background:var(--void2);border:1px solid var(--edge);border-radius:12px;padding:16px 18px;overflow-x:auto;font-family:var(--fm);font-size:12.2px;line-height:1.62;color:#cfd5e0}
+.sw-row{display:flex;gap:0;border-radius:11px;overflow:hidden;border:1px solid var(--edge);margin:16px 0 6px}
+.sw-row div{flex:1;height:74px;display:flex;align-items:flex-end;justify-content:center;font-family:var(--fm);font-size:9.5px;padding-bottom:6px}
+footer{margin-top:60px;padding:26px 0 44px;border-top:1px solid var(--edge);font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;color:var(--dim);display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+</style><style id="product-tokens">
+:root{
+
+  /* ---------- BRAND TOKENS (기본: Institutional Cool) ---------- */
+  --brand-primary-50:  oklch(96% 0.02 220);
+  --brand-primary-100: oklch(90% 0.04 220);
+  --brand-primary-200: oklch(80% 0.08 220);
+  --brand-primary-300: oklch(70% 0.11 220);
+  --brand-primary-400: oklch(62% 0.13 220);
+  --brand-primary-500: oklch(56% 0.15 220);   /* signature cyan */
+  --brand-primary-600: oklch(48% 0.14 220);
+  --brand-primary-700: oklch(38% 0.11 220);
+  --brand-primary-800: oklch(28% 0.08 220);
+  --brand-primary-900: oklch(20% 0.05 220);
+
+  --brand-accent-500: oklch(78% 0.13 210);    /* light cyan (highlight) */
+  --brand-neutral-hue: 240;                    /* cool blue-gray */
+
+  /* ---------- LONG / SHORT (기본: Teal / Magenta) ---------- */
+  --trade-long-500:  oklch(72% 0.14 175);
+  --trade-long-400:  oklch(78% 0.12 175);
+  --trade-long-600:  oklch(64% 0.15 175);
+  --trade-long-bg:   oklch(72% 0.14 175 / 0.12);
+  --trade-long-bg-2: oklch(72% 0.14 175 / 0.25);
+
+  --trade-short-500: oklch(68% 0.22 355);
+  --trade-short-400: oklch(74% 0.20 355);
+  --trade-short-600: oklch(60% 0.24 355);
+  --trade-short-bg:  oklch(68% 0.22 355 / 0.12);
+  --trade-short-bg-2:oklch(68% 0.22 355 / 0.25);
+
+  /* ---------- AI / SIGNAL (팔레트 독립) ---------- */
+  --ai-500: oklch(72% 0.15 285);
+  --ai-400: oklch(78% 0.13 285);
+  --ai-600: oklch(64% 0.16 285);
+  --ai-bg:  oklch(72% 0.15 285 / 0.10);
+  --ai-bg-2: oklch(72% 0.15 285 / 0.22);
+
+  --signal-draft:    var(--ai-500);
+  --signal-approved: oklch(78% 0.14 145);
+  --order-pending:   oklch(80% 0.13 85);
+  --order-filled:    oklch(75% 0.13 145);
+  --order-canceled:  oklch(60% 0.02 240);
+  --order-rejected:  var(--trade-short-500);
+
+  --warning-500: oklch(80% 0.14 75);
+  --danger-500:  oklch(64% 0.20 25);
+  --success-500: oklch(74% 0.14 150);
+  --info-500:    var(--brand-primary-500);
+
+  /* ---------- NEUTRALS (Dark 기본) ---------- */
+  --n-950: oklch(14% 0.012 240);
+  --n-925: oklch(17% 0.013 240);
+  --n-900: oklch(20% 0.014 240);
+  --n-850: oklch(24% 0.014 240);
+  --n-800: oklch(28% 0.013 240);
+  --n-700: oklch(38% 0.012 240);
+  --n-600: oklch(48% 0.010 240);
+  --n-500: oklch(58% 0.008 240);
+  --n-400: oklch(68% 0.006 240);
+  --n-300: oklch(78% 0.005 240);
+  --n-200: oklch(86% 0.004 240);
+  --n-100: oklch(92% 0.003 240);
+  --n-050: oklch(97% 0.002 240);
+  --n-000: oklch(100% 0 0);
+
+  /* ---------- SEMANTIC — Dark theme (default) ---------- */
+  --color-bg-app:       var(--n-950);
+  --color-bg-surface:   var(--n-925);
+  --color-bg-panel:     var(--n-900);
+  --color-bg-elevated:  var(--n-850);
+  --color-bg-hover:     oklch(28% 0.014 240 / 0.6);
+  --color-bg-active:    oklch(32% 0.016 240 / 0.7);
+  --color-bg-input:     var(--n-925);
+
+  --color-text-primary:   var(--n-050);
+  --color-text-secondary: var(--n-300);
+  --color-text-tertiary:  var(--n-500);
+  --color-text-disabled:  var(--n-700);
+  --color-text-inverse:   var(--n-950);
+
+  --color-border-subtle:  oklch(28% 0.014 240 / 0.6);
+  --color-border-default: oklch(38% 0.014 240 / 0.7);
+  --color-border-strong:  oklch(48% 0.014 240 / 0.9);
+  --color-border-focus:   var(--brand-primary-500);
+
+  --color-brand:          var(--brand-primary-500);
+  --color-brand-hover:    var(--brand-primary-400);
+  --color-brand-subtle:   oklch(56% 0.15 220 / 0.14);
+
+  --color-trade-long:     var(--trade-long-500);
+  --color-trade-short:    var(--trade-short-500);
+  --color-trade-long-bg:  var(--trade-long-bg);
+  --color-trade-short-bg: var(--trade-short-bg);
+
+  --color-ai:             var(--ai-500);
+  --color-ai-bg:          var(--ai-bg);
+  --color-signal-draft:   var(--signal-draft);
+  --color-signal-approved:var(--signal-approved);
+  --color-order-pending:  var(--order-pending);
+  --color-order-filled:   var(--order-filled);
+  --color-order-canceled: var(--order-canceled);
+  --color-order-rejected: var(--order-rejected);
+
+  --color-warning: var(--warning-500);
+  --color-danger:  var(--danger-500);
+  --color-success: var(--success-500);
+  --color-info:    var(--info-500);
+
+  /* ---------- CHART COLORS ---------- */
+  --chart-grid:       oklch(28% 0.014 240 / 0.5);
+  --chart-axis-text:  var(--n-500);
+  --chart-crosshair:  oklch(70% 0.03 240 / 0.6);
+  --chart-candle-up:  var(--color-trade-long);
+  --chart-candle-dn:  var(--color-trade-short);
+  --chart-ma-1:       oklch(80% 0.13 85);   /* MA20 amber */
+  --chart-ma-2:       oklch(78% 0.13 285);  /* MA60 violet */
+  --chart-ma-3:       oklch(76% 0.13 210);  /* MA120 cyan */
+  --chart-volume-up:  oklch(72% 0.14 175 / 0.35);
+  --chart-volume-dn:  oklch(68% 0.22 355 / 0.35);
+
+  /* ---------- TYPOGRAPHY ----------
+     No web font is downloaded (see apps/web/index.html): the preferred faces are used when the OS
+     has them, otherwise the stack falls through to the platform Korean/Latin UI faces so Hangul
+     never renders in a fallback serif. */
+  --font-sans: 'Pretendard Variable', 'IBM Plex Sans', 'Apple SD Gothic Neo', 'Noto Sans KR',
+               'Noto Sans CJK KR', 'Malgun Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
+  --font-num:  'IBM Plex Mono', 'Pretendard Variable', ui-monospace, 'DejaVu Sans Mono', monospace;
+  --font-en:   'IBM Plex Sans', 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-2xs: 10px;
+  --fs-xs:  11px;
+  --fs-sm:  12px;
+  --fs-md:  13px;
+  --fs-lg:  14px;
+  --fs-xl:  16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --fs-5xl: 36px;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.45;
+  --lh-loose: 1.6;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---------- SPACING (density: Comfortable 기본) ---------- */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+
+  --density-scale: 1;
+  --row-h-xs: calc(20px * var(--density-scale));
+  --row-h-sm: calc(24px * var(--density-scale));
+  --row-h-md: calc(28px * var(--density-scale));
+  --row-h-lg: calc(32px * var(--density-scale));
+  --input-h:  calc(32px * var(--density-scale));
+  --btn-h:    calc(32px * var(--density-scale));
+  --header-h: 48px;
+  --sub-header-h: 56px;
+
+  /* ---------- RADII ---------- */
+  --r-none: 0;
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 999px;
+
+  /* ---------- BORDER / SHADOW / OPACITY ---------- */
+  --bw-1: 1px;
+  --bw-2: 2px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-3: 0 12px 32px rgba(0,0,0,0.45);
+  --shadow-glow-ai: 0 0 0 1px var(--color-ai), 0 8px 24px oklch(72% 0.15 285 / 0.25);
+
+  --opacity-disabled: 0.4;
+  --opacity-hover: 0.85;
+
+  /* ---------- MOTION ---------- */
+  --dur-instant: 60ms;
+  --dur-fast: 120ms;
+  --dur-normal: 180ms;
+  --dur-slow: 280ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dropdown: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+  --z-max: 9999;
+
+  /* ---------- BREAKPOINTS (values only) ---------- */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
+  --bp-3xl: 1680px;
+  --bp-4xl: 1920px;
+
+  /* ---------- WIDGET GRID ---------- */
+  --grid-cols: 24;
+  --grid-gap: 6px;
+  --grid-row: 40px;
+}
+</style>
+<style id="product-bridge">
+/* ===== 제품 토큰 브리지 레이어 =====
+   목업의 자체 변수를 제품 디자인 토큰으로 연결한다.
+   구조는 목업 것을 유지하고, 색·폰트는 전부 제품 토큰이 결정한다. */
+:root{
+  --mag:var(--color-brand); --mag-soft:var(--brand-primary-300); --mag-deep:var(--brand-primary-700);
+  --violet:var(--color-ai); --cyan:var(--brand-primary-300);
+  --up:var(--color-trade-long); --dn:var(--color-trade-short);
+  --bone:var(--color-text-primary); --steel:var(--color-text-secondary);
+  --slate:var(--color-text-tertiary); --dim:var(--color-text-tertiary);
+  --void:var(--color-bg-app); --void-2:var(--color-bg-surface);
+  --panel:var(--color-bg-panel); --panel-2:var(--color-bg-elevated);
+  --foot-bg:var(--color-bg-surface); --glass-dark:var(--color-bg-panel); --glass-dark-2:var(--color-bg-surface);
+  --edge:var(--color-border-subtle); --edge-2:var(--color-border-default);
+  --btn-fg:var(--color-text-inverse);
+  --axis:var(--chart-axis-text); --cross-dot:var(--color-text-primary); --cross-ring:var(--color-bg-app);
+  --scroll-track:var(--color-bg-surface); --scroll-thumb:var(--color-border-default);
+  --shadow-ink:var(--color-border-strong);
+  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:var(--font-mono);
+}
+</style>
+<style id="brand-pin">
+/* 목업 잔여 시안 제거 — 기본 브랜드는 #F00FF0 하나뿐이다 */
+:root{
+  --brand-primary-50:oklch(96% 0.030 328.33);
+  --brand-primary-100:oklch(90% 0.060 328.33);
+  --brand-primary-200:oklch(82% 0.120 328.33);
+  --brand-primary-300:oklch(75% 0.200 328.33);
+  --brand-primary-400:oklch(71% 0.260 328.33);
+  --brand-primary-500:oklch(67.25% 0.3048 328.33);
+  --brand-primary-600:oklch(56% 0.240 328.33);
+  --brand-primary-700:oklch(46% 0.190 328.33);
+  --brand-primary-800:oklch(34% 0.130 328.33);
+  --brand-primary-900:oklch(24% 0.090 328.33);
+  --brand-accent-500:oklch(71% 0.260 328.33);
+  --color-brand:var(--brand-primary-500);
+  --color-brand-hover:var(--brand-primary-400);
+  --color-brand-subtle:oklch(67.25% 0.3048 328.33 / 0.14);
+  --cyan:var(--brand-primary-300);
+  --info-500:oklch(66% 0.16 250);
+}
+.btn-mag{background:var(--color-brand)!important;border-color:var(--color-brand)!important;color:var(--btn-fg)!important}
+.btn-mag:hover{background:var(--color-brand-hover)!important;border-color:var(--color-brand-hover)!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kick">Brand token unification · proposal</div>
+  <h1>One brand colour, applied to the product tokens.</h1>
+  <p class="lede">The public site already runs on <strong>#F00FF0</strong>. The product design system (<span class="mono">src/tokens.css</span>) still ships a placeholder cyan as its brand primary, so the app and the site disagree. This is the patch that closes the gap — <strong>proposed, not applied to the repository</strong>.</p>
+  <div class="big"><span class="chip"></span>
+    <div><div class="mono" style="font-size:20px;font-weight:600">#F00FF0</div>
+    <div class="mono" style="color:var(--slate);font-size:12.5px;margin-top:6px">oklch(67.25% 0.3048 328.33)<br>replaces oklch(56% 0.15 220) &nbsp;"institutional-cool"</div></div>
+  </div>
+</header>
+
+<h2><span class="n">01</span>Why this is not just a find-and-replace</h2>
+<p>Two measurements on the exact brand colour decide how it can be used. Both were computed from the hex, not estimated.</p>
+<table><thead><tr><th>Pairing</th><th>Ratio</th><th>AA 4.5:1</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>#F00FF0 as text on the dark app background</td><td class="mono">5.78:1</td><td class="mono ok">pass</td><td>Safe for text, icons, focus rings</td></tr>
+<tr><td>#F00FF0 as text on the light app background</td><td class="mono">3.05:1</td><td class="mono bad">fail</td><td><strong>Must darken on light</strong> — the patch adds a light-theme brand</td></tr>
+<tr><td>White text on a #F00FF0 fill</td><td class="mono">3.48:1</td><td class="mono bad">fail</td><td>Buttons must use dark text, or a darker magenta fill</td></tr>
+<tr><td>Dark text #0C0E15 on a #F00FF0 fill</td><td class="mono">5.54:1</td><td class="mono ok">pass</td><td>This is the button treatment to use</td></tr>
+</tbody></table>
+<div class="card warn"><h4>Consequence for every button</h4><p style="margin:0">A magenta button with a white label fails AA. The patch keeps <span class="mono">--color-brand</span> as the fill, but the label must switch to the inverse text token. In light theme, brand-as-text is overridden to <span class="mono">#922391</span> (6.41:1).</p></div>
+
+<h2><span class="n">02</span>The proposed scale</h2>
+<p>Monotonic in lightness, hue locked to the brand's 328.33°, chroma clamped per step to stay inside sRGB. <strong>500 is pinned to the exact official colour</strong> — not an approximation of it.</p>
+<div class="sw-row"><div style="background:#FEEBFC;color:#0C0E15">50</div><div style="background:#F5D1F2;color:#0C0E15">100</div><div style="background:#EFA8EB;color:#0C0E15">200</div><div style="background:#EF79EC;color:#0C0E15">300</div><div style="background:#F250F0;color:#0C0E15">400</div><div style="background:#F00FF0;color:#0C0E15">500</div><div style="background:#B91EB8;color:#F2F3F7">600</div><div style="background:#8C1B8B;color:#F2F3F7">700</div><div style="background:#591559;color:#F2F3F7">800</div><div style="background:#340934;color:#F2F3F7">900</div></div>
+<table><thead><tr><th>Step</th><th>L</th><th>C</th><th>Swatch</th><th>On dark</th><th>On light</th></tr></thead><tbody>
+<tr><td class="mono">50</td><td class="mono">96.0%</td><td class="mono">0.0300</td><td><span class="sw" style="background:#FEEBFC"></span></td><td class="mono ok">17.72</td><td class="mono bad">1.00</td></tr><tr><td class="mono">100</td><td class="mono">90.0%</td><td class="mono">0.0600</td><td><span class="sw" style="background:#F5D1F2"></span></td><td class="mono ok">14.64</td><td class="mono bad">1.20</td></tr><tr><td class="mono">200</td><td class="mono">82.0%</td><td class="mono">0.1200</td><td><span class="sw" style="background:#EFA8EB"></span></td><td class="mono ok">10.98</td><td class="mono bad">1.61</td></tr><tr><td class="mono">300</td><td class="mono">75.0%</td><td class="mono">0.2000</td><td><span class="sw" style="background:#EF79EC"></span></td><td class="mono ok">8.25</td><td class="mono bad">2.14</td></tr><tr><td class="mono">400</td><td class="mono">71.0%</td><td class="mono">0.2600</td><td><span class="sw" style="background:#F250F0"></span></td><td class="mono ok">6.88</td><td class="mono bad">2.56</td></tr><tr style="outline:2px solid var(--mag);outline-offset:2px"><td class="mono">500</td><td class="mono">67.25%</td><td class="mono">0.3048</td><td><span class="sw" style="background:#F00FF0"></span></td><td class="mono ok">5.78</td><td class="mono bad">3.05</td></tr><tr><td class="mono">600</td><td class="mono">56.0%</td><td class="mono">0.2400</td><td><span class="sw" style="background:#B91EB8"></span></td><td class="mono bad">3.77</td><td class="mono ok">4.67</td></tr><tr><td class="mono">700</td><td class="mono">46.0%</td><td class="mono">0.1900</td><td><span class="sw" style="background:#8C1B8B"></span></td><td class="mono bad">2.53</td><td class="mono ok">6.96</td></tr><tr><td class="mono">800</td><td class="mono">34.0%</td><td class="mono">0.1300</td><td><span class="sw" style="background:#591559"></span></td><td class="mono bad">1.61</td><td class="mono ok">10.99</td></tr><tr><td class="mono">900</td><td class="mono">24.0%</td><td class="mono">0.0900</td><td><span class="sw" style="background:#340934"></span></td><td class="mono bad">1.18</td><td class="mono ok">14.92</td></tr>
+</tbody></table>
+<p style="font-size:13.5px">The current file's 500 was the only token anybody consumed directly; the rest of the scale existed as placeholders. Steps 50–300 are for washes, borders and hover surfaces; 600–900 for pressed states and dark-on-light text.</p>
+
+<h2><span class="n">03</span>Before and after, in context</h2>
+<div class="grid2">
+  <div class="spec"><div class="hd"><span class="badge b-before">Before</span> &nbsp;cyan oklch(56% 0.15 220)</div>
+  <div class="bd" style="--brand:#4A9FD8">
+    <p style="font-size:13.5px">Focus ring, active nav, link and button fill:</p>
+    <button class="demo" style="background:var(--brand);color:#0C0E15">Connect exchange</button>
+    <p style="margin:14px 0 0;font-size:13.5px"><span style="color:var(--brand);font-weight:600">Active nav item</span> &nbsp;·&nbsp; <span style="border:1px solid var(--brand);border-radius:7px;padding:3px 9px;font-size:12px;color:var(--brand)">Focus ring</span></p>
+  </div></div>
+  <div class="spec"><div class="hd"><span class="badge b-after">After</span> &nbsp;brand #F00FF0</div>
+  <div class="bd" style="--brand:#F00FF0">
+    <p style="font-size:13.5px">Focus ring, active nav, link and button fill:</p>
+    <button class="demo" style="background:var(--brand);color:#0C0E15">Connect exchange</button>
+    <p style="margin:14px 0 0;font-size:13.5px"><span style="color:var(--brand);font-weight:600">Active nav item</span> &nbsp;·&nbsp; <span style="border:1px solid var(--brand);border-radius:7px;padding:3px 9px;font-size:12px;color:var(--brand)">Focus ring</span></p>
+  </div></div>
+</div>
+
+<h2><span class="n">04</span>The one thing that needs your decision</h2>
+<p>A magenta brand sits <strong>26.7° away</strong> from the colour the product already uses for <em>short / down</em> (<span class="mono">--trade-short-500</span>, hue 355). On a chart they can read as the same family.</p>
+<div class="spec"><div class="hd">Chart sample — teal/magenta long-short (default), with the brand magenta as an overlay line</div>
+<div class="bd">
+<svg viewBox="0 0 340 190" width="100%" height="190" style="display:block">
+  <g opacity=".5"><line x1="30" y1="60" x2="330" y2="60" stroke="#59606F" stroke-width=".7"/><line x1="30" y1="95" x2="330" y2="95" stroke="#59606F" stroke-width=".7"/><line x1="30" y1="130" x2="330" y2="130" stroke="#59606F" stroke-width=".7"/><line x1="30" y1="165" x2="330" y2="165" stroke="#59606F" stroke-width=".7"/></g>
+  <line x1="40" y1="153.6" x2="40" y2="174.2" stroke="#00C0A0" stroke-width="1.4"/><rect x="34.5" y="159.3" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="66" y1="153.6" x2="66" y2="174.2" stroke="#F84B9F" stroke-width="1.4"/><rect x="60.5" y="159.3" width="11" height="9.2" fill="#F84B9F" rx="1.5"/><line x1="92" y1="158.2" x2="92" y2="178.8" stroke="#00C0A0" stroke-width="1.4"/><rect x="86.5" y="163.9" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="118" y1="139.8" x2="118" y2="160.4" stroke="#00C0A0" stroke-width="1.4"/><rect x="112.5" y="145.5" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="144" y1="158.2" x2="144" y2="178.8" stroke="#F84B9F" stroke-width="1.4"/><rect x="138.5" y="163.9" width="11" height="9.2" fill="#F84B9F" rx="1.5"/><line x1="170" y1="132.8" x2="170" y2="153.6" stroke="#00C0A0" stroke-width="1.4"/><rect x="164.5" y="138.6" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="196" y1="132.8" x2="196" y2="153.6" stroke="#F84B9F" stroke-width="1.4"/><rect x="190.5" y="138.6" width="11" height="9.2" fill="#F84B9F" rx="1.5"/><line x1="222" y1="130.6" x2="222" y2="151.2" stroke="#00C0A0" stroke-width="1.4"/><rect x="216.5" y="136.3" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="248" y1="114.5" x2="248" y2="135.2" stroke="#00C0A0" stroke-width="1.4"/><rect x="242.5" y="120.2" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="274" y1="130.6" x2="274" y2="151.2" stroke="#F84B9F" stroke-width="1.4"/><rect x="268.5" y="136.3" width="11" height="9.2" fill="#F84B9F" rx="1.5"/><line x1="300" y1="105.2" x2="300" y2="126.0" stroke="#00C0A0" stroke-width="1.4"/><rect x="294.5" y="111.0" width="11" height="9.2" fill="#00C0A0" rx="1.5"/><line x1="326" y1="96.1" x2="326" y2="116.8" stroke="#00C0A0" stroke-width="1.4"/><rect x="320.5" y="101.8" width="11" height="9.2" fill="#00C0A0" rx="1.5"/>
+  <polyline points="40,150.0 66,146.4 92,142.8 118,139.2 144,135.6 170,132.0 196,128.4 222,124.8 248,121.2 274,117.6 300,114.0 326,110.4" fill="none" stroke="#E4B750" stroke-width="1.6"/>
+  <polyline points="40,172.0 66,167.0 92,162.0 118,157.0 144,152.0 170,147.0 196,142.0 222,137.0 248,132.0 274,127.0 300,122.0 326,117.0" fill="none" stroke="#0EC7DE" stroke-width="1.6"/>
+  <line x1="30" y1="120" x2="330" y2="120" stroke="#F00FF0" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="34" y="114" fill="#F00FF0" font-family="JetBrains Mono, monospace" font-size="9">AI level · brand #F00FF0</text>
+  <text x="34" y="185" fill="#F84B9F" font-family="JetBrains Mono, monospace" font-size="9">down candles · hue 355</text>
+</svg>
+</div></div>
+<div class="card"><h4>Three ways to resolve it — pick one before this ships</h4>
+<ul style="margin:0;padding-left:20px">
+<li><strong>Keep both.</strong> 27° is distinguishable at candle width, and the AI level is a dashed line, not a candle. Lowest risk, no further change.</li>
+<li><strong>Move the AI accent to violet.</strong> The brand stays for UI chrome only, and every chart overlay uses <span class="mono">--ai-500</span> (285°) instead — the two never meet.</li>
+<li><strong>Shift short/down toward red</strong> (hue 25). Maximum separation, but it changes the default long/short identity across the whole terminal.</li>
+</ul></div>
+
+<h2><span class="n">05</span>Two defects found while writing the patch</h2>
+<div class="card warn"><h4>1 — every "info" state was silently the brand colour</h4>
+<p style="margin:0"><span class="mono">--info-500: var(--brand-primary-500)</span> couples info to the brand. With a magenta brand, an informational notice renders in the same colour family as an error. The patch decouples it to a fixed blue at hue 250.</p></div>
+<div class="card warn"><h4>2 — the light theme only overrode three chart tokens</h4>
+<p style="margin:0">Inside <span class="mono">[data-theme="light"]</span> only <span class="mono">--chart-grid</span>, <span class="mono">--chart-axis-text</span> and <span class="mono">--chart-crosshair</span> were redefined. Candle, MA and volume colours kept their dark-theme values, which are far too light for a white background. The patch adds the missing overrides, all at 4.5:1 or better.</p></div>
+
+<h2><span class="n">06</span>The patch</h2>
+<p>Delivered alongside this page as <span class="mono">tokens-brand-chartcontrol.css</span>. Four blocks: the replaced brand scale, the old cyan re-registered as a selectable option, the light-theme chart overrides, and the <span class="mono">--chart-line-1..8</span> tokens that replace the eight hard-coded hex values in <span class="mono">chart-indicators.js</span>.</p>
+<pre>/* ============================================================
+   ChartControl — brand token unification (PROPOSAL, not applied)
+   Official brand colour: #F00FF0 = oklch(67.25% 0.3048 328.33)
+   Replaces the default brand scale, a placeholder cyan
+   (oklch(56% 0.15 220), labelled "institutional-cool").
+   Block 1 replaces lines 15-28 of src/tokens.css. Blocks 2-4 append.
+   ============================================================ */
+
+/* ---------- 1. REPLACE the default BRAND TOKENS block ---------- */
+:root {
+  /* ---------- BRAND TOKENS (default: ChartControl magenta) ---------- */
+  --brand-primary-50:  oklch(96% 0.030 328.33);
+  --brand-primary-100: oklch(90% 0.060 328.33);
+  --brand-primary-200: oklch(82% 0.120 328.33);
+  --brand-primary-300: oklch(75% 0.200 328.33);
+  --brand-primary-400: oklch(71% 0.260 328.33);
+  --brand-primary-500: oklch(67.25% 0.3048 328.33);   /* #F00FF0 — official brand */
+  --brand-primary-600: oklch(56% 0.240 328.33);
+  --brand-primary-700: oklch(46% 0.190 328.33);
+  --brand-primary-800: oklch(34% 0.130 328.33);
+  --brand-primary-900: oklch(24% 0.090 328.33);
+
+  --brand-accent-500: oklch(71% 0.260 328.33);        /* light magenta (highlight) */
+  --brand-neutral-hue: 240;                           /* cool blue-gray, kept */
+
+  /* was hard-coded to the old cyan; follow the brand now */
+  --color-brand-subtle: oklch(67.25% 0.3048 328.33 / 0.14);
+
+  /* FIX: --info-500 was var(--brand-primary-500), so every "info" state
+     silently became </pre>
+<footer><span>PROPOSAL — NOT APPLIED TO THE REPOSITORY</span><span>CONTRAST COMPUTED FROM HEX, WCAG 2.1</span></footer>
+</div></body></html>

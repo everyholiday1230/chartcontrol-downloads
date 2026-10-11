@@ -1,0 +1,47 @@
+/* ================================================================
+   ADD TO src/tokens.css — chart line palette
+   ----------------------------------------------------------------
+   Replaces the eight hardcoded hex fallbacks that v1 carried in
+   chart-indicators.js (LINE_FALLBACKS). Every indicator line now has
+   a token, so no indicator file ever needs a literal colour again.
+
+   Dark values sit in the base :root block; the light overrides go in
+   the existing [data-theme="light"] block, darkened so text and lines
+   clear 4.5:1 on white — the gap the base file has today.
+   ================================================================ */
+
+/* --- base (:root, dark) --- */
+:root {
+  --chart-line-1: oklch(74% 0.14 250);   /* indigo   */
+  --chart-line-2: oklch(78% 0.13 30);    /* coral    */
+  --chart-line-3: oklch(76% 0.14 160);   /* mint     */
+  --chart-line-4: oklch(72% 0.15 300);   /* orchid   */
+  --chart-line-5: oklch(80% 0.12 90);    /* sand     */
+  --chart-line-6: oklch(74% 0.13 210);   /* sky      */
+  --chart-line-7: oklch(70% 0.13 130);   /* leaf     */
+  --chart-line-8: oklch(76% 0.14 340);   /* rose     */
+
+  /* level tokens used by the AI read and by PIVOT / ZIGZAG */
+  --level-entry:        var(--color-brand);
+  --level-invalidation: var(--color-trade-short);
+  --level-target-1:     var(--color-ai);
+  --level-target-2:     var(--color-trade-long);
+  --level-range:        var(--color-text-tertiary);
+}
+
+/* --- light overrides (add inside the existing [data-theme="light"] block) --- */
+[data-theme="light"] {
+  --chart-line-1: oklch(44% 0.14 250);
+  --chart-line-2: oklch(48% 0.13 30);
+  --chart-line-3: oklch(42% 0.14 160);
+  --chart-line-4: oklch(42% 0.15 300);
+  --chart-line-5: oklch(50% 0.12 90);
+  --chart-line-6: oklch(44% 0.13 210);
+  --chart-line-7: oklch(40% 0.13 130);
+  --chart-line-8: oklch(46% 0.14 340);
+  --level-entry:        oklch(40% 0.15 220);
+  --level-invalidation: oklch(45% 0.21 355);
+  --level-target-1:     oklch(42% 0.17 285);
+  --level-target-2:     oklch(40% 0.13 175);
+  --level-range:        oklch(50% 0.010 240);
+}

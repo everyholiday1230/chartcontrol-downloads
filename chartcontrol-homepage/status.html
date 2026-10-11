@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>작업 현황 — ChartControl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0C11; --surf:#0F131A; --panel:#131822; --edge:rgba(255,255,255,.09); --edge2:rgba(255,255,255,.17);
+  --txt:#F2F4F8; --txt2:#A9B2C1; --txt3:#7E879A;
+  --cyan:#3BC6E8; --violet:#9D7BFF; --long:#4FD1AE; --short:#F2639E; --warn:#F0B84E;
+  --fs:13px; --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:var(--fs);line-height:1.55;-webkit-font-smoothing:antialiased}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+header{padding:54px 0 26px;border-bottom:1px solid var(--edge)}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+h1{font-size:clamp(26px,3.4vw,40px);font-weight:700;margin:0;letter-spacing:-.02em}
+.lead{color:var(--txt2);max-width:80ch;margin:14px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.stat{border:1px solid var(--edge);border-radius:10px;padding:8px 13px;background:var(--panel)}
+.stat b{display:block;font-size:17px;font-family:var(--mono);color:var(--cyan)}
+.stat span{font-size:11px;color:var(--txt3)}
+h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);font-weight:600;
+  margin:44px 0 16px;padding-bottom:9px;border-bottom:1px solid var(--edge)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{border:1px solid var(--edge);border-radius:14px;background:var(--panel);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .25s,transform .3s cubic-bezier(.16,1,.3,1)}
+.card:hover{border-color:var(--edge2);transform:translateY(-2px)}
+.thumb{aspect-ratio:16/10;overflow:hidden;background:var(--surf);border-bottom:1px solid var(--edge);position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.thumb .badge{position:absolute;left:9px;top:9px;font-size:10px;font-family:var(--mono);letter-spacing:.05em;
+  padding:3px 8px;border-radius:20px;background:rgba(10,12,17,.82);border:1px solid var(--edge2);color:var(--txt2)}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:7px;flex:1}
+.body h3{margin:0;font-size:14.5px;font-weight:600}
+.body p{margin:0;font-size:12.5px;color:var(--txt2)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.tag{font-size:10.5px;border:1px solid var(--edge);border-radius:6px;padding:3px 7px;color:var(--txt3)}
+.tag.ok{color:var(--long);border-color:rgba(79,209,174,.4)}
+.tag.warn{color:var(--warn);border-color:rgba(240,184,78,.4)}
+.tag.bad{color:var(--short);border-color:rgba(242,99,158,.4)}
+a.go{font-family:var(--mono);font-size:11.5px;color:var(--cyan);text-decoration:none;border-bottom:1px dashed rgba(59,198,232,.5);align-self:flex-start}
+a.go:hover{color:#fff;border-bottom-color:#fff}
+.flat{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px}
+.link{border:1px solid var(--edge);border-radius:9px;padding:9px 11px;background:var(--panel);display:block;text-decoration:none;color:inherit}
+.link:hover{border-color:var(--edge2)}
+.link b{display:block;font-size:12.5px;font-weight:600}
+.link span{font-size:10.5px;color:var(--txt3);font-family:var(--mono)}
+.note{border:1px solid rgba(240,184,78,.34);background:rgba(240,184,78,.06);border-radius:12px;padding:15px 17px;margin-top:16px}
+.note h4{margin:0 0 7px;font-size:13px;color:var(--warn)}
+.note p{margin:0 0 7px;font-size:12.5px;color:var(--txt2)}
+.note ul{margin:6px 0 0;padding-left:19px;font-size:12.5px;color:var(--txt2);line-height:1.75}
+.note code{font-family:var(--mono);font-size:11.5px;color:var(--cyan)}
+footer{margin-top:52px;border-top:1px solid var(--edge);padding:24px 0 44px;color:var(--txt3);font-size:12px}
+</style>
+<style id="product-tokens">
+:root{
+
+  /* ---------- BRAND TOKENS (기본: Institutional Cool) ---------- */
+  --brand-primary-50:  oklch(96% 0.02 220);
+  --brand-primary-100: oklch(90% 0.04 220);
+  --brand-primary-200: oklch(80% 0.08 220);
+  --brand-primary-300: oklch(70% 0.11 220);
+  --brand-primary-400: oklch(62% 0.13 220);
+  --brand-primary-500: oklch(56% 0.15 220);   /* signature cyan */
+  --brand-primary-600: oklch(48% 0.14 220);
+  --brand-primary-700: oklch(38% 0.11 220);
+  --brand-primary-800: oklch(28% 0.08 220);
+  --brand-primary-900: oklch(20% 0.05 220);
+
+  --brand-accent-500: oklch(78% 0.13 210);    /* light cyan (highlight) */
+  --brand-neutral-hue: 240;                    /* cool blue-gray */
+
+  /* ---------- LONG / SHORT (기본: Teal / Magenta) ---------- */
+  --trade-long-500:  oklch(72% 0.14 175);
+  --trade-long-400:  oklch(78% 0.12 175);
+  --trade-long-600:  oklch(64% 0.15 175);
+  --trade-long-bg:   oklch(72% 0.14 175 / 0.12);
+  --trade-long-bg-2: oklch(72% 0.14 175 / 0.25);
+
+  --trade-short-500: oklch(68% 0.22 355);
+  --trade-short-400: oklch(74% 0.20 355);
+  --trade-short-600: oklch(60% 0.24 355);
+  --trade-short-bg:  oklch(68% 0.22 355 / 0.12);
+  --trade-short-bg-2:oklch(68% 0.22 355 / 0.25);
+
+  /* ---------- AI / SIGNAL (팔레트 독립) ---------- */
+  --ai-500: oklch(72% 0.15 285);
+  --ai-400: oklch(78% 0.13 285);
+  --ai-600: oklch(64% 0.16 285);
+  --ai-bg:  oklch(72% 0.15 285 / 0.10);
+  --ai-bg-2: oklch(72% 0.15 285 / 0.22);
+
+  --signal-draft:    var(--ai-500);
+  --signal-approved: oklch(78% 0.14 145);
+  --order-pending:   oklch(80% 0.13 85);
+  --order-filled:    oklch(75% 0.13 145);
+  --order-canceled:  oklch(60% 0.02 240);
+  --order-rejected:  var(--trade-short-500);
+
+  --warning-500: oklch(80% 0.14 75);
+  --danger-500:  oklch(64% 0.20 25);
+  --success-500: oklch(74% 0.14 150);
+  --info-500:    var(--brand-primary-500);
+
+  /* ---------- NEUTRALS (Dark 기본) ---------- */
+  --n-950: oklch(14% 0.012 240);
+  --n-925: oklch(17% 0.013 240);
+  --n-900: oklch(20% 0.014 240);
+  --n-850: oklch(24% 0.014 240);
+  --n-800: oklch(28% 0.013 240);
+  --n-700: oklch(38% 0.012 240);
+  --n-600: oklch(48% 0.010 240);
+  --n-500: oklch(58% 0.008 240);
+  --n-400: oklch(68% 0.006 240);
+  --n-300: oklch(78% 0.005 240);
+  --n-200: oklch(86% 0.004 240);
+  --n-100: oklch(92% 0.003 240);
+  --n-050: oklch(97% 0.002 240);
+  --n-000: oklch(100% 0 0);
+
+  /* ---------- SEMANTIC — Dark theme (default) ---------- */
+  --color-bg-app:       var(--n-950);
+  --color-bg-surface:   var(--n-925);
+  --color-bg-panel:     var(--n-900);
+  --color-bg-elevated:  var(--n-850);
+  --color-bg-hover:     oklch(28% 0.014 240 / 0.6);
+  --color-bg-active:    oklch(32% 0.016 240 / 0.7);
+  --color-bg-input:     var(--n-925);
+
+  --color-text-primary:   var(--n-050);
+  --color-text-secondary: var(--n-300);
+  --color-text-tertiary:  var(--n-500);
+  --color-text-disabled:  var(--n-700);
+  --color-text-inverse:   var(--n-950);
+
+  --color-border-subtle:  oklch(28% 0.014 240 / 0.6);
+  --color-border-default: oklch(38% 0.014 240 / 0.7);
+  --color-border-strong:  oklch(48% 0.014 240 / 0.9);
+  --color-border-focus:   var(--brand-primary-500);
+
+  --color-brand:          var(--brand-primary-500);
+  --color-brand-hover:    var(--brand-primary-400);
+  --color-brand-subtle:   oklch(56% 0.15 220 / 0.14);
+
+  --color-trade-long:     var(--trade-long-500);
+  --color-trade-short:    var(--trade-short-500);
+  --color-trade-long-bg:  var(--trade-long-bg);
+  --color-trade-short-bg: var(--trade-short-bg);
+
+  --color-ai:             var(--ai-500);
+  --color-ai-bg:          var(--ai-bg);
+  --color-signal-draft:   var(--signal-draft);
+  --color-signal-approved:var(--signal-approved);
+  --color-order-pending:  var(--order-pending);
+  --color-order-filled:   var(--order-filled);
+  --color-order-canceled: var(--order-canceled);
+  --color-order-rejected: var(--order-rejected);
+
+  --color-warning: var(--warning-500);
+  --color-danger:  var(--danger-500);
+  --color-success: var(--success-500);
+  --color-info:    var(--info-500);
+
+  /* ---------- CHART COLORS ---------- */
+  --chart-grid:       oklch(28% 0.014 240 / 0.5);
+  --chart-axis-text:  var(--n-500);
+  --chart-crosshair:  oklch(70% 0.03 240 / 0.6);
+  --chart-candle-up:  var(--color-trade-long);
+  --chart-candle-dn:  var(--color-trade-short);
+  --chart-ma-1:       oklch(80% 0.13 85);   /* MA20 amber */
+  --chart-ma-2:       oklch(78% 0.13 285);  /* MA60 violet */
+  --chart-ma-3:       oklch(76% 0.13 210);  /* MA120 cyan */
+  --chart-volume-up:  oklch(72% 0.14 175 / 0.35);
+  --chart-volume-dn:  oklch(68% 0.22 355 / 0.35);
+
+  /* ---------- TYPOGRAPHY ----------
+     No web font is downloaded (see apps/web/index.html): the preferred faces are used when the OS
+     has them, otherwise the stack falls through to the platform Korean/Latin UI faces so Hangul
+     never renders in a fallback serif. */
+  --font-sans: 'Pretendard Variable', 'IBM Plex Sans', 'Apple SD Gothic Neo', 'Noto Sans KR',
+               'Noto Sans CJK KR', 'Malgun Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
+  --font-num:  'IBM Plex Mono', 'Pretendard Variable', ui-monospace, 'DejaVu Sans Mono', monospace;
+  --font-en:   'IBM Plex Sans', 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-2xs: 10px;
+  --fs-xs:  11px;
+  --fs-sm:  12px;
+  --fs-md:  13px;
+  --fs-lg:  14px;
+  --fs-xl:  16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --fs-5xl: 36px;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.45;
+  --lh-loose: 1.6;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---------- SPACING (density: Comfortable 기본) ---------- */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+
+  --density-scale: 1;
+  --row-h-xs: calc(20px * var(--density-scale));
+  --row-h-sm: calc(24px * var(--density-scale));
+  --row-h-md: calc(28px * var(--density-scale));
+  --row-h-lg: calc(32px * var(--density-scale));
+  --input-h:  calc(32px * var(--density-scale));
+  --btn-h:    calc(32px * var(--density-scale));
+  --header-h: 48px;
+  --sub-header-h: 56px;
+
+  /* ---------- RADII ---------- */
+  --r-none: 0;
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 999px;
+
+  /* ---------- BORDER / SHADOW / OPACITY ---------- */
+  --bw-1: 1px;
+  --bw-2: 2px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-3: 0 12px 32px rgba(0,0,0,0.45);
+  --shadow-glow-ai: 0 0 0 1px var(--color-ai), 0 8px 24px oklch(72% 0.15 285 / 0.25);
+
+  --opacity-disabled: 0.4;
+  --opacity-hover: 0.85;
+
+  /* ---------- MOTION ---------- */
+  --dur-instant: 60ms;
+  --dur-fast: 120ms;
+  --dur-normal: 180ms;
+  --dur-slow: 280ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dropdown: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+  --z-max: 9999;
+
+  /* ---------- BREAKPOINTS (values only) ---------- */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
+  --bp-3xl: 1680px;
+  --bp-4xl: 1920px;
+
+  /* ---------- WIDGET GRID ---------- */
+  --grid-cols: 24;
+  --grid-gap: 6px;
+  --grid-row: 40px;
+}
+</style>
+<style id="product-bridge">
+/* ===== 제품 토큰 브리지 레이어 =====
+   목업의 자체 변수를 제품 디자인 토큰으로 연결한다.
+   구조는 목업 것을 유지하고, 색·폰트는 전부 제품 토큰이 결정한다. */
+:root{
+  --mag:var(--color-brand); --mag-soft:var(--brand-primary-300); --mag-deep:var(--brand-primary-700);
+  --violet:var(--color-ai); --cyan:var(--brand-primary-300);
+  --up:var(--color-trade-long); --dn:var(--color-trade-short);
+  --bone:var(--color-text-primary); --steel:var(--color-text-secondary);
+  --slate:var(--color-text-tertiary); --dim:var(--color-text-tertiary);
+  --void:var(--color-bg-app); --void-2:var(--color-bg-surface);
+  --panel:var(--color-bg-panel); --panel-2:var(--color-bg-elevated);
+  --foot-bg:var(--color-bg-surface); --glass-dark:var(--color-bg-panel); --glass-dark-2:var(--color-bg-surface);
+  --edge:var(--color-border-subtle); --edge-2:var(--color-border-default);
+  --btn-fg:var(--color-text-inverse);
+  --axis:var(--chart-axis-text); --cross-dot:var(--color-text-primary); --cross-ring:var(--color-bg-app);
+  --scroll-track:var(--color-bg-surface); --scroll-thumb:var(--color-border-default);
+  --shadow-ink:var(--color-border-strong);
+  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:var(--font-mono);
+}
+</style>
+<style id="brand-pin">
+/* 목업 잔여 시안 제거 — 기본 브랜드는 #F00FF0 하나뿐이다 */
+:root{
+  --brand-primary-50:oklch(96% 0.030 328.33);
+  --brand-primary-100:oklch(90% 0.060 328.33);
+  --brand-primary-200:oklch(82% 0.120 328.33);
+  --brand-primary-300:oklch(75% 0.200 328.33);
+  --brand-primary-400:oklch(71% 0.260 328.33);
+  --brand-primary-500:oklch(67.25% 0.3048 328.33);
+  --brand-primary-600:oklch(56% 0.240 328.33);
+  --brand-primary-700:oklch(46% 0.190 328.33);
+  --brand-primary-800:oklch(34% 0.130 328.33);
+  --brand-primary-900:oklch(24% 0.090 328.33);
+  --brand-accent-500:oklch(71% 0.260 328.33);
+  --color-brand:var(--brand-primary-500);
+  --color-brand-hover:var(--brand-primary-400);
+  --color-brand-subtle:oklch(67.25% 0.3048 328.33 / 0.14);
+  --cyan:var(--brand-primary-300);
+  --info-500:oklch(66% 0.16 250);
+}
+.btn-mag{background:var(--color-brand)!important;border-color:var(--color-brand)!important;color:var(--btn-fg)!important}
+.btn-mag:hover{background:var(--color-brand-hover)!important;border-color:var(--color-brand-hover)!important}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">Work status</div>
+  <h1>지금까지 만든 것 — 전부</h1>
+  <p class="lead">공개 사이트 13페이지, 트레이딩 화면 재현본과 옵션 변형, 디자인 옵션 8종, 지표 라이브러리 v2, 리포트 3종. 각 항목은 라이브로 열립니다.</p>
+  <div class="stats">
+    <div class="stat"><b>13</b><span>공개 사이트 페이지</span></div>
+    <div class="stat"><b>8</b><span>표면 효과 옵션</span></div>
+    <div class="stat"><b>6</b><span>적용 변형 (다크/라이트)</span></div>
+    <div class="stat"><b>82</b><span>지표 (v2 이관)</span></div>
+    <div class="stat"><b>3</b><span>리포트</span></div>
+    <div class="stat"><b>0</b><span>깨진 링크</span></div>
+  </div>
+</div></header>
+
+<div class="wrap">
+
+<h2>1 · 공개 사이트 — 13페이지</h2>
+<div class="grid">
+  <article class="card">
+    <div class="thumb"><span class="badge">index.html</span><img src="https://www.genspark.ai/api/files/s/a9ImIiMY" alt="홈페이지"></div>
+    <div class="body"><h3>홈페이지</h3>
+      <p>히어로 · AI차트 · 워크스페이스 · 커버리지 · 가격 · FAQ · 시네마틱 터미널 쇼케이스. Proof 지표를 코드 근거 기반으로 교체.</p>
+      <div class="tags"><span class="tag ok">렌더 확인</span><span class="tag">다크/라이트</span><span class="tag">링크 9건 복구</span></div>
+      <a class="go" href="index.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">app.html</span><img src="https://www.genspark.ai/api/files/s/dTaQqUKq" alt="터미널"></div>
+    <div class="body"><h3>트레이딩 터미널 (초기 시안)</h3>
+      <p>캔들 차트 · AI 레벨 · 코파일럿 · 포지션 · 주문 티켓 · 오더북 · 워치리스트. <b>초기 마젠타 팔레트</b> 버전.</p>
+      <div class="tags"><span class="tag warn">팔레트 구버전</span><span class="tag">레일 6개</span></div>
+      <a class="go" href="app.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">signup.html</span><img src="https://www.genspark.ai/api/files/s/5JRP8aT6" alt="회원가입"></div>
+    <div class="body"><h3>회원가입</h3>
+      <p>서비스 동의와 <b>분리된 데이터 학습 동의 체크박스</b>. 추천코드 안내에 KuCoin·BitMart 두 코드 표시.</p>
+      <div class="tags"><span class="tag ok">별도 동의</span><span class="tag">두 코드</span></div>
+      <a class="go" href="signup.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">privacy.html</span><img src="https://www.genspark.ai/api/files/s/KyHIHutY" alt="개인정보처리방침"></div>
+    <div class="body"><h3>개인정보처리방침</h3>
+      <p><b>13조 "Model and service improvement"</b> 신설 — 데이터 종류·보관기간 표, 사용 목적, 비식별 처리, 동의 철회 절차.</p>
+      <div class="tags"><span class="tag ok">13조 추가</span><span class="tag">목차 13개</span></div>
+      <a class="go" href="privacy.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">refund.html</span><img src="https://www.genspark.ai/api/files/s/yfQhjg5N" alt="환불정책"></div>
+    <div class="body"><h3>환불 정책 (신규 작성)</h3>
+      <p>레포에 내용이 없어 직접 작성. 9개 조항 — 14일 전액 환불, 법정 권리 우선 조항, 환불 불가 항목, 처리 절차.</p>
+      <div class="tags"><span class="tag ok">신규</span><span class="tag warn">법무 검토 필요</span></div>
+      <a class="go" href="refund.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">partner.html</span><img src="https://www.genspark.ai/api/files/s/G5RBeaSk" alt="파트너"></div>
+    <div class="body"><h3>파트너 프로그램</h3>
+      <p>3개 프로그램 · 4단계 프로세스 · 조건표 7항목(Custody Never, Claims 금지) · FAQ 4개 · 신청폼 6필드.</p>
+      <div class="tags"><span class="tag ok">완료</span><span class="tag">퍼센트 미확정</span></div>
+      <a class="go" href="partner.html">열기 →</a>
+    </div>
+  </article>
+</div>
+
+<h2>2 · 나머지 공개 페이지</h2>
+<div class="flat">
+  <a class="link" href="guide.html"><b>사용법</b><span>guide.html · 6단계</span></a>
+  <a class="link" href="login.html"><b>로그인</b><span>login.html · Google OAuth</span></a>
+  <a class="link" href="reset.html"><b>비밀번호 재설정</b><span>reset.html · 3단계</span></a>
+  <a class="link" href="billing.html"><b>구독·결제</b><span>billing.html · 5티어</span></a>
+  <a class="link" href="terms.html"><b>이용약관</b><span>terms.html · 레포 원문</span></a>
+  <a class="link" href="risk.html"><b>위험고지</b><span>risk.html · 레포 원문</span></a>
+  <a class="link" href="legal.html"><b>법적문서 허브</b><span>legal.html · 4개 카드 Ready</span></a>
+</div>
+
+<h2>3 · 트레이딩 화면 — 실제 토큰으로 재현</h2>
+<div class="grid">
+  <article class="card">
+    <div class="thumb"><span class="badge">trade-system.html</span><img src="https://www.genspark.ai/api/files/s/viOyEy4o" alt="트레이드 탭 다크"></div>
+    <div class="body"><h3>트레이드 탭 + 트윅스 패널 (다크)</h3>
+      <p><b>레포 src/tokens.css 실제 토큰</b>으로 재현. 우측 트윅스에서 테마·브랜드4종·롱숏3종·밀도3종·효과9종 실시간 전환.</p>
+      <div class="tags"><span class="tag ok">토큰 준수</span><span class="tag">지표 12종</span><span class="tag">24컬럼</span></div>
+      <a class="go" href="trade-system.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">ts-opt-light.html</span><img src="https://www.genspark.ai/api/files/s/xqfv6zp4" alt="트레이드 라이트"></div>
+    <div class="body"><h3>라이트 모드 (대비 수정본)</h3>
+      <p>기존 tokens.css가 라이트에서 차트 토큰 2개만 덮어쓰던 결함을 수정. 레벨 라벨이 흰 배경에서 읽힙니다.</p>
+      <div class="tags"><span class="tag ok">대비 4.5:1</span><span class="tag">수정 완료</span></div>
+      <a class="go" href="ts-opt-light.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">ts-violet.html</span><img src="https://www.genspark.ai/api/files/s/UTP74EQA" alt="바이올렛"></div>
+    <div class="body"><h3>브랜드 스왑 증명 — 바이올렛 + 그린/레드</h3>
+      <p>토큰만 바꿔 시안→바이올렛, 틸/마젠타→그린/레드, 패널→유리로 전부 전환됩니다.</p>
+      <div class="tags"><span class="tag ok">스왑 작동</span><span class="tag">효과 C</span></div>
+      <a class="go" href="ts-violet.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">ts-grid-light.html</span><img src="https://www.genspark.ai/api/files/s/Ba6dle5O" alt="앰버 라이트"></div>
+    <div class="body"><h3>앰버 + 시안/오렌지 + 그리드 (라이트)</h3>
+      <p>브랜드 앰버, 롱숏 시안/오렌지, 표면 효과 B를 라이트에서. 조합이 전부 독립 동작합니다.</p>
+      <div class="tags"><span class="tag ok">조합 검증</span><span class="tag">효과 B</span></div>
+      <a class="go" href="ts-grid-light.html">열기 →</a>
+    </div>
+  </article>
+</div>
+<div class="flat" style="margin-top:12px">
+  <a class="link" href="ts-dark.html"><b>기본 다크</b><span>ts-dark.html</span></a>
+  <a class="link" href="ts-light.html"><b>기본 라이트</b><span>ts-light.html</span></a>
+  <a class="link" href="ts-opt-dark.html"><b>효과 A — 다크</b><span>ts-opt-dark.html</span></a>
+  <a class="link" href="ts-g-dark.html"><b>효과 G — 다크</b><span>ts-g-dark.html</span></a>
+  <a class="link" href="trade.html"><b>구버전 트레이드 (마젠타)</b><span>trade.html</span></a>
+</div>
+
+<h2>4 · 디자인 옵션 — 8종 + 적용 변형 6종</h2>
+<div class="grid">
+  <article class="card">
+    <div class="thumb"><span class="badge">options.html</span><img src="https://www.genspark.ai/api/files/s/msAxJ6Zg" alt="옵션 보드"></div>
+    <div class="body"><h3>옵션 보드 — A~H 8종</h3>
+      <p>모두 실제로 살아 움직이는 효과. 차트 페이지에 얹을 수 있는 것만 골랐습니다. 각 항목에 적합도·비용 표기.</p>
+      <div class="tags"><span class="tag ok">8종 전부 렌더</span><span class="tag">무료 자체 구현</span></div>
+      <a class="go" href="options.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">variants/v-G.html</span><img src="https://www.genspark.ai/api/files/s/iTzT0GQt" alt="효과 G"></div>
+    <div class="body"><h3>적용 변형 — 효과 G (차트 펄스 글로우)</h3>
+      <p>터미널에 실제 적용한 6종 중 하나. G는 유일하게 <b>기능</b> — 가격이 롱 구간이면 틸, 숏이면 마젠타.</p>
+      <div class="tags"><span class="tag ok">다크 렌더 확인</span><span class="tag">추천</span></div>
+      <a class="go" href="variants/v-G.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb"><span class="badge">variants/v-ACG.html</span><img src="https://www.genspark.ai/api/files/s/0uURj3vz" alt="ACG 조합"></div>
+    <div class="body"><h3>적용 변형 — A+C+G 조합</h3>
+      <p>배경 오로라 + 유리 패널 + 차트 글로우가 동시에. 3요소 모두 렌더에서 검출됐습니다.</p>
+      <div class="tags"><span class="tag ok">3요소 검출</span><span class="tag">가장 비싸 보임</span></div>
+      <a class="go" href="variants/v-ACG.html">열기 →</a>
+    </div>
+  </article>
+</div>
+<div class="flat" style="margin-top:12px">
+  <a class="link" href="variants/v-A.html"><b>A — Aurora mesh</b><span>v-A.html</span></a>
+  <a class="link" href="variants/v-C.html"><b>C — Glass depth</b><span>v-C.html</span></a>
+  <a class="link" href="variants/v-E.html"><b>E — Scanline</b><span>v-E.html</span></a>
+  <a class="link" href="variants/v-H.html"><b>H — Starfield</b><span>v-H.html</span></a>
+</div>
+
+<h2>5 · 지표 라이브러리 v2 — 82개</h2>
+<div class="grid">
+  <article class="card">
+    <div class="thumb"><span class="badge">indicators.html</span><img src="https://www.genspark.ai/api/files/s/YEvKMncr" alt="지표 v2"></div>
+    <div class="body"><h3>지표 라이브러리 v2 — 검증 PASS</h3>
+      <p>v1 79개를 전부 선언적 형식으로 이관 + 3개 추가 = <b>82개</b>. 토큰 전용(hex 0개), 파라미터 UI 자동 생성, compute 메모이즈.</p>
+      <div class="tags"><span class="tag ok">미등록 토큰 0</span><span class="tag ok">중복 id 0</span><span class="tag">문법 검증</span></div>
+      <a class="go" href="indicators.html">열기 →</a>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb" style="display:grid;place-items:center;background:#0F131A">
+      <div style="padding:22px;text-align:center">
+        <div class="mono" style="color:var(--cyan);font-size:15px">qt-indicators-next.js</div>
+        <div style="color:var(--txt3);font-size:11.5px;margin-top:6px">65 KB · 82 entries</div>
+      </div>
+    </div>
+    <div class="body"><h3>v2 라이브러리 본체</h3>
+      <p>v1 규칙 위반(하드코딩 hex 8개)을 제거. <code>CHART_TOKENS</code> 화이트리스트로 모르는 토큰은 하드 실패. <code>register()</code> 진입점 유지 → chart-kline.jsx 수정 불필요.</p>
+      <div class="tags"><span class="tag ok">SUPERTREND 교정</span><span class="tag">validate() throw</span></div>
+    </div>
+  </article>
+  <article class="card">
+    <div class="thumb" style="display:grid;place-items:center;background:#0F131A">
+      <div style="padding:22px;text-align:center">
+        <div class="mono" style="color:var(--cyan);font-size:15px">tokens-chart-lines.css</div>
+        <div style="color:var(--txt3);font-size:11.5px;margin-top:6px">2 KB · tokens.css 추가용</div>
+      </div>
+    </div>
+    <div class="body"><h3>차트 색상 토큰 블록</h3>
+      <p><code>--chart-line-1~8</code> 신설로 hex 팔레트 대체. 라이트 오버라이드 포함 — 기존 파일이 차트 토큰 2개만 덮어쓰던 결함 해결.</p>
+      <div class="tags"><span class="tag ok">라이트 대비 확보</span></div>
+    </div>
+  </article>
+</div>
+
+<h2>6 · 리포트 3종</h2>
+<div class="flat">
+  <div class="link"><b>트레이딩 스택 2026</b><span>trading-stack-2026.doc</span></div>
+  <div class="link"><b>ChartControl vs 권장 스택</b><span>chartcontrol-vs-recommended.doc</span></div>
+  <div class="link"><b>ChartControl 해설</b><span>chartcontrol-explained.doc</span></div>
+</div>
+
+<h2>7 · 반드시 알아야 할 충돌</h2>
+<div class="note">
+  <h4>브랜드 색이 두 갈래로 갈려 있습니다 — 확인 필요</h4>
+  <p>작업 중 실제 레포에서 확인한 사실입니다.</p>
+  <ul>
+    <li><b>공식 로고</b>(<code>logo-dark.svg</code>) = 일렉트릭 마젠타 <code>#F00FF0</code> → 공개 사이트 13페이지가 이 색을 씁니다.</li>
+    <li><b>제품 디자인 토큰</b>(<code>src/tokens.css</code>) = 브랜드 프라이머리 <b>시안</b> <code>oklch(56% 0.15 220)</code> → 트레이딩 화면이 이 색을 씁니다.</li>
+  </ul>
+  <p style="margin-top:9px">즉 <b>마케팅 사이트는 마젠타, 제품은 시안</b>입니다. 둘 다 의도된 것일 수도 있고, 하나가 낡은 것일 수도 있습니다. 어느 쪽이 기준인지 알려주시면 전체를 통일하겠습니다.</p>
+</div>
+<div class="note" style="border-color:rgba(242,99,158,.34);background:rgba(242,99,158,.06)">
+  <h4 style="color:var(--short)">아직 안 된 것</h4>
+  <ul>
+    <li><b>로그인 후 화면</b> — 대표님 지시로 보류. 로그인 벽 뒤라 스크린샷이 필요합니다.</li>
+    <li><b>법무 검토</b> — 약관·방침·위험고지·환불 4개 문서 전부. 레포에 "DRAFT — 그대로 게시 금지" 표시.</li>
+    <li><b>지표 3종 미이관</b> — <code>ASI</code>·<code>KLINGER</code>·<code>VCTC</code>. 정의가 모호해 추측으로 넣지 않았습니다.</li>
+    <li><b>일부 지표 근사 구현</b> — <code>CRSI</code>·<code>RVIMOM</code>·<code>CZ</code>·<code>MASSINDEX</code>는 교과서 1:1 대조 미완.</li>
+    <li><b>효과 E·F·H 개별 렌더</b> — 트윅스에서 선택 가능하지만 개별 스크린샷은 미촬영.</li>
+  </ul>
+</div>
+
+</div>
+<footer><div class="wrap">
+  작업 현황 · ChartControl · 링크는 모두 라이브로 열립니다. 정지 이미지로는 모션(오로라·빔·글로우·별)이 보이지 않으니 해당 페이지에서 직접 확인해 주세요.
+</div></footer>
+</body>
+</html>

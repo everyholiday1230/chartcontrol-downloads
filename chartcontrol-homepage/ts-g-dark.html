@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-longshort="teal-magenta" data-density="comfortable" data-fx="g">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade — ChartControl design system</title>
+<meta name="description" content="Token-driven ChartControl trade tab: brand palettes, long/short sets, density, dark/light and eight surface effects, all switchable live.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   LAYER 1 — BRAND TOKENS  (mirrors src/tokens.css exactly)
+   ================================================================ */
+:root{
+  --n-950:oklch(14% 0.012 240); --n-925:oklch(17% 0.013 240); --n-900:oklch(20% 0.014 240);
+  --n-850:oklch(24% 0.014 240); --n-800:oklch(28% 0.013 240); --n-700:oklch(38% 0.012 240);
+  --n-600:oklch(48% 0.010 240); --n-500:oklch(58% 0.008 240); --n-400:oklch(68% 0.006 240);
+  --n-300:oklch(78% 0.005 240); --n-200:oklch(86% 0.004 240); --n-100:oklch(92% 0.003 240);
+  --n-050:oklch(97% 0.002 240);
+
+  --brand-primary-400:oklch(71% 0.260 328.33); --brand-primary-500:oklch(67.25% 0.3048 328.33); --brand-primary-600:oklch(56% 0.240 328.33);
+  --trade-long-500:oklch(72% 0.14 175);  --trade-short-500:oklch(68% 0.22 355);
+  --trade-long-bg:oklch(72% 0.14 175 / .12); --trade-short-bg:oklch(68% 0.22 355 / .12);
+  --ai-500:oklch(72% 0.15 285); --ai-bg:oklch(72% 0.15 285 / .10);
+
+  /* ================================================================
+     LAYER 2 — SEMANTIC TOKENS (dark is the default theme)
+     ================================================================ */
+  --color-bg-app:var(--n-950); --color-bg-surface:var(--n-925); --color-bg-panel:var(--n-900);
+  --color-bg-elevated:var(--n-850); --color-bg-input:var(--n-925);
+  --color-bg-hover:oklch(28% 0.014 240 / .6);
+  --color-text-primary:var(--n-050); --color-text-secondary:var(--n-300); --color-text-tertiary:var(--n-500);
+  --color-border-subtle:oklch(28% 0.014 240 / .6); --color-border-default:oklch(38% 0.014 240 / .7);
+  --color-brand:var(--brand-primary-500); --color-brand-subtle:oklch(56% 0.15 220 / .14);
+  --color-trade-long:var(--trade-long-500); --color-trade-short:var(--trade-short-500);
+  --color-trade-long-bg:var(--trade-long-bg); --color-trade-short-bg:var(--trade-short-bg);
+  --color-ai:var(--ai-500); --color-ai-bg:var(--ai-bg);
+  --shadow-1:0 1px 2px rgba(0,0,0,.3); --shadow-2:0 4px 12px rgba(0,0,0,.35); --shadow-3:0 12px 32px rgba(0,0,0,.45);
+
+  /* ---- CHART TOKENS — read at DRAW time, never frozen at init ---- */
+  --chart-grid:oklch(28% 0.014 240 / .5);
+  --chart-axis-text:var(--n-500);
+  --chart-ma-1:oklch(80% 0.13 85);    /* MA20  amber   */
+  --chart-ma-2:oklch(78% 0.13 285);   /* MA60  violet  */
+  --chart-ma-3:oklch(76% 0.13 210);   /* MA120 cyan    */
+  --chart-bb:oklch(66% 0.06 240);     /* Bollinger     */
+  --chart-vwap:oklch(82% 0.11 105);   /* VWAP          */
+  --chart-rsi:oklch(74% 0.14 320);    /* RSI           */
+  --chart-macd:oklch(76% 0.12 200);   /* MACD          */
+  /* ---- LEVEL TOKENS — the light-mode fix lives here ---- */
+  --level-entry:var(--color-brand);
+  --level-invalidation:var(--color-trade-short);
+  --level-target-1:var(--color-ai);
+  --level-target-2:var(--color-trade-long);
+  --level-range:var(--color-text-tertiary);
+
+  /* ================================================================
+     LAYER 3 — COMPONENT TOKENS
+     ================================================================ */
+  --font-sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  --fs-2xs:10px; --fs-xs:11px; --fs-sm:12px; --fs-md:13px; --fs-lg:14px; --fs-xl:16px;
+  --sp-2:4px; --sp-3:6px; --sp-4:8px; --sp-5:10px; --sp-6:12px; --sp-8:16px; --sp-10:20px;
+  --r-sm:4px; --r-md:6px; --r-lg:8px; --r-xl:12px; --r-full:999px;
+  --density-scale:1;
+  --row-h:calc(24px * var(--density-scale));
+  --input-h:calc(32px * var(--density-scale));
+  --header-h:48px; --grid-gap:6px;
+  --dur-fast:120ms; --dur-normal:180ms; --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+/* ---- BRAND VARIANTS (Tweaks §6) ---- */
+[data-brand="quantum-violet"]{
+  --brand-primary-500:oklch(64% 0.20 300); --brand-primary-400:oklch(70% 0.18 300);
+  --color-brand:var(--brand-primary-500); --color-brand-subtle:oklch(64% 0.20 300 / .14);
+}
+[data-brand="onyx-emerald"]{
+  --brand-primary-500:oklch(64% 0.15 160); --brand-primary-400:oklch(72% 0.13 160);
+  --color-brand:var(--brand-primary-500); --color-brand-subtle:oklch(64% 0.15 160 / .14);
+}
+[data-brand="graphite-amber"]{
+  --brand-primary-500:oklch(72% 0.14 70); --brand-primary-400:oklch(78% 0.12 70);
+  --color-brand:var(--brand-primary-500); --color-brand-subtle:oklch(72% 0.14 70 / .14);
+}
+
+/* ---- LONG/SHORT VARIANTS (Tweaks §5) ---- */
+[data-longshort="green-red"]{
+  --trade-long-500:oklch(70% 0.17 145); --trade-short-500:oklch(64% 0.22 25);
+  --trade-long-bg:oklch(70% 0.17 145 / .12); --trade-short-bg:oklch(64% 0.22 25 / .12);
+  --color-trade-long:var(--trade-long-500); --color-trade-short:var(--trade-short-500);
+  --color-trade-long-bg:var(--trade-long-bg); --color-trade-short-bg:var(--trade-short-bg);
+}
+[data-longshort="cyan-orange"]{
+  --trade-long-500:oklch(72% 0.15 220); --trade-short-500:oklch(72% 0.17 55);
+  --trade-long-bg:oklch(72% 0.15 220 / .12); --trade-short-bg:oklch(72% 0.17 55 / .12);
+  --color-trade-long:var(--trade-long-500); --color-trade-short:var(--trade-short-500);
+  --color-trade-long-bg:var(--trade-long-bg); --color-trade-short-bg:var(--trade-short-bg);
+}
+
+/* ---- DENSITY (Tweaks §2) ---- */
+[data-density="compact"]{--density-scale:.88}
+[data-density="dense"]{--density-scale:.78}
+
+/* ================================================================
+   LIGHT THEME — plus the chart-token overrides the base file lacks
+   ================================================================ */
+[data-theme="light"]{
+  --color-bg-app:oklch(98% 0.003 240); --color-bg-surface:oklch(100% 0 0);
+  --color-bg-panel:oklch(99% 0.002 240); --color-bg-elevated:oklch(100% 0 0);
+  --color-bg-input:oklch(100% 0 0); --color-bg-hover:oklch(94% 0.006 240);
+  --color-text-primary:oklch(20% 0.014 240); --color-text-secondary:oklch(38% 0.014 240);
+  --color-text-tertiary:oklch(52% 0.012 240);
+  --color-border-subtle:oklch(90% 0.006 240); --color-border-default:oklch(82% 0.008 240);
+  --chart-grid:oklch(88% 0.006 240 / .7); --chart-axis-text:oklch(48% 0.012 240);
+  /* FIX: the base file overrides only grid + axis. Every other chart token keeps
+     its dark value on white, which is why level labels and MA lines wash out.
+     These are the missing overrides — darkened for >=4.5:1 on white. */
+  --chart-ma-1:oklch(46% 0.13 75);
+  --chart-ma-2:oklch(44% 0.16 290);
+  --chart-ma-3:oklch(42% 0.12 225);
+  --chart-bb:oklch(42% 0.05 240);
+  --chart-vwap:oklch(44% 0.11 105);
+  --chart-rsi:oklch(44% 0.16 325);
+  --chart-macd:oklch(42% 0.12 210);
+  --level-entry:oklch(40% 0.15 220);
+  --level-invalidation:oklch(45% 0.21 355);
+  --level-target-1:oklch(42% 0.17 285);
+  --level-target-2:oklch(40% 0.13 175);
+  --level-range:oklch(50% 0.010 240);
+  --shadow-1:0 1px 2px rgba(15,20,28,.06); --shadow-2:0 4px 12px rgba(15,20,28,.08);
+  --shadow-3:0 12px 32px rgba(15,20,28,.14);
+}
+
+/* ================================================================
+   SHELL
+   ================================================================ */
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--color-bg-app);color:var(--color-text-primary);font-family:var(--font-sans);
+  font-size:var(--fs-md);line-height:1.45;-webkit-font-smoothing:antialiased;position:relative}
+.mono{font-family:var(--font-mono)}
+.ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.topbar{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);
+  padding:0 var(--sp-8);background:var(--color-bg-surface);border-bottom:1px solid var(--color-border-subtle);position:relative;z-index:2}
+.tb-l,.tb-r{display:flex;align-items:center;gap:var(--sp-5);min-width:0}
+.mark{font-weight:700;color:var(--color-brand);font-size:var(--fs-lg);letter-spacing:.01em}
+.sym{display:flex;align-items:center;gap:var(--sp-3);background:transparent;border:1px solid var(--color-border-subtle);
+  color:var(--color-text-primary);font:inherit;font-weight:600;padding:5px 9px;border-radius:var(--r-md);cursor:pointer}
+.sym em{font-style:normal;color:var(--color-text-tertiary);font-weight:400;font-size:var(--fs-xs)}
+.seg{display:flex;gap:2px;background:var(--color-bg-app);border:1px solid var(--color-border-subtle);border-radius:var(--r-md);padding:2px}
+.seg__opt{background:transparent;border:0;color:var(--color-text-tertiary);font:inherit;font-size:var(--fs-xs);
+  padding:4px 9px;border-radius:var(--r-sm);cursor:pointer;white-space:nowrap}
+.seg__opt.is-active{background:var(--color-bg-elevated);color:var(--color-text-primary)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-xs);padding:4px 9px;border-radius:var(--r-full);
+  border:1px solid var(--color-border-subtle);color:var(--color-text-secondary);white-space:nowrap}
+.chip i{width:6px;height:6px;border-radius:50%;background:var(--color-trade-long);box-shadow:0 0 7px var(--color-trade-long)}
+.chip--warn{color:var(--color-trade-short);border-color:color-mix(in srgb,var(--color-trade-short) 40%,transparent)}
+.btn{font:inherit;font-size:var(--fs-sm);font-weight:600;height:var(--input-h);padding:0 var(--sp-6);border-radius:var(--r-md);
+  cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn--ghost{background:transparent;border-color:var(--color-border-default);color:var(--color-text-secondary)}
+.btn--brand{background:var(--color-brand);color:#08120f}
+.btn--long{background:var(--color-trade-long);color:#08130f;width:100%}
+.btn--icon{width:var(--input-h);padding:0;background:transparent;border-color:var(--color-border-subtle);color:var(--color-text-secondary)}
+.shell{display:flex;gap:var(--grid-gap);padding:var(--sp-4);position:relative;z-index:2;align-items:flex-start}
+.rail{width:64px;flex:none;display:flex;flex-direction:column;gap:2px;background:var(--color-bg-surface);
+  border:1px solid var(--color-border-subtle);border-radius:var(--r-lg);padding:var(--sp-3) 0;align-items:center}
+.rail__i{width:56px;background:transparent;border:0;color:var(--color-text-tertiary);font:inherit;font-size:var(--fs-2xs);
+  display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;border-radius:var(--r-md);cursor:pointer}
+.rail__i.is-active{color:var(--color-brand);background:var(--color-brand-subtle)}
+.grid{flex:1;min-width:0;display:grid;grid-template-columns:repeat(24,1fr);gap:var(--grid-gap)}
+.panel{background:var(--color-bg-panel);border:1px solid var(--color-border-subtle);border-radius:var(--r-lg);
+  padding:var(--sp-5);min-width:0;box-shadow:var(--shadow-1);position:relative}
+.panel--chart{grid-column:span 15}
+.panel--ai{grid-column:span 9;display:flex;flex-direction:column;gap:var(--sp-4)}
+.panel--pos{grid-column:span 9}
+.panel--ticket{grid-column:span 8}
+.panel--book{grid-column:span 7}
+.panel--ind{grid-column:span 24}
+.ph{display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-5);flex-wrap:wrap}
+.ph__t{font-size:var(--fs-xs);letter-spacing:.09em;text-transform:uppercase;color:var(--color-text-tertiary);font-weight:600}
+.legend{font-size:var(--fs-2xs);color:var(--color-text-tertiary);display:inline-flex;align-items:center;gap:4px}
+.legend .dot{width:7px;height:2px;border-radius:1px;display:inline-block;margin-left:6px}
+.legend.ohlc{margin-left:auto;font-family:var(--font-mono)}
+.canvas svg{width:100%;height:356px;display:block}
+.badge{font-size:var(--fs-2xs);padding:2px 7px;border-radius:var(--r-full);border:1px solid var(--color-border-subtle);color:var(--color-text-tertiary)}
+.badge--ai{color:var(--color-ai);border-color:color-mix(in srgb,var(--color-ai) 45%,transparent);background:var(--color-ai-bg)}
+.q{margin:0;font-size:var(--fs-sm);color:var(--color-text-tertiary);font-style:italic}
+.lv{display:flex;justify-content:space-between;align-items:baseline;font-size:var(--fs-sm);height:var(--row-h)}
+.lv span{color:var(--color-text-tertiary)}
+.lv b{font-size:var(--fs-md);font-family:var(--font-mono)}
+.t-entry{color:var(--level-entry)} .t-inv{color:var(--level-invalidation)}
+.t-t1{color:var(--level-target-1)} .t-t2{color:var(--level-target-2)}
+.ev{font-size:var(--fs-sm);line-height:1.55;color:var(--color-text-secondary);margin:0;padding-top:var(--sp-4);
+  border-top:1px solid var(--color-border-subtle)}
+.ev b{color:var(--color-text-primary)}
+.ev.dim{color:var(--color-text-tertiary);border:0;padding-top:0;font-size:var(--fs-xs)}
+.ask{display:flex;gap:var(--sp-3);margin-top:auto}
+.ask input{flex:1;background:var(--color-bg-input);border:1px solid var(--color-border-subtle);border-radius:var(--r-md);
+  color:var(--color-text-primary);font:inherit;font-size:var(--fs-sm);height:var(--input-h);padding:0 9px}
+.tbl{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}
+.tbl th{text-align:left;font-size:var(--fs-2xs);letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);font-weight:600;padding:0 6px 6px 0}
+.tbl td{padding:5px 6px 5px 0;border-top:1px solid var(--color-border-subtle);color:var(--color-text-secondary);height:var(--row-h)}
+.tag{font-size:var(--fs-2xs);padding:2px 7px;border-radius:var(--r-sm)}
+.tag--long{color:var(--color-trade-long);background:var(--color-trade-long-bg)}
+.tabs{display:flex;gap:var(--sp-2);margin-bottom:var(--sp-4)}
+.tab{flex:1;font:inherit;font-size:var(--fs-sm);height:var(--input-h);border-radius:var(--r-md);cursor:pointer;
+  background:transparent;border:1px solid var(--color-border-subtle);color:var(--color-text-tertiary)}
+.tab--long.is-active{background:var(--color-trade-long-bg);border-color:var(--color-trade-long);color:var(--color-trade-long);font-weight:600}
+.f{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-3)}
+.f label{font-size:var(--fs-xs);color:var(--color-text-tertiary)}
+.f input{width:104px;background:var(--color-bg-input);border:1px solid var(--color-border-subtle);border-radius:var(--r-md);
+  color:var(--color-text-primary);font-family:var(--font-mono);font-size:var(--fs-sm);height:var(--input-h);padding:0 8px;text-align:right}
+.note{font-size:var(--fs-2xs);color:var(--color-text-tertiary);margin:var(--sp-3) 0 0;text-align:center}
+.ob-h{display:flex;justify-content:space-between;font-size:var(--fs-2xs);text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-tertiary);padding-bottom:5px}
+.ob-r{display:flex;justify-content:space-between;font-size:var(--fs-xs);font-family:var(--font-mono);padding:1px 5px;border-radius:var(--r-sm)}
+.ob-bid{color:var(--color-trade-long);background:var(--color-trade-long-bg)}
+.ob-ask{color:var(--color-trade-short);background:var(--color-trade-short-bg)}
+.ob-spread{display:flex;justify-content:space-between;font-size:var(--fs-xs);font-family:var(--font-mono);padding:5px;
+  margin:4px 0;border-top:1px solid var(--color-border-subtle);border-bottom:1px solid var(--color-border-subtle)}
+.ob-spread span{color:var(--color-text-tertiary)}
+/* indicator list */
+.ind{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:var(--sp-4)}
+.ind__i{display:flex;align-items:center;gap:8px;font-size:var(--fs-xs);color:var(--color-text-secondary);
+  border:1px solid var(--color-border-subtle);border-radius:var(--r-md);padding:5px 9px;height:var(--row-h)}
+.ind__i .sw{width:14px;height:3px;border-radius:2px;flex:none}
+.ind__i em{font-style:normal;margin-left:auto;font-size:var(--fs-2xs);color:var(--color-text-tertiary);font-family:var(--font-mono)}
+
+/* ================================================================
+   TWEAKS PANEL
+   ================================================================ */
+.tweaks{position:fixed;right:14px;top:60px;width:296px;max-height:calc(100vh - 76px);overflow:auto;z-index:400;
+  background:var(--color-bg-surface);border:1px solid var(--color-border-default);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-3);font-size:var(--fs-sm)}
+.tweaks[hidden]{display:none}
+.tweaks__header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;
+  border-bottom:1px solid var(--color-border-subtle);position:sticky;top:0;background:var(--color-bg-surface);z-index:1}
+.tweaks__title{display:flex;align-items:center;gap:7px;font-weight:600;font-size:var(--fs-sm)}
+.tweaks__title em{font-style:normal;font-size:9px;font-family:var(--font-mono);color:var(--color-text-tertiary);letter-spacing:.06em}
+.tw{padding:11px 12px;border-bottom:1px solid var(--color-border-subtle)}
+.tw:last-child{border-bottom:0}
+.tw__t{font-size:var(--fs-2xs);letter-spacing:.09em;text-transform:uppercase;color:var(--color-text-tertiary);
+  font-weight:600;margin-bottom:7px;display:flex;justify-content:space-between}
+.tw__t b{color:var(--color-brand);font-weight:600}
+.tw__row{display:flex;flex-wrap:wrap;gap:5px}
+.opt{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--color-border-subtle);
+  color:var(--color-text-secondary);font:inherit;font-size:var(--fs-xs);padding:5px 8px;border-radius:var(--r-md);cursor:pointer}
+.opt.is-active{border-color:var(--color-brand);color:var(--color-text-primary);background:var(--color-brand-subtle)}
+.opt i{width:11px;height:11px;border-radius:3px;display:block;flex:none}
+.opt--fx{width:100%;justify-content:flex-start}
+.opt--fx em{font-style:normal;margin-left:auto;font-family:var(--font-mono);font-size:9px;color:var(--color-text-tertiary)}
+
+/* ================================================================
+   SURFACE EFFECTS — every colour comes from a token, so each one
+   works in dark AND light and under all four brand palettes.
+   ================================================================ */
+[data-fx="a"] body::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(30% 22% at 20% 12%,color-mix(in srgb,var(--color-brand) 26%,transparent),transparent 62%),
+    radial-gradient(28% 22% at 80% 18%,color-mix(in srgb,var(--color-ai) 26%,transparent),transparent 64%),
+    radial-gradient(34% 22% at 52% 58%,color-mix(in srgb,var(--color-brand) 16%,transparent),transparent 66%);
+  filter:blur(48px);animation:fxAurora 18s ease-in-out infinite alternate}
+@keyframes fxAurora{0%{transform:translate3d(-3%,-2%,0) scale(1.04)}100%{transform:translate3d(3%,3%,0) scale(1.12)}}
+
+[data-fx="b"] body::before{content:"";position:absolute;left:-30%;right:-30%;top:42%;height:120%;z-index:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(90deg,color-mix(in srgb,var(--color-brand) 60%,transparent) 0 1px,transparent 1px 52px),
+    repeating-linear-gradient(0deg,color-mix(in srgb,var(--color-ai) 45%,transparent) 0 1px,transparent 1px 52px);
+  transform:perspective(260px) rotateX(64deg);transform-origin:50% 0;animation:fxGrid 3.8s linear infinite}
+@keyframes fxGrid{to{background-position:0 52px,0 52px}}
+[data-fx="b"] body::after{content:"";position:absolute;left:0;right:0;top:42%;height:1px;z-index:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--color-brand),transparent)}
+
+[data-fx="c"] .panel,[data-fx="c"] .rail,[data-fx="c"] .topbar{
+  background:color-mix(in srgb,var(--color-bg-panel) 70%,transparent);
+  backdrop-filter:blur(14px) saturate(140%);
+  border-color:color-mix(in srgb,var(--color-border-default) 80%,transparent);box-shadow:var(--shadow-2)}
+[data-fx="c"] .panel::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(125deg,color-mix(in srgb,var(--color-text-primary) 7%,transparent) 0 20%,transparent 44%)}
+
+[data-fx="d"] .panel--chart::after{content:"";position:absolute;top:-40%;bottom:-40%;width:150px;left:-30%;z-index:1;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--color-brand) 34%,transparent),
+    color-mix(in srgb,var(--color-text-primary) 10%,transparent),transparent);
+  transform:rotate(15deg);filter:blur(11px);animation:fxBeam 4.4s ease-in-out infinite;pointer-events:none}
+@keyframes fxBeam{0%{left:-32%}55%{left:110%}100%{left:110%}}
+
+[data-fx="e"] .panel--ai::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(0deg,color-mix(in srgb,var(--color-text-primary) 8%,transparent) 0 1px,transparent 1px 3px);
+  animation:fxScan 9s linear infinite}
+@keyframes fxScan{to{background-position:0 3px}}
+[data-fx="e"] .panel--ai::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  background:radial-gradient(76% 76% at 50% 46%,transparent 42%,color-mix(in srgb,var(--color-bg-app) 72%,transparent))}
+[data-fx="e"] .panel--ai>*{position:relative;z-index:4}
+.vlog{font-family:var(--font-mono);font-size:var(--fs-2xs);line-height:1.8;color:var(--color-trade-long);
+  border-bottom:1px solid var(--color-border-subtle);padding-bottom:8px;margin-bottom:8px}
+.vlog i{font-style:normal;color:var(--color-brand)}
+
+[data-fx="f"] body::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(color-mix(in srgb,var(--color-text-secondary) 50%,transparent) 1px,transparent 1.4px);
+  background-size:15px 15px;animation:fxDots 16s linear infinite}
+@keyframes fxDots{to{background-position:15px 15px}}
+[data-fx="f"] body::after{content:"";position:absolute;left:50%;top:34%;width:340px;height:340px;transform:translate(-50%,-50%);
+  z-index:0;pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--color-brand) 34%,transparent),transparent 64%);filter:blur(8px)}
+
+[data-fx="g"] .panel--chart{animation:fxPulse 3.2s ease-in-out infinite}
+@keyframes fxPulse{
+ 0%,100%{box-shadow:0 0 0 2px color-mix(in srgb,var(--color-trade-long) 85%,transparent),
+    0 0 42px color-mix(in srgb,var(--color-trade-long) 34%,transparent)}
+ 50%{box-shadow:0 0 0 2px color-mix(in srgb,var(--color-trade-short) 85%,transparent),
+    0 0 50px color-mix(in srgb,var(--color-trade-short) 40%,transparent)}}
+[data-fx="g"] .legend.ohlc{animation:fxTint 3.2s ease-in-out infinite}
+@keyframes fxTint{0%,100%{color:var(--color-trade-long)}50%{color:var(--color-trade-short)}}
+
+[data-fx="h"] body::before,[data-fx="h"] body::after{content:"";position:absolute;inset:-40%;z-index:0;pointer-events:none}
+[data-fx="h"] body::before{background-image:radial-gradient(color-mix(in srgb,var(--color-text-primary) 70%,transparent) 1px,transparent 1.35px);
+  background-size:118px 118px;opacity:.34;animation:fxStar1 26s linear infinite}
+[data-fx="h"] body::after{background-image:radial-gradient(color-mix(in srgb,var(--color-text-primary) 60%,transparent) 1px,transparent 1.3px);
+  background-size:52px 52px;opacity:.22;animation:fxStar2 15s linear infinite}
+@keyframes fxStar1{to{transform:translate3d(118px,118px,0)}}
+@keyframes fxStar2{to{transform:translate3d(52px,52px,0)}}
+
+@media (max-width:1240px){
+  .panel--chart,.panel--ai,.panel--pos{grid-column:span 24}
+  .panel--ticket,.panel--book{grid-column:span 12}
+}
+@media (max-width:720px){.panel--ticket,.panel--book{grid-column:span 24}.tweaks{left:10px;right:10px;width:auto}}
+@media (prefers-reduced-motion:reduce){
+  [data-fx] body::before,[data-fx] body::after,[data-fx] .panel::after,[data-fx] .panel--chart,[data-fx] .legend.ohlc{animation:none}
+}
+</style>
+<style id="brand-f00ff0">
+[data-brand="institutional-cool"]{
+  --brand-primary-50: oklch(96% 0.02 220);
+  --brand-primary-100: oklch(90% 0.04 220);
+  --brand-primary-200: oklch(80% 0.08 220);
+  --brand-primary-300: oklch(70% 0.11 220);
+  --brand-primary-400: oklch(62% 0.13 220);
+  --brand-primary-500: oklch(56% 0.15 220);
+  --brand-primary-600: oklch(48% 0.14 220);
+  --brand-primary-700: oklch(38% 0.11 220);
+  --brand-primary-800: oklch(28% 0.08 220);
+  --brand-primary-900: oklch(20% 0.05 220);
+  --brand-accent-500: oklch(78% 0.13 210);
+  --color-brand: var(--brand-primary-500);
+  --color-brand-hover: var(--brand-primary-400);
+  --color-brand-subtle: oklch(56% 0.15 220 / 0.14);
+  --info-500: var(--brand-primary-500);
+}
+:root{
+  --chart-line-1: oklch(67.25% 0.3048 328.33);
+  --chart-line-2: oklch(72% 0.15 175);
+  --chart-line-3: oklch(70% 0.14 250);
+  --chart-line-4: oklch(76% 0.14 85);
+  --chart-line-5: oklch(70% 0.16 285);
+  --chart-line-6: oklch(72% 0.13 200);
+  --chart-line-7: oklch(70% 0.15 145);
+  --chart-line-8: oklch(68% 0.18 355);
+}
+[data-theme="light"]{
+  --color-brand: oklch(48% 0.190 328.33);
+  --color-brand-hover: oklch(40% 0.190 328.33);
+  --color-brand-subtle: oklch(48% 0.190 328.33 / 0.12);
+  --chart-candle-up: oklch(56% 0.15 175);
+  --chart-candle-dn: oklch(52% 0.20 355);
+  --chart-ma-1: oklch(58% 0.15 75);
+  --chart-ma-2: oklch(50% 0.19 285);
+  --chart-ma-3: oklch(50% 0.14 230);
+  --chart-volume-up: oklch(39.3% 0.049 175 / 0.6);
+  --chart-volume-dn: oklch(42.7% 0.106 355 / 0.6);
+  --chart-line-1: oklch(48% 0.190 328.33);
+  --chart-line-2: oklch(52% 0.14 175);
+  --chart-line-3: oklch(50% 0.15 250);
+  --chart-line-4: oklch(54% 0.14 75);
+  --chart-line-5: oklch(50% 0.17 285);
+  --chart-line-6: oklch(52% 0.13 200);
+  --chart-line-7: oklch(50% 0.15 145);
+  --chart-line-8: oklch(50% 0.18 355);
+}
+/* 패널이 바닥까지 늘어나 생기는 빈 공간 방지 */
+body{min-height:auto}
+</style>
+<style id="product-tokens">
+:root{
+
+  /* ---------- BRAND TOKENS (기본: Institutional Cool) ---------- */
+  --brand-primary-50:  oklch(96% 0.02 220);
+  --brand-primary-100: oklch(90% 0.04 220);
+  --brand-primary-200: oklch(80% 0.08 220);
+  --brand-primary-300: oklch(70% 0.11 220);
+  --brand-primary-400: oklch(62% 0.13 220);
+  --brand-primary-500: oklch(56% 0.15 220);   /* signature cyan */
+  --brand-primary-600: oklch(48% 0.14 220);
+  --brand-primary-700: oklch(38% 0.11 220);
+  --brand-primary-800: oklch(28% 0.08 220);
+  --brand-primary-900: oklch(20% 0.05 220);
+
+  --brand-accent-500: oklch(78% 0.13 210);    /* light cyan (highlight) */
+  --brand-neutral-hue: 240;                    /* cool blue-gray */
+
+  /* ---------- LONG / SHORT (기본: Teal / Magenta) ---------- */
+  --trade-long-500:  oklch(72% 0.14 175);
+  --trade-long-400:  oklch(78% 0.12 175);
+  --trade-long-600:  oklch(64% 0.15 175);
+  --trade-long-bg:   oklch(72% 0.14 175 / 0.12);
+  --trade-long-bg-2: oklch(72% 0.14 175 / 0.25);
+
+  --trade-short-500: oklch(68% 0.22 355);
+  --trade-short-400: oklch(74% 0.20 355);
+  --trade-short-600: oklch(60% 0.24 355);
+  --trade-short-bg:  oklch(68% 0.22 355 / 0.12);
+  --trade-short-bg-2:oklch(68% 0.22 355 / 0.25);
+
+  /* ---------- AI / SIGNAL (팔레트 독립) ---------- */
+  --ai-500: oklch(72% 0.15 285);
+  --ai-400: oklch(78% 0.13 285);
+  --ai-600: oklch(64% 0.16 285);
+  --ai-bg:  oklch(72% 0.15 285 / 0.10);
+  --ai-bg-2: oklch(72% 0.15 285 / 0.22);
+
+  --signal-draft:    var(--ai-500);
+  --signal-approved: oklch(78% 0.14 145);
+  --order-pending:   oklch(80% 0.13 85);
+  --order-filled:    oklch(75% 0.13 145);
+  --order-canceled:  oklch(60% 0.02 240);
+  --order-rejected:  var(--trade-short-500);
+
+  --warning-500: oklch(80% 0.14 75);
+  --danger-500:  oklch(64% 0.20 25);
+  --success-500: oklch(74% 0.14 150);
+  --info-500:    var(--brand-primary-500);
+
+  /* ---------- NEUTRALS (Dark 기본) ---------- */
+  --n-950: oklch(14% 0.012 240);
+  --n-925: oklch(17% 0.013 240);
+  --n-900: oklch(20% 0.014 240);
+  --n-850: oklch(24% 0.014 240);
+  --n-800: oklch(28% 0.013 240);
+  --n-700: oklch(38% 0.012 240);
+  --n-600: oklch(48% 0.010 240);
+  --n-500: oklch(58% 0.008 240);
+  --n-400: oklch(68% 0.006 240);
+  --n-300: oklch(78% 0.005 240);
+  --n-200: oklch(86% 0.004 240);
+  --n-100: oklch(92% 0.003 240);
+  --n-050: oklch(97% 0.002 240);
+  --n-000: oklch(100% 0 0);
+
+  /* ---------- SEMANTIC — Dark theme (default) ---------- */
+  --color-bg-app:       var(--n-950);
+  --color-bg-surface:   var(--n-925);
+  --color-bg-panel:     var(--n-900);
+  --color-bg-elevated:  var(--n-850);
+  --color-bg-hover:     oklch(28% 0.014 240 / 0.6);
+  --color-bg-active:    oklch(32% 0.016 240 / 0.7);
+  --color-bg-input:     var(--n-925);
+
+  --color-text-primary:   var(--n-050);
+  --color-text-secondary: var(--n-300);
+  --color-text-tertiary:  var(--n-500);
+  --color-text-disabled:  var(--n-700);
+  --color-text-inverse:   var(--n-950);
+
+  --color-border-subtle:  oklch(28% 0.014 240 / 0.6);
+  --color-border-default: oklch(38% 0.014 240 / 0.7);
+  --color-border-strong:  oklch(48% 0.014 240 / 0.9);
+  --color-border-focus:   var(--brand-primary-500);
+
+  --color-brand:          var(--brand-primary-500);
+  --color-brand-hover:    var(--brand-primary-400);
+  --color-brand-subtle:   oklch(56% 0.15 220 / 0.14);
+
+  --color-trade-long:     var(--trade-long-500);
+  --color-trade-short:    var(--trade-short-500);
+  --color-trade-long-bg:  var(--trade-long-bg);
+  --color-trade-short-bg: var(--trade-short-bg);
+
+  --color-ai:             var(--ai-500);
+  --color-ai-bg:          var(--ai-bg);
+  --color-signal-draft:   var(--signal-draft);
+  --color-signal-approved:var(--signal-approved);
+  --color-order-pending:  var(--order-pending);
+  --color-order-filled:   var(--order-filled);
+  --color-order-canceled: var(--order-canceled);
+  --color-order-rejected: var(--order-rejected);
+
+  --color-warning: var(--warning-500);
+  --color-danger:  var(--danger-500);
+  --color-success: var(--success-500);
+  --color-info:    var(--info-500);
+
+  /* ---------- CHART COLORS ---------- */
+  --chart-grid:       oklch(28% 0.014 240 / 0.5);
+  --chart-axis-text:  var(--n-500);
+  --chart-crosshair:  oklch(70% 0.03 240 / 0.6);
+  --chart-candle-up:  var(--color-trade-long);
+  --chart-candle-dn:  var(--color-trade-short);
+  --chart-ma-1:       oklch(80% 0.13 85);   /* MA20 amber */
+  --chart-ma-2:       oklch(78% 0.13 285);  /* MA60 violet */
+  --chart-ma-3:       oklch(76% 0.13 210);  /* MA120 cyan */
+  --chart-volume-up:  oklch(72% 0.14 175 / 0.35);
+  --chart-volume-dn:  oklch(68% 0.22 355 / 0.35);
+
+  /* ---------- TYPOGRAPHY ----------
+     No web font is downloaded (see apps/web/index.html): the preferred faces are used when the OS
+     has them, otherwise the stack falls through to the platform Korean/Latin UI faces so Hangul
+     never renders in a fallback serif. */
+  --font-sans: 'Pretendard Variable', 'IBM Plex Sans', 'Apple SD Gothic Neo', 'Noto Sans KR',
+               'Noto Sans CJK KR', 'Malgun Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
+  --font-num:  'IBM Plex Mono', 'Pretendard Variable', ui-monospace, 'DejaVu Sans Mono', monospace;
+  --font-en:   'IBM Plex Sans', 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-2xs: 10px;
+  --fs-xs:  11px;
+  --fs-sm:  12px;
+  --fs-md:  13px;
+  --fs-lg:  14px;
+  --fs-xl:  16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --fs-5xl: 36px;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.45;
+  --lh-loose: 1.6;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---------- SPACING (density: Comfortable 기본) ---------- */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+
+  --density-scale: 1;
+  --row-h-xs: calc(20px * var(--density-scale));
+  --row-h-sm: calc(24px * var(--density-scale));
+  --row-h-md: calc(28px * var(--density-scale));
+  --row-h-lg: calc(32px * var(--density-scale));
+  --input-h:  calc(32px * var(--density-scale));
+  --btn-h:    calc(32px * var(--density-scale));
+  --header-h: 48px;
+  --sub-header-h: 56px;
+
+  /* ---------- RADII ---------- */
+  --r-none: 0;
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 999px;
+
+  /* ---------- BORDER / SHADOW / OPACITY ---------- */
+  --bw-1: 1px;
+  --bw-2: 2px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-3: 0 12px 32px rgba(0,0,0,0.45);
+  --shadow-glow-ai: 0 0 0 1px var(--color-ai), 0 8px 24px oklch(72% 0.15 285 / 0.25);
+
+  --opacity-disabled: 0.4;
+  --opacity-hover: 0.85;
+
+  /* ---------- MOTION ---------- */
+  --dur-instant: 60ms;
+  --dur-fast: 120ms;
+  --dur-normal: 180ms;
+  --dur-slow: 280ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dropdown: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+  --z-max: 9999;
+
+  /* ---------- BREAKPOINTS (values only) ---------- */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
+  --bp-3xl: 1680px;
+  --bp-4xl: 1920px;
+
+  /* ---------- WIDGET GRID ---------- */
+  --grid-cols: 24;
+  --grid-gap: 6px;
+  --grid-row: 40px;
+}
+</style>
+<style id="product-bridge">
+/* ===== 제품 토큰 브리지 레이어 =====
+   목업의 자체 변수를 제품 디자인 토큰으로 연결한다.
+   구조는 목업 것을 유지하고, 색·폰트는 전부 제품 토큰이 결정한다. */
+:root{
+  --mag:var(--color-brand); --mag-soft:var(--brand-primary-300); --mag-deep:var(--brand-primary-700);
+  --violet:var(--color-ai); --cyan:var(--brand-primary-300);
+  --up:var(--color-trade-long); --dn:var(--color-trade-short);
+  --bone:var(--color-text-primary); --steel:var(--color-text-secondary);
+  --slate:var(--color-text-tertiary); --dim:var(--color-text-tertiary);
+  --void:var(--color-bg-app); --void-2:var(--color-bg-surface);
+  --panel:var(--color-bg-panel); --panel-2:var(--color-bg-elevated);
+  --foot-bg:var(--color-bg-surface); --glass-dark:var(--color-bg-panel); --glass-dark-2:var(--color-bg-surface);
+  --edge:var(--color-border-subtle); --edge-2:var(--color-border-default);
+  --btn-fg:var(--color-text-inverse);
+  --axis:var(--chart-axis-text); --cross-dot:var(--color-text-primary); --cross-ring:var(--color-bg-app);
+  --scroll-track:var(--color-bg-surface); --scroll-thumb:var(--color-border-default);
+  --shadow-ink:var(--color-border-strong);
+  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:var(--font-mono);
+}
+</style>
+<style id="brand-pin">
+/* 목업 잔여 시안 제거 — 기본 브랜드는 #F00FF0 하나뿐이다 */
+:root{
+  --brand-primary-50:oklch(96% 0.030 328.33);
+  --brand-primary-100:oklch(90% 0.060 328.33);
+  --brand-primary-200:oklch(82% 0.120 328.33);
+  --brand-primary-300:oklch(75% 0.200 328.33);
+  --brand-primary-400:oklch(71% 0.260 328.33);
+  --brand-primary-500:oklch(67.25% 0.3048 328.33);
+  --brand-primary-600:oklch(56% 0.240 328.33);
+  --brand-primary-700:oklch(46% 0.190 328.33);
+  --brand-primary-800:oklch(34% 0.130 328.33);
+  --brand-primary-900:oklch(24% 0.090 328.33);
+  --brand-accent-500:oklch(71% 0.260 328.33);
+  --color-brand:var(--brand-primary-500);
+  --color-brand-hover:var(--brand-primary-400);
+  --color-brand-subtle:oklch(67.25% 0.3048 328.33 / 0.14);
+  --cyan:var(--brand-primary-300);
+  --info-500:oklch(66% 0.16 250);
+}
+.btn-mag{background:var(--color-brand)!important;border-color:var(--color-brand)!important;color:var(--btn-fg)!important}
+.btn-mag:hover{background:var(--color-brand-hover)!important;border-color:var(--color-brand-hover)!important}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-l">
+    <span class="mark">CCAI</span>
+    <button class="sym">BTC/USDT <em>Perpetual</em><svg viewBox="0 0 24 24" class="ic"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="seg" id="tf"></div>
+    <div class="seg" id="mode"></div>
+  </div>
+  <div class="tb-r">
+    <span class="chip"><i></i>KuCoin · connected</span>
+    <span class="chip chip--warn">withdraw · refused</span>
+    <button class="btn btn--ghost" id="openTweaks">
+      <svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>Tweaks
+    </button>
+    <button class="btn btn--brand">New order</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="Main" id="rail"></nav>
+
+  <main class="grid">
+    <section class="panel panel--chart">
+      <div class="ph">
+        <span class="ph__t">Chart</span>
+        <span class="legend mono ohlc">O 66,180 H 66,412 L 66,088 C 66,240</span>
+      </div>
+      <div class="canvas" id="chart"></div>
+      <div class="ph" style="margin:9px 0 0">
+        <span class="legend"><i class="dot" style="background:var(--chart-ma-1)"></i>MA20</span>
+        <span class="legend"><i class="dot" style="background:var(--chart-ma-2)"></i>MA60</span>
+        <span class="legend"><i class="dot" style="background:var(--chart-ma-3)"></i>MA120</span>
+        <span class="legend"><i class="dot" style="background:var(--chart-bb)"></i>BB</span>
+        <span class="legend"><i class="dot" style="background:var(--chart-vwap)"></i>VWAP</span>
+        <span class="legend"><i class="dot" style="background:var(--level-entry)"></i>Entry</span>
+        <span class="legend"><i class="dot" style="background:var(--level-invalidation)"></i>Invalidation</span>
+        <span class="legend"><i class="dot" style="background:var(--level-target-1)"></i>T1</span>
+        <span class="legend"><i class="dot" style="background:var(--level-target-2)"></i>T2</span>
+      </div>
+    </section>
+
+    <aside class="panel panel--ai">
+      <div class="ph"><span class="ph__t">AI read</span><span class="badge badge--ai">draft</span></div>
+      <p class="q">"Where does this break down?"</p>
+      <div class="lv"><span>Entry</span><b class="t-entry">66,310</b></div>
+      <div class="lv"><span>Invalidation</span><b class="t-inv">65,940</b></div>
+      <div class="lv"><span>Target 1</span><b class="t-t1">67,120</b></div>
+      <div class="lv"><span>Target 2</span><b class="t-t2">68,640</b></div>
+      <p class="ev"><b>Why.</b> Price reclaimed the 15m range high on expanding volume and printed three higher lows. Invalidation sits under the last higher low; below it the structure that produced the move is gone.</p>
+      <p class="ev dim">Every level is drawn from candles on your own account.</p>
+      <div class="ask"><input placeholder="Ask about this chart" aria-label="Ask about this chart"><button class="btn btn--brand">Ask</button></div>
+    </aside>
+
+    <section class="panel panel--pos">
+      <div class="ph"><span class="ph__t">Open positions</span><span class="badge">1</span></div>
+      <table class="tbl"><thead><tr><th>Market</th><th>Side</th><th>Size</th><th>Entry</th><th>Mark</th><th>PnL</th></tr></thead>
+      <tbody><tr><td>BTC/USDT</td><td><span class="tag tag--long">Long 5×</span></td><td class="mono">0.180</td><td class="mono">66,310</td><td class="mono">66,240</td><td class="mono" style="color:var(--color-trade-short)">−$12.6</td></tr></tbody></table>
+    </section>
+
+    <section class="panel panel--ticket">
+      <div class="ph"><span class="ph__t">Order ticket</span><span class="badge">risk check on</span></div>
+      <div class="tabs"><button class="tab tab--long is-active">Buy / Long</button><button class="tab">Sell / Short</button></div>
+      <div class="f"><label>Size (BTC)</label><input class="mono" value="0.180"></div>
+      <div class="f"><label>Leverage</label><input class="mono" value="5×"></div>
+      <div class="f"><label>Take profit</label><input class="mono" value="67,120"></div>
+      <div class="f"><label>Stop</label><input class="mono" value="65,940"></div>
+      <button class="btn btn--long">Confirm order</button>
+      <p class="note">Pre-filled from the read. You confirm every order.</p>
+    </section>
+
+    <section class="panel panel--book">
+      <div class="ph"><span class="ph__t">Order book</span><span class="badge">KuCoin</span></div>
+      <div class="ob-h"><span>Price</span><span>Size</span></div>
+      <div id="asks"></div>
+      <div class="ob-spread">66,243 <span>spread 0.01%</span></div>
+      <div id="bids"></div>
+    </section>
+
+    <section class="panel panel--ind">
+      <div class="ph"><span class="ph__t">Indicators &amp; signal lines</span><span class="badge" id="indCount"></span><span class="legend" style="margin-left:auto">each colour is bound to a token — change the token, every surface follows</span></div>
+      <div class="ind" id="ind"></div>
+    </section>
+  </main>
+</div>
+
+<aside class="tweaks" id="tweaks" hidden>
+  <div class="tweaks__header">
+    <div class="tweaks__title">
+      <svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      Tweaks <em>LIVE</em>
+    </div>
+    <button class="btn btn--icon" id="closeTweaks" aria-label="Close">
+      <svg viewBox="0 0 24 24" class="ic"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="tw"><div class="tw__t">Theme</div><div class="tw__row" id="tw-theme"></div></div>
+  <div class="tw"><div class="tw__t">Brand palette</div><div class="tw__row" id="tw-brand"></div></div>
+  <div class="tw"><div class="tw__t">Long / short</div><div class="tw__row" id="tw-ls"></div></div>
+  <div class="tw"><div class="tw__t">Density</div><div class="tw__row" id="tw-density"></div></div>
+  <div class="tw"><div class="tw__t">Surface effect <b id="fxNow">none</b></div><div class="tw__row" id="tw-fx"></div></div>
+</aside>
+
+<script>
+/* ================================================================
+   CHART RENDERER
+   Every colour is read from a CSS variable at DRAW time. Nothing is
+   frozen at load, so switching theme / brand / long-short repaints
+   correctly — the rule stated in chart-indicators.js.
+   ================================================================ */
+(function(){
+  'use strict';
+  var W=1040,H=360,PAD=24,N=96;
+
+  function rnd(seed){ var s=seed; return function(){ s=(s*1103515245+12345)&0x7fffffff; return s/0x7fffffff; }; }
+  function series(){
+    var r=rnd(20261011), p=66240, out=[], i;
+    for(i=0;i<N;i++){
+      var o=p, drift=i>54?6:-2;
+      var c=o+(r()*2-1)*86+drift;
+      var hi=Math.max(o,c)+r()*46, lo=Math.min(o,c)-r()*46;
+      out.push([o,hi,lo,c]); p=c;
+    }
+    return out;
+  }
+  var C=series();
+  var LO=Math.min.apply(null,C.map(function(k){return k[2];}));
+  var HI=Math.max.apply(null,C.map(function(k){return k[1];}));
+  var STEP=(W-PAD*2)/N, BODY=STEP*0.6;
+  function y(v){ return PAD+(HI-v)/(HI-LO)*(H-PAD*2); }
+  function ma(n,i){ var s=0,k; for(k=Math.max(0,i-n+1);k<=i;k++) s+=C[k][3]; return s/(i-Math.max(0,i-n+1)+1); }
+  function sd(n,i){ var m=ma(n,i),s=0,k,c=0; for(k=Math.max(0,i-n+1);k<=i;k++){s+=Math.pow(C[k][3]-m,2);c++;} return Math.sqrt(s/c); }
+
+  function el(t,a){ var e=document.createElementNS('http://www.w3.org/2000/svg',t),k;
+    for(k in a) e.setAttribute(k,a[k]); return e; }
+
+  function draw(){
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'none',
+      role:'img','aria-label':'BTC/USDT perpetual chart with indicators, signal levels and AI markers'});
+    var i,k,x,o,h,l,c,up,col,yt,yb;
+    /* grid — token: --chart-grid */
+    for(i=0;i<=5;i++){
+      svg.appendChild(el('line',{x1:PAD,y1:PAD+i*(H-PAD*2)/5,x2:W-PAD,y2:PAD+i*(H-PAD*2)/5,
+        stroke:'var(--chart-grid)','stroke-width':1}));
+    }
+    /* Bollinger band — token: --chart-bb */
+    var upP=[],dnP=[],midP=[];
+    for(i=0;i<N;i++){ x=(PAD+i*STEP+STEP/2).toFixed(1);
+      var m=ma(20,i),s=sd(20,i);
+      upP.push(x+','+y(m+s*2).toFixed(1)); midP.push(x+','+y(m).toFixed(1)); dnP.push(x+','+y(m-s*2).toFixed(1)); }
+    svg.appendChild(el('polyline',{points:upP.join(' '),fill:'none',stroke:'var(--chart-bb)','stroke-width':1,opacity:.6}));
+    svg.appendChild(el('polyline',{points:dnP.join(' '),fill:'none',stroke:'var(--chart-bb)','stroke-width':1,opacity:.6}));
+    svg.appendChild(el('polyline',{points:midP.join(' '),fill:'none',stroke:'var(--chart-bb)','stroke-width':1,opacity:.35,'stroke-dasharray':'3 3'}));
+    /* moving averages — tokens: --chart-ma-1/2/3 */
+    [[20,'var(--chart-ma-1)'],[60,'var(--chart-ma-2)'],[120,'var(--chart-ma-3)']].forEach(function(mv){
+      var pts=[]; for(i=0;i<N;i++) pts.push((PAD+i*STEP+STEP/2).toFixed(1)+','+y(ma(mv[0],i)).toFixed(1));
+      svg.appendChild(el('polyline',{points:pts.join(' '),fill:'none',stroke:mv[1],'stroke-width':1.35,opacity:.9}));
+    });
+    /* VWAP — token: --chart-vwap */
+    var vw=[],acc=0,vol=0;
+    for(i=0;i<N;i++){ var tp=(C[i][1]+C[i][2]+C[i][3])/3, v=1+Math.abs(C[i][3]-C[i][0])/60;
+      acc+=tp*v; vol+=v; vw.push((PAD+i*STEP+STEP/2).toFixed(1)+','+y(acc/vol).toFixed(1)); }
+    svg.appendChild(el('polyline',{points:vw.join(' '),fill:'none',stroke:'var(--chart-vwap)','stroke-width':1.3,opacity:.9}));
+    /* candles — tokens: --color-trade-long / --color-trade-short */
+    for(i=0;i<N;i++){
+      o=C[i][0];h=C[i][1];l=C[i][2];c=C[i][3]; x=PAD+i*STEP+STEP/2;
+      up=c>=o; col=up?'var(--color-trade-long)':'var(--color-trade-short)';
+      yt=y(Math.max(o,c)); yb=y(Math.min(o,c)); if(yb-yt<1.3) yb=yt+1.3;
+      svg.appendChild(el('line',{x1:x.toFixed(1),y1:y(h).toFixed(1),x2:x.toFixed(1),y2:y(l).toFixed(1),stroke:col,'stroke-width':1}));
+      svg.appendChild(el('rect',{x:(x-BODY/2).toFixed(1),y:yt.toFixed(1),width:BODY.toFixed(1),height:(yb-yt).toFixed(1),fill:col}));
+    }
+    /* signal levels — tokens: --level-* */
+    [[65280,'Range low','--level-range'],[65940,'Invalidation','--level-invalidation'],
+     [66310,'Entry','--level-entry'],[67120,'Target 1','--level-target-1'],[68640,'Target 2','--level-target-2']]
+    .forEach(function(L){
+      svg.appendChild(el('line',{x1:PAD,y1:y(L[0]).toFixed(1),x2:W-PAD,y2:y(L[0]).toFixed(1),
+        stroke:'var('+L[2]+')','stroke-width':1,'stroke-dasharray':'4 4',opacity:1}));
+      var tx=el('text',{x:PAD+6,y:(y(L[0])-4).toFixed(1),fill:'var('+L[2]+')','font-size':10.5,
+        'font-weight':600,
+        'font-family':'var(--font-mono)'});
+      tx.textContent=L[1]+' '+L[0].toLocaleString(); svg.appendChild(tx);
+    });
+    /* AI signal markers — token: --color-ai */
+    var m1=el('rect',{x:(PAD+30*STEP).toFixed(1),y:(y(66120)-4).toFixed(1),width:8,height:8,fill:'var(--color-ai)'});
+    svg.appendChild(m1);
+    var tx2=el('text',{x:(PAD+30*STEP+13).toFixed(1),y:(y(66120)+3).toFixed(1),fill:'var(--color-ai)','font-size':10.5,'font-weight':600,'font-family':'var(--font-mono)'});
+    tx2.textContent='signal approved'; svg.appendChild(tx2);
+    var m2=el('rect',{x:(PAD+72*STEP).toFixed(1),y:(y(66780)-4).toFixed(1),width:8,height:8,fill:'var(--color-trade-short)'});
+    svg.appendChild(m2);
+    var tx3=el('text',{x:(PAD+72*STEP+13).toFixed(1),y:(y(66780)+3).toFixed(1),fill:'var(--color-trade-short)','font-size':10.5,'font-weight':600,'font-family':'var(--font-mono)'});
+    tx3.textContent='signal rejected'; svg.appendChild(tx3);
+    /* last price marker — token: --color-text-primary */
+    svg.appendChild(el('line',{x1:W-PAD-52,y1:y(C[N-1][3]).toFixed(1),x2:W-PAD,y2:y(C[N-1][3]).toFixed(1),
+      stroke:'var(--color-text-primary)','stroke-width':1,opacity:.7}));
+    var host=document.getElementById('chart'); host.innerHTML=''; host.appendChild(svg);
+  }
+
+  /* ---- order book ---- */
+  function book(){
+    var r=rnd(777),a=[],b=[],i;
+    for(i=0;i<7;i++){
+      a.push('<div class="ob-r ob-ask"><span>'+(66246+i*6).toLocaleString()+'</span><span>'+(0.05+r()*2.35).toFixed(3)+'</span></div>');
+      b.push('<div class="ob-r ob-bid"><span>'+(66240-i*6).toLocaleString()+'</span><span>'+(0.05+r()*2.35).toFixed(3)+'</span></div>');
+    }
+    document.getElementById('asks').innerHTML=a.join('');
+    document.getElementById('bids').innerHTML=b.join('');
+  }
+
+  /* ---- indicators + signal lines, colour-bound to tokens ---- */
+  var IND=[
+    ['MA20','--chart-ma-1'],['MA60','--chart-ma-2'],['MA120','--chart-ma-3'],
+    ['Bollinger Bands','--chart-bb'],['VWAP','--chart-vwap'],
+    ['RSI(14)','--chart-rsi'],['MACD','--chart-macd'],
+    ['Entry signal','--level-entry'],['Invalidation line','--level-invalidation'],
+    ['Target 1','--level-target-1'],['Target 2','--level-target-2'],['Range low','--level-range']
+  ];
+  function indicators(){
+    document.getElementById('ind').innerHTML=IND.map(function(x){
+      return '<div class="ind__i"><i class="sw" style="background:var('+x[1]+')"></i>'+x[0]+'<em>'+x[1]+'</em></div>';
+    }).join('');
+    document.getElementById('indCount').textContent=IND.length+' active';
+  }
+
+  /* ---- topbar segments + rail ---- */
+  var ICONS=[
+    ['Trade','<path d="M3 3v18h18"/><path d="m7 14 3-4 3 3 5-7"/>'],
+    ['Markets','<path d="M4 7h16M4 12h16M4 17h10"/>'],
+    ['Portfolio','<path d="M4 19V5m0 14h16"/><path d="M8 15V9m4 6V7m4 8v-5"/>'],
+    ['Copilot','<path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/>'],
+    ['Journal','<path d="M5 4h11l3 3v13H5z"/><path d="M9 9h7M9 13h7"/>'],
+    ['Points','<circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h5M9.5 14h5"/>'],
+    ['Settings','<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>']
+  ];
+  function chrome(){
+    document.getElementById('tf').innerHTML=['1m','5m','15m','1h','4h','1D'].map(function(t){
+      return '<button class="seg__opt'+(t==='15m'?' is-active':'')+'">'+t+'</button>'; }).join('');
+    document.getElementById('mode').innerHTML=['Futures','Spot'].map(function(t){
+      return '<button class="seg__opt'+(t==='Futures'?' is-active':'')+'">'+t+'</button>'; }).join('');
+    document.getElementById('rail').innerHTML=ICONS.map(function(x,i){
+      return '<button class="rail__i'+(i===0?' is-active':'')+'"><svg viewBox="0 0 24 24" class="ic">'+x[1]+
+             '</svg><span>'+x[0]+'</span></button>'; }).join('');
+  }
+
+  /* ---- TWEAKS: one place that mutates the root attributes ---- */
+  var THEMES=[['dark','Dark'],['light','Light']];
+  var BRANDS=[['institutional-cool','Institutional Cool','oklch(67.25% 0.3048 328.33)'],
+              ['quantum-violet','Quantum Violet','oklch(64% 0.20 300)'],
+              ['onyx-emerald','Onyx Emerald','oklch(64% 0.15 160)'],
+              ['graphite-amber','Graphite Amber','oklch(72% 0.14 70)']];
+  var LS=[['teal-magenta','Teal / Magenta','oklch(72% 0.14 175)','oklch(68% 0.22 355)'],
+          ['green-red','Green / Red','oklch(70% 0.17 145)','oklch(64% 0.22 25)'],
+          ['cyan-orange','Cyan / Orange','oklch(72% 0.15 220)','oklch(72% 0.17 55)']];
+  var DEN=[['comfortable','Comfortable'],['compact','Compact'],['dense','Dense']];
+  var FX=[['none','None'],['a','Aurora mesh'],['b','Neon grid floor'],['c','Glass depth'],
+          ['d','Beam sweep'],['e','Scanline console'],['f','Dot matrix'],['g','Chart pulse glow'],['h','Starfield parallax']];
+  var root=document.documentElement;
+
+  function paint(host,items,attr,active){
+    document.getElementById(host).innerHTML=items.map(function(x){
+      var chips=x[2]?('<i style="background:'+x[2]+'"></i>'+(x[3]?'<i style="background:'+x[3]+'"></i>':'')):'';
+      var cls='opt'+(attr==='fx'?' opt--fx':'')+(x[0]===active?' is-active':'');
+      var tail=attr==='fx'?'<em>'+x[0].toUpperCase()+'</em>':'';
+      return '<button class="'+cls+'" data-v="'+x[0]+'">'+chips+'<span>'+x[1]+'</span>'+tail+'</button>';
+    }).join('');
+  }
+  function sync(){
+    paint('tw-theme',THEMES,'theme',root.getAttribute('data-theme'));
+    paint('tw-brand',BRANDS,'brand',root.getAttribute('data-brand'));
+    paint('tw-ls',LS,'ls',root.getAttribute('data-longshort'));
+    paint('tw-density',DEN,'density',root.getAttribute('data-density'));
+    paint('tw-fx',FX,'fx',root.getAttribute('data-fx'));
+    document.getElementById('fxNow').textContent=(root.getAttribute('data-fx')||'none').toUpperCase();
+  }
+  document.getElementById('tweaks').addEventListener('click',function(e){
+    var b=e.target.closest('.opt'); if(!b) return;
+    var v=b.dataset.v, host=b.parentElement.id;
+    if(host==='tw-theme') root.setAttribute('data-theme',v);
+    if(host==='tw-brand') root.setAttribute('data-brand',v);
+    if(host==='tw-ls') root.setAttribute('data-longshort',v);
+    if(host==='tw-density') root.setAttribute('data-density',v);
+    if(host==='tw-fx') root.setAttribute('data-fx',v);
+    sync(); draw();
+  });
+  document.getElementById('openTweaks').addEventListener('click',function(){
+    document.getElementById('tweaks').hidden=false; });
+  document.getElementById('closeTweaks').addEventListener('click',function(){
+    document.getElementById('tweaks').hidden=true; });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') document.getElementById('tweaks').hidden=true; });
+
+  chrome(); book(); indicators(); sync(); draw();
+  /* keep the panel open on first paint so the controls are discoverable */
+  })();
+</script>
+</body>
+</html>

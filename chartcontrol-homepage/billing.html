@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plans &amp; billing — ChartControl</title>
+<meta name="description" content="Choose a ChartControl plan and manage payment. Every plan buys AI analyses; unused points carry over. Non-custodial — we never hold your funds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>(function(){try{var t=localStorage.getItem('cc-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<style>
+:root{
+  --void:#07070B;
+  --void-2:#0B0B12;
+  --panel:rgba(255,255,255,.034);
+  --panel-2:rgba(255,255,255,.06);
+  --edge:rgba(255,255,255,.09);
+  --edge-2:rgba(255,255,255,.16);
+  --bone:#F2F3F7;
+  --steel:#A7AEBD;
+  --slate:#7A8292;
+  --dim:#7E879A;
+  --mag:#F00FF0;
+  --mag-soft:#FF6BFF;
+  --mag-deep:#A800A8;
+  --violet:#7C5CFF;
+  --cyan:var(--brand-primary-300);
+  --up:#25D07A;
+  --dn:#FF4D6A;
+  --btn-fg:#FFFFFF;
+  --glass-dark:rgba(9,9,14,.72);
+  --glass-dark-2:rgba(9,9,14,.6);
+  --scroll-track:#0A0A10;
+  --scroll-thumb:#22222E;
+  --axis:#59606F;
+  --cross-dot:#F2F3F7;
+  --cross-ring:#07070B;
+  --grain-op:.32;
+  --grain-invert:0;
+  --field-op:.5;
+  --shadow-ink:var(--shadow-ink);
+  --foot-bg:rgba(0,0,0,.32);
+  --ov012:rgba(255,255,255,.012);
+  --ov015:rgba(255,255,255,.015);
+  --ov016:rgba(255,255,255,.016);
+  --ov018:rgba(255,255,255,.018);
+  --ov02:rgba(255,255,255,.02);
+  --ov022:rgba(255,255,255,.022);
+  --ov025:rgba(255,255,255,.025);
+  --ov026:rgba(255,255,255,.026);
+  --ov028:rgba(255,255,255,.028);
+  --ov034:rgba(255,255,255,.034);
+  --ov035:rgba(255,255,255,.035);
+  --ov045:rgba(255,255,255,.045);
+  --ov05:rgba(255,255,255,.05);
+  --ov055:rgba(255,255,255,.055);
+  --ov06:rgba(255,255,255,.06);
+  --ov07:rgba(255,255,255,.07);
+  --ov08:rgba(255,255,255,.08);
+  --ov09:rgba(255,255,255,.09);
+  --ov16:rgba(255,255,255,.16);
+  --ov20:rgba(255,255,255,.20);
+  --ov26:rgba(255,255,255,.26);
+  --ov36:rgba(255,255,255,.36);
+  --ov42:rgba(255,255,255,.42);
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Public Sans","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  --shell:1280px;
+  --gut:34px;
+}
+
+html[data-theme="light"]{
+  --void:#EEF0F5;
+  --void-2:#FFFFFF;
+  --panel:rgba(255,255,255,.78);
+  --panel-2:rgba(255,255,255,.95);
+  --edge:rgba(16,18,28,.11);
+  --edge-2:rgba(16,18,28,.20);
+  --bone:#0C0E15;
+  --steel:#3B4250;
+  --slate:#5A6270;
+  --dim:#6A7284;
+  --mag:#F00FF0;
+  --mag-soft:#B000B0;
+  --mag-deep:#8A008A;
+  --violet:#5B3BE0;
+  --cyan:#0A93AC;
+  --up:#0B9A58;
+  --dn:#D8284A;
+  --btn-fg:#0C0E15;
+  --glass-dark:rgba(255,255,255,.86);
+  --glass-dark-2:rgba(255,255,255,.72);
+  --scroll-track:#E4E7EE;
+  --scroll-thumb:#BFC5D2;
+  --axis:#6B7280;
+  --cross-dot:#0C0E15;
+  --cross-ring:#FFFFFF;
+  --grain-op:.05;
+  --grain-invert:1;
+  --field-op:.55;
+  --shadow-ink:rgba(16,18,28,.16);
+  --foot-bg:rgba(16,18,28,.035);
+  --nav-bg:rgba(255,255,255,.74);
+  --ov012:rgba(16,18,28,.03);
+  --ov015:rgba(16,18,28,.035);
+  --ov016:rgba(16,18,28,.04);
+  --ov018:rgba(16,18,28,.04);
+  --ov02:rgba(16,18,28,.045);
+  --ov022:rgba(16,18,28,.045);
+  --ov025:rgba(16,18,28,.05);
+  --ov026:rgba(16,18,28,.05);
+  --ov028:rgba(16,18,28,.055);
+  --ov034:rgba(16,18,28,.06);
+  --ov035:rgba(16,18,28,.06);
+  --ov045:rgba(16,18,28,.07);
+  --ov05:rgba(16,18,28,.075);
+  --ov055:rgba(16,18,28,.08);
+  --ov06:rgba(16,18,28,.085);
+  --ov07:rgba(16,18,28,.09);
+  --ov08:rgba(16,18,28,.10);
+  --ov09:rgba(16,18,28,.11);
+  --ov16:rgba(16,18,28,.16);
+  --ov20:rgba(16,18,28,.20);
+  --ov26:rgba(16,18,28,.26);
+  --ov36:rgba(16,18,28,.36);
+  --ov42:rgba(16,18,28,.42);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--void);color:var(--bone);font-family:var(--font-body);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background-color .45s ease,color .45s ease}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);font-weight:800;letter-spacing:-.03em;line-height:1.06}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit}
+code{font-family:var(--font-mono)}
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:3px}
+::selection{background:rgba(240,15,240,.32);color:var(--btn-fg)}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--scroll-track)}
+::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:6px;border:2px solid var(--scroll-track)}
+.field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.field .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--field-op);will-change:transform}
+.field .b1{width:720px;height:720px;left:-210px;top:-240px;background:radial-gradient(circle at 40% 40%,rgba(240,15,240,.5),transparent 68%);animation:drift1 36s ease-in-out infinite}
+.field .b2{width:620px;height:620px;right:-180px;top:26%;background:radial-gradient(circle at 50% 50%,rgba(124,92,255,.42),transparent 68%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(120px,90px,0) scale(1.12)}}
+@keyframes drift2{0%,100%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-130px,100px,0) scale(.94)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:var(--grain-op);filter:invert(var(--grain-invert));
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.grid-veil{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(var(--ov028) 1px,transparent 1px),linear-gradient(90deg,var(--ov028) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 78%)}
+.shell{width:100%;max-width:1180px;margin:0 auto;padding:0 30px;position:relative;z-index:2}
+.nav{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--edge);background:var(--nav-bg);
+  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5)}
+.nav .shell{display:flex;align-items:center;gap:28px;height:74px}
+.brand svg{height:28px;width:auto;display:block}
+.nav-links{display:flex;align-items:center;gap:22px;margin-left:6px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--steel);transition:color .16s}
+.nav-links a:hover{color:var(--bone)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.themebtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;
+  border:1px solid var(--edge-2);background:var(--panel-2);color:var(--steel);cursor:pointer;flex:none;
+  transition:color .25s,border-color .25s,box-shadow .25s}
+.themebtn:hover{color:var(--mag);border-color:var(--mag);box-shadow:0 0 20px -6px rgba(240,15,240,.7)}
+.themebtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+html[data-theme="dark"] .i-moon{display:none}
+html[data-theme="light"] .i-sun{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:44px;padding:0 20px;border-radius:11px;
+  border:1px solid transparent;font-weight:600;font-size:14.5px;cursor:pointer;transition:.22s;white-space:nowrap}
+.btn .ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn-mag{background:var(--color-brand);color:var(--btn-fg);box-shadow:0 14px 34px -16px rgba(240,15,240,.75)}
+.btn-mag:hover{transform:translateY(-1px)}
+.btn-glass{border-color:var(--edge-2);background:var(--panel);color:var(--bone)}
+.btn-glass:hover{border-color:var(--mag);color:var(--mag)}
+.btn-sm{height:38px;padding:0 15px;font-size:13.5px}
+.head{padding:70px 0 40px}
+.kicker{display:flex;align-items:center;gap:11px;font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--slate);margin-bottom:20px}
+.kicker::before{content:"";width:28px;height:2px;background:var(--mag);flex:none;box-shadow:0 0 12px rgba(240,15,240,.8)}
+.head h1{font-size:clamp(31px,4vw,48px);max-width:20ch}
+.head p{margin-top:16px;color:var(--steel);max-width:60ch}
+.head p b{color:var(--bone);font-weight:600}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:30px;align-items:start;padding-bottom:60px}
+.tiers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--edge);border:1px solid var(--edge);
+  border-radius:16px;overflow:hidden}
+.tier{background:var(--void-2);padding:38px 20px 26px;position:relative;transition:background .3s;display:flex;flex-direction:column}
+.tier:hover{background:var(--panel-2)}
+.tier.best{background:rgba(240,15,240,.07);box-shadow:inset 0 0 0 1px rgba(240,15,240,.45)}
+.tier .badge{position:absolute;top:12px;left:18px;font-family:var(--font-mono);font-size:9px;font-weight:700;
+  letter-spacing:.11em;background:var(--color-brand);color:var(--btn-fg);border-radius:5px;padding:3px 8px}
+.tier h3{font-size:17px;margin-bottom:6px}
+.tier .desc{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-bottom:16px}
+.tier .amt{font-family:var(--font-display);font-weight:800;font-size:32px;letter-spacing:-.03em;line-height:1}
+.tier .amt em{font-style:normal;font-size:14px;font-weight:600;color:var(--slate);letter-spacing:0}
+.tier .per{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-top:7px}
+.tier ul{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+.tier li{display:flex;gap:8px;font-size:12.8px;color:var(--steel);line-height:1.5}
+.tier li svg{width:14px;height:14px;stroke:var(--up);fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:3px}
+.tier ul{margin-bottom:20px}
+.tier .pick{margin-top:auto;width:100%;height:38px;font-size:13px}
+.tier .pick.cur{background:var(--panel-2);color:var(--steel);border-color:var(--edge-2);cursor:default;box-shadow:none}
+.note{margin-top:22px;display:flex;gap:10px;font-size:13px;color:var(--slate);line-height:1.6}
+.note svg{width:15px;height:15px;stroke:var(--slate);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:3px}
+.side{display:flex;flex-direction:column;gap:18px;position:sticky;top:98px}
+.panel{border:1px solid var(--edge);border-radius:15px;background:var(--panel);backdrop-filter:blur(14px);padding:22px 22px 24px}
+.panel h4{font-size:15.5px;margin-bottom:16px;display:flex;align-items:center;gap:9px}
+.panel h4 svg{width:16px;height:16px;stroke:var(--mag);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bal{font-family:var(--font-display);font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1}
+.bal em{font-style:normal;font-size:14px;color:var(--slate);font-weight:600}
+.bar{margin-top:14px;height:7px;border-radius:4px;background:var(--edge-2);overflow:hidden}
+.bar i{display:block;height:100%;width:38%;background:linear-gradient(90deg,var(--mag),var(--violet));border-radius:4px;
+  box-shadow:0 0 14px -2px rgba(240,15,240,.9)}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--steel);padding:8px 0;border-bottom:1px solid var(--edge)}
+.row:last-child{border-bottom:0}
+.row b{color:var(--bone);font-weight:600;font-family:var(--font-mono);font-size:13px}
+.card{display:flex;align-items:center;gap:13px;border:1px solid var(--edge-2);border-radius:12px;background:var(--void-2);padding:14px 16px}
+.card .cc{width:38px;height:26px;border-radius:5px;background:linear-gradient(135deg,var(--mag),#D900DA);flex:none}
+.card .meta{flex:1}
+.card .meta b{display:block;font-family:var(--font-mono);font-size:13px;letter-spacing:.06em}
+.card .meta span{font-size:12px;color:var(--slate)}
+.card .rm{font-family:var(--font-mono);font-size:10.5px;color:var(--slate);border:1px solid var(--edge-2);border-radius:7px;
+  padding:5px 9px;background:var(--panel-2);cursor:pointer}
+.card .rm:hover{color:var(--dn);border-color:rgba(255,77,106,.5)}
+.inv{margin-top:6px}
+.inv .r{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--edge);font-size:13px}
+.inv .r:last-child{border-bottom:0}
+.inv .r span{color:var(--slate)}
+.inv .r b{font-family:var(--font-mono);font-weight:600;font-size:12.8px}
+.inv .r .st{font-family:var(--font-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--up);
+  border:1px solid rgba(37,208,122,.4);border-radius:4px;padding:2px 6px}
+@media (max-width:1040px){.grid{grid-template-columns:1fr}.side{position:static}.tiers{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.shell{padding:0 20px}.tiers{grid-template-columns:1fr}.nav-links{display:none}}
+@media (prefers-reduced-motion:reduce){.field .blob{animation:none}}
+</style>
+<style id="cc-ux">
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:10px;z-index:400;background:var(--void-2);color:var(--bone);
+  border:1px solid var(--mag);padding:12px 18px;border-radius:12px;font-size:13px;text-decoration:none;font-weight:600}
+.skip:focus{left:10px}
+body{overflow-x:clip}
+.cc-spot{position:relative}
+.cc-spot::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  transition:opacity .4s ease;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(240,15,240,.14),transparent 62%)}
+.cc-spot:hover::before{opacity:1}
+.cc-tip{position:relative}
+.cc-tip::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translate(-50%,5px);
+  white-space:nowrap;background:var(--void-2);border:1px solid var(--edge);color:var(--bone);
+  font-size:11px;letter-spacing:.02em;padding:6px 10px;border-radius:9px;opacity:0;pointer-events:none;z-index:90;
+  box-shadow:0 12px 34px rgba(0,0,0,.45);transition:opacity .2s,transform .3s cubic-bezier(.22,.9,.3,1)}
+.cc-tip:hover::after{opacity:1;transform:translate(-50%,0)}
+.cc-glow{animation:ccglow 3.4s ease-in-out infinite}
+@keyframes ccglow{
+  0%,100%{box-shadow:0 0 0 1px rgba(240,15,240,.55),0 0 20px rgba(240,15,240,.38)}
+  50%{box-shadow:0 0 0 1px rgba(124,92,255,.70),0 0 32px rgba(240,15,240,.60),0 0 58px rgba(59,232,255,.22)}}
+@media (max-width:1024px){:root{--gut:26px}}
+@media (max-width:390px){:root{--gut:15px}}
+@media (prefers-reduced-motion:reduce){.cc-glow{animation:none}.cc-spot::before{transition:none}}
+</style><style id="product-tokens">
+:root{
+
+  /* ---------- BRAND TOKENS (기본: Institutional Cool) ---------- */
+  --brand-primary-50:  oklch(96% 0.02 220);
+  --brand-primary-100: oklch(90% 0.04 220);
+  --brand-primary-200: oklch(80% 0.08 220);
+  --brand-primary-300: oklch(70% 0.11 220);
+  --brand-primary-400: oklch(62% 0.13 220);
+  --brand-primary-500: oklch(56% 0.15 220);   /* signature cyan */
+  --brand-primary-600: oklch(48% 0.14 220);
+  --brand-primary-700: oklch(38% 0.11 220);
+  --brand-primary-800: oklch(28% 0.08 220);
+  --brand-primary-900: oklch(20% 0.05 220);
+
+  --brand-accent-500: oklch(78% 0.13 210);    /* light cyan (highlight) */
+  --brand-neutral-hue: 240;                    /* cool blue-gray */
+
+  /* ---------- LONG / SHORT (기본: Teal / Magenta) ---------- */
+  --trade-long-500:  oklch(72% 0.14 175);
+  --trade-long-400:  oklch(78% 0.12 175);
+  --trade-long-600:  oklch(64% 0.15 175);
+  --trade-long-bg:   oklch(72% 0.14 175 / 0.12);
+  --trade-long-bg-2: oklch(72% 0.14 175 / 0.25);
+
+  --trade-short-500: oklch(68% 0.22 355);
+  --trade-short-400: oklch(74% 0.20 355);
+  --trade-short-600: oklch(60% 0.24 355);
+  --trade-short-bg:  oklch(68% 0.22 355 / 0.12);
+  --trade-short-bg-2:oklch(68% 0.22 355 / 0.25);
+
+  /* ---------- AI / SIGNAL (팔레트 독립) ---------- */
+  --ai-500: oklch(72% 0.15 285);
+  --ai-400: oklch(78% 0.13 285);
+  --ai-600: oklch(64% 0.16 285);
+  --ai-bg:  oklch(72% 0.15 285 / 0.10);
+  --ai-bg-2: oklch(72% 0.15 285 / 0.22);
+
+  --signal-draft:    var(--ai-500);
+  --signal-approved: oklch(78% 0.14 145);
+  --order-pending:   oklch(80% 0.13 85);
+  --order-filled:    oklch(75% 0.13 145);
+  --order-canceled:  oklch(60% 0.02 240);
+  --order-rejected:  var(--trade-short-500);
+
+  --warning-500: oklch(80% 0.14 75);
+  --danger-500:  oklch(64% 0.20 25);
+  --success-500: oklch(74% 0.14 150);
+  --info-500:    var(--brand-primary-500);
+
+  /* ---------- NEUTRALS (Dark 기본) ---------- */
+  --n-950: oklch(14% 0.012 240);
+  --n-925: oklch(17% 0.013 240);
+  --n-900: oklch(20% 0.014 240);
+  --n-850: oklch(24% 0.014 240);
+  --n-800: oklch(28% 0.013 240);
+  --n-700: oklch(38% 0.012 240);
+  --n-600: oklch(48% 0.010 240);
+  --n-500: oklch(58% 0.008 240);
+  --n-400: oklch(68% 0.006 240);
+  --n-300: oklch(78% 0.005 240);
+  --n-200: oklch(86% 0.004 240);
+  --n-100: oklch(92% 0.003 240);
+  --n-050: oklch(97% 0.002 240);
+  --n-000: oklch(100% 0 0);
+
+  /* ---------- SEMANTIC — Dark theme (default) ---------- */
+  --color-bg-app:       var(--n-950);
+  --color-bg-surface:   var(--n-925);
+  --color-bg-panel:     var(--n-900);
+  --color-bg-elevated:  var(--n-850);
+  --color-bg-hover:     oklch(28% 0.014 240 / 0.6);
+  --color-bg-active:    oklch(32% 0.016 240 / 0.7);
+  --color-bg-input:     var(--n-925);
+
+  --color-text-primary:   var(--n-050);
+  --color-text-secondary: var(--n-300);
+  --color-text-tertiary:  var(--n-500);
+  --color-text-disabled:  var(--n-700);
+  --color-text-inverse:   var(--n-950);
+
+  --color-border-subtle:  oklch(28% 0.014 240 / 0.6);
+  --color-border-default: oklch(38% 0.014 240 / 0.7);
+  --color-border-strong:  oklch(48% 0.014 240 / 0.9);
+  --color-border-focus:   var(--brand-primary-500);
+
+  --color-brand:          var(--brand-primary-500);
+  --color-brand-hover:    var(--brand-primary-400);
+  --color-brand-subtle:   oklch(56% 0.15 220 / 0.14);
+
+  --color-trade-long:     var(--trade-long-500);
+  --color-trade-short:    var(--trade-short-500);
+  --color-trade-long-bg:  var(--trade-long-bg);
+  --color-trade-short-bg: var(--trade-short-bg);
+
+  --color-ai:             var(--ai-500);
+  --color-ai-bg:          var(--ai-bg);
+  --color-signal-draft:   var(--signal-draft);
+  --color-signal-approved:var(--signal-approved);
+  --color-order-pending:  var(--order-pending);
+  --color-order-filled:   var(--order-filled);
+  --color-order-canceled: var(--order-canceled);
+  --color-order-rejected: var(--order-rejected);
+
+  --color-warning: var(--warning-500);
+  --color-danger:  var(--danger-500);
+  --color-success: var(--success-500);
+  --color-info:    var(--info-500);
+
+  /* ---------- CHART COLORS ---------- */
+  --chart-grid:       oklch(28% 0.014 240 / 0.5);
+  --chart-axis-text:  var(--n-500);
+  --chart-crosshair:  oklch(70% 0.03 240 / 0.6);
+  --chart-candle-up:  var(--color-trade-long);
+  --chart-candle-dn:  var(--color-trade-short);
+  --chart-ma-1:       oklch(80% 0.13 85);   /* MA20 amber */
+  --chart-ma-2:       oklch(78% 0.13 285);  /* MA60 violet */
+  --chart-ma-3:       oklch(76% 0.13 210);  /* MA120 cyan */
+  --chart-volume-up:  oklch(72% 0.14 175 / 0.35);
+  --chart-volume-dn:  oklch(68% 0.22 355 / 0.35);
+
+  /* ---------- TYPOGRAPHY ----------
+     No web font is downloaded (see apps/web/index.html): the preferred faces are used when the OS
+     has them, otherwise the stack falls through to the platform Korean/Latin UI faces so Hangul
+     never renders in a fallback serif. */
+  --font-sans: 'Pretendard Variable', 'IBM Plex Sans', 'Apple SD Gothic Neo', 'Noto Sans KR',
+               'Noto Sans CJK KR', 'Malgun Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, 'DejaVu Sans Mono', monospace;
+  --font-num:  'IBM Plex Mono', 'Pretendard Variable', ui-monospace, 'DejaVu Sans Mono', monospace;
+  --font-en:   'IBM Plex Sans', 'Pretendard Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-2xs: 10px;
+  --fs-xs:  11px;
+  --fs-sm:  12px;
+  --fs-md:  13px;
+  --fs-lg:  14px;
+  --fs-xl:  16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+  --fs-4xl: 28px;
+  --fs-5xl: 36px;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.45;
+  --lh-loose: 1.6;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* ---------- SPACING (density: Comfortable 기본) ---------- */
+  --sp-0: 0;
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+
+  --density-scale: 1;
+  --row-h-xs: calc(20px * var(--density-scale));
+  --row-h-sm: calc(24px * var(--density-scale));
+  --row-h-md: calc(28px * var(--density-scale));
+  --row-h-lg: calc(32px * var(--density-scale));
+  --input-h:  calc(32px * var(--density-scale));
+  --btn-h:    calc(32px * var(--density-scale));
+  --header-h: 48px;
+  --sub-header-h: 56px;
+
+  /* ---------- RADII ---------- */
+  --r-none: 0;
+  --r-xs: 2px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-full: 999px;
+
+  /* ---------- BORDER / SHADOW / OPACITY ---------- */
+  --bw-1: 1px;
+  --bw-2: 2px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-3: 0 12px 32px rgba(0,0,0,0.45);
+  --shadow-glow-ai: 0 0 0 1px var(--color-ai), 0 8px 24px oklch(72% 0.15 285 / 0.25);
+
+  --opacity-disabled: 0.4;
+  --opacity-hover: 0.85;
+
+  /* ---------- MOTION ---------- */
+  --dur-instant: 60ms;
+  --dur-fast: 120ms;
+  --dur-normal: 180ms;
+  --dur-slow: 280ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-dropdown: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+  --z-max: 9999;
+
+  /* ---------- BREAKPOINTS (values only) ---------- */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
+  --bp-3xl: 1680px;
+  --bp-4xl: 1920px;
+
+  /* ---------- WIDGET GRID ---------- */
+  --grid-cols: 24;
+  --grid-gap: 6px;
+  --grid-row: 40px;
+}
+</style>
+<style id="product-bridge">
+/* ===== 제품 토큰 브리지 레이어 =====
+   목업의 자체 변수를 제품 디자인 토큰으로 연결한다.
+   구조는 목업 것을 유지하고, 색·폰트는 전부 제품 토큰이 결정한다. */
+:root{
+  --mag:var(--color-brand); --mag-soft:var(--brand-primary-300); --mag-deep:var(--brand-primary-700);
+  --violet:var(--color-ai); --cyan:var(--brand-primary-300);
+  --up:var(--color-trade-long); --dn:var(--color-trade-short);
+  --bone:var(--color-text-primary); --steel:var(--color-text-secondary);
+  --slate:var(--color-text-tertiary); --dim:var(--color-text-tertiary);
+  --void:var(--color-bg-app); --void-2:var(--color-bg-surface);
+  --panel:var(--color-bg-panel); --panel-2:var(--color-bg-elevated);
+  --foot-bg:var(--color-bg-surface); --glass-dark:var(--color-bg-panel); --glass-dark-2:var(--color-bg-surface);
+  --edge:var(--color-border-subtle); --edge-2:var(--color-border-default);
+  --btn-fg:var(--color-text-inverse);
+  --axis:var(--chart-axis-text); --cross-dot:var(--color-text-primary); --cross-ring:var(--color-bg-app);
+  --scroll-track:var(--color-bg-surface); --scroll-thumb:var(--color-border-default);
+  --shadow-ink:var(--color-border-strong);
+  --font-display:var(--font-sans); --font-body:var(--font-sans); --font-mono:var(--font-mono);
+}
+</style>
+<style id="brand-pin">
+/* 목업 잔여 시안 제거 — 기본 브랜드는 #F00FF0 하나뿐이다 */
+:root{
+  --brand-primary-50:oklch(96% 0.030 328.33);
+  --brand-primary-100:oklch(90% 0.060 328.33);
+  --brand-primary-200:oklch(82% 0.120 328.33);
+  --brand-primary-300:oklch(75% 0.200 328.33);
+  --brand-primary-400:oklch(71% 0.260 328.33);
+  --brand-primary-500:oklch(67.25% 0.3048 328.33);
+  --brand-primary-600:oklch(56% 0.240 328.33);
+  --brand-primary-700:oklch(46% 0.190 328.33);
+  --brand-primary-800:oklch(34% 0.130 328.33);
+  --brand-primary-900:oklch(24% 0.090 328.33);
+  --brand-accent-500:oklch(71% 0.260 328.33);
+  --color-brand:var(--brand-primary-500);
+  --color-brand-hover:var(--brand-primary-400);
+  --color-brand-subtle:oklch(67.25% 0.3048 328.33 / 0.14);
+  --cyan:var(--brand-primary-300);
+  --info-500:oklch(66% 0.16 250);
+}
+.btn-mag{background:var(--color-brand)!important;border-color:var(--color-brand)!important;color:var(--btn-fg)!important}
+.btn-mag:hover{background:var(--color-brand-hover)!important;border-color:var(--color-brand-hover)!important}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="field" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span></div>
+<div class="grid-veil" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="shell">
+    <a class="brand" href="/" aria-label="ChartControl home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="412 292 1075 338" width="1075" height="338" role="img" aria-label="ChartControl AI">
+<title>ChartControl AI - CCAI wordmark</title>
+
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="#F00FF0" stroke="none">
+<path d="M5720 6493 c-439 -34 -894 -258 -1173 -578 -453 -518 -544 -1243 -225 -1802 234 -411 617 -676 1119 -775 110 -21 137 -22 769 -26 l655 -3 -3 55 c-2 30 1 62 6 73 10 17 -11 18 -651 18 -649 0 -664 0 -774 23 -603 122 -1042 557 -1139 1126 -23 136 -16 402 14 531 143 615 586 1042 1226 1182 121 26 122 26 646 30 289 2 559 3 600 3 l75 0 -3 54 c-2 30 1 63 7 74 11 20 10 20 -547 20 -306 -1 -577 -3 -602 -5z M8917 6489 c-253 -25 -556 -134 -777 -281 -607 -405 -894 -1158 -689 -1805 178 -563 629 -952 1239 -1069 84 -16 167 -19 740 -22 l645 -3 -1 68 -1 68 -659 6 c-724 6 -713 5 -926 74 -403 130 -744 468 -877 870 -170 511 -23 1095 374 1490 172 170 340 279 555 359 265 98 268 98 982 103 l616 4 -9 32 c-5 19 -5 45 1 66 5 19 7 38 4 43 -7 10 -1101 8 -1217 -3z M5615 6011 c-479 -86 -846 -406 -983 -856 -44 -144 -56 -235 -49 -383 19 -448 333 -836 802 -991 168 -55 236 -61 697 -61 l419 0 -3 68 -3 67 -445 5 c-443 6 -446 6 -540 32 -407 114 -658 352 -756 718 -28 103 -26 338 4 455 73 288 277 546 539 682 225 118 318 133 821 133 l383 0 -3 73 -3 72 -390 2 c-336 1 -404 -1 -490 -16z M8935 6023 c-501 -59 -902 -387 -1053 -863 -84 -266 -68 -547 47 -786 136 -283 369 -488 671 -588 185 -61 242 -66 727 -66 l433 0 0 70 0 70 -424 0 c-448 0 -514 5 -671 51 -320 95 -583 365 -661 679 -28 111 -26 375 4 483 97 353 351 626 696 746 158 56 217 61 657 61 l399 0 0 75 0 75 -397 -1 c-219 -1 -411 -4 -428 -6z"/>
+</g>
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="var(--bone)" stroke="none">
+<path d="M11706 6047 c-67 -157 -338 -798 -564 -1332 -60 -143 -144 -343 -187 -445 -146 -349 -397 -945 -402 -952 -2 -5 170 -8 384 -8 l388 0 135 326 c74 180 141 335 148 345 13 18 38 19 621 19 475 0 611 -3 618 -12 5 -7 18 -33 27 -58 10 -25 72 -174 138 -332 l121 -288 372 0 373 0 -35 88 c-19 48 -117 287 -218 532 -101 245 -284 697 -408 1005 -222 553 -386 958 -474 1168 l-45 107 -461 0 -462 0 -69 -163z m593 -684 c145 -334 331 -777 328 -780 -2 -2 -184 -2 -404 -1 l-401 3 137 320 c189 442 262 605 270 605 3 0 35 -66 70 -147z M14180 4760 l0 -1450 350 0 350 0 0 1450 0 1450 -350 0 -350 0 0 -1450z"/>
+<circle cx="7024.50" cy="6426.16" r="161.99"/>
+<circle cx="10264.07" cy="6426.16" r="161.99"/>
+<circle cx="7024.50" cy="3383.84" r="161.99"/>
+<circle cx="10264.07" cy="3383.84" r="161.99"/>
+</g>
+</svg></a>
+    <div class="nav-links"><a href="#plans">Plans</a><a href="#payment">Payment</a><a href="#invoices">Invoices</a></div>
+    <div class="nav-right">
+      <button class="themebtn" id="themebtn" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <a class="btn btn-glass btn-sm" href="/">Back to site</a>
+        <a class="btn" href="/app.html">Terminal</a>
+  </div>
+  </div>
+</nav>
+
+<header class="head">
+  <div class="shell">
+    <div class="kicker">Plans &amp; billing</div>
+    <h1>Pay for answers, not for software.</h1>
+    <p>Every plan buys AI analyses. Unused points stay in your balance and carry over. Paid tiers change <b>how often the AI answers</b> — never who holds your money.</p>
+  </div>
+</header>
+
+<main class="shell" id="main">
+  <div class="grid">
+    <div>
+      <div class="tiers" id="plans">
+        <article class="tier">
+          <h3>Free</h3><div class="desc">For a first read</div>
+          <div class="amt">$0</div><div class="per">No card required</div>
+          <ul><li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>~3 analyses / mo</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>1,000 points</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Full chart reads</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Indicators &amp; drawings</span></li></ul>
+          <button class="btn btn-glass pick cur" type="button">Current plan</button>
+        </article>
+        <article class="tier">
+          <h3>Basic</h3><div class="desc">For a few reads a day</div>
+          <div class="amt">$19</div><div class="per">Per month</div>
+          <ul><li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>~30 analyses / mo</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>9,000 points</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Signal audit trail</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Email support</span></li></ul>
+          <button class="btn btn-mag pick" type="button">Choose Basic</button>
+        </article>
+        <article class="tier best">
+          <span class="badge">BEST VALUE</span>
+          <h3>Pro</h3><div class="desc">For active traders</div>
+          <div class="amt">$49</div><div class="per">Per month</div>
+          <ul><li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>~100 analyses / mo</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>30,000 points</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Custom signal rules</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Priority pair listings</span></li></ul>
+          <button class="btn btn-mag pick" type="button">Choose Pro</button>
+        </article>
+        <article class="tier">
+          <h3>Premium</h3><div class="desc">For high-frequency asking</div>
+          <div class="amt">$99</div><div class="per">Per month</div>
+          <ul><li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>~240 analyses / mo</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>72,000 points</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Multi-timeframe critique</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Priority support channel</span></li></ul>
+          <button class="btn btn-mag pick" type="button">Choose Premium</button>
+        </article>
+        <article class="tier">
+          <h3>Elite</h3><div class="desc">For desks &amp; study groups</div>
+          <div class="amt">$199</div><div class="per">Per month</div>
+          <ul><li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>~666 analyses / mo</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>200,000 points</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Largest AI context</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span>Desk-ready workspace</span></li></ul>
+          <button class="btn btn-mag pick" type="button">Choose Elite</button>
+        </article>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <span>One analysis averages <b>≈300 points</b>. Multi-timeframe and deep audit-trail reads use more; single-timeframe reads use less. Every plan is <b>non-custodial</b> and preserves your existing exchange arrangements — no deposit is required at any tier.</span>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="panel">
+        <h4><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Your balance</h4>
+        <div class="bal">1,000<em> points</em></div>
+        <div class="bar"><i></i></div>
+        <div class="row"><span>Analyses used this month</span><b>0 / 3</b></div>
+        <div class="row"><span>Points remaining</span><b>1,000</b></div>
+        <div class="row"><span>Carry over</span><b>Yes</b></div>
+      </div>
+
+      <div class="panel" id="payment">
+        <h4><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment method</h4>
+        <div class="card">
+          <span class="cc"></span>
+          <div class="meta"><b>•••• •••• •••• 4242</b><span>Expires 08 / 2029</span></div>
+          <button class="rm" type="button">Remove</button>
+        </div>
+        <button class="btn btn-glass btn-sm" type="button" style="width:100%;margin-top:14px">Add payment method</button>
+      </div>
+
+      <div class="panel" id="invoices">
+        <h4><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Invoices</h4>
+        <div class="inv">
+          <div class="r"><span>No invoices yet</span><span class="st">Free</span></div>
+          <div class="r"><span>Upgrade to generate one</span><b>—</b></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script>
+(function(){
+  var b=document.getElementById('themebtn'); if(b) b.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+    var nxt=cur==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem('cc-theme',nxt);}catch(e){}
+  });
+  [].forEach.call(document.querySelectorAll('.pick:not(.cur)'),function(el){
+    el.addEventListener('click',function(){
+      [].forEach.call(document.querySelectorAll('.pick'),function(o){o.classList.remove('cur');o.textContent=o.textContent.replace('Selected','Choose '+o.closest('.tier').querySelector('h3').textContent);});
+      el.classList.add('cur'); el.textContent='Selected';
+    });
+  });
+})();
+</script>
+<script id="cc-ux-js">
+(function(){
+  if(window.__ccUx) return; window.__ccUx=1;
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hov=window.matchMedia('(hover:hover)').matches;
+  if(hov&&!rm){
+    [].forEach.call(document.querySelectorAll('a.btn,.btn,.cta,button[type=submit]'),function(el){
+      if(el.dataset.mag||el.classList.contains('glow-border'))return; el.dataset.mag='1';
+      el.style.transition='transform .4s cubic-bezier(.22,.9,.3,1)';
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        el.style.transform='translate('+((e.clientX-r.left-r.width/2)*0.14).toFixed(2)+'px,'+((e.clientY-r.top-r.height/2)*0.20).toFixed(2)+'px)';
+      });
+      el.addEventListener('pointerleave',function(){el.style.transform='';});
+    });
+    [].forEach.call(document.querySelectorAll('article,.card,.tier,.cov-card,.howcard,.prin article'),function(el){
+      if(el.dataset.sp||el.classList.contains('spot'))return; el.dataset.sp='1'; el.classList.add('cc-spot');
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        el.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+        el.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+      });
+    });
+  }
+  [].forEach.call(document.querySelectorAll('.u,.chip,.metric,.badge,.pill'),function(el){
+    var t=(el.textContent||'').trim();
+    if(t.length>2&&t.length<34&&!el.dataset.tip){el.dataset.tip=t;el.classList.add('cc-tip');}
+  });
+  var hb=document.querySelector('.hero .btn,.hero .cta,.hero a.btn');
+  if(hb&&!hb.classList.contains('glow-border'))hb.classList.add('cc-glow');
+})();
+</script></body>
+</html>
