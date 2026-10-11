@@ -319,6 +319,15 @@ html[data-theme="light"] .grad{background:linear-gradient(94deg,#171412 6%,var(-
 .lvl3d--t{color:var(--mag-soft)}
 .bar3d--ai{box-shadow:0 0 30px rgba(240,15,240,.5)}
 
+/* ============ capabilities ============ */
+.capgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;
+  background:var(--edge);border:1px solid var(--edge);border-radius:4px;overflow:hidden;margin-top:34px}
+.cap{background:var(--panel);padding:20px 22px;display:flex;flex-direction:column;gap:7px}
+.cap b{font-family:var(--font-display);font-size:15.5px;font-weight:700;color:var(--bone);letter-spacing:-.01em}
+.cap span{font-size:13.6px;line-height:1.6;color:var(--steel)}
+html[data-theme="light"] .cap{background:#fff}
+html[data-theme="light"] .cap b{color:var(--color-text-primary,#171412)}
+
 /* ============ marquee ticker ============ */
 .tape{margin-top:56px;border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);
   background:var(--ov018);overflow:hidden;position:relative;z-index:2}
@@ -1057,7 +1066,7 @@ body{overflow-x:clip}
         <div class="rule"><span>AI chart intelligence</span></div>
         <h1>Ask the chart.<br><span class="grad">It marks the answer.</span></h1>
         <p class="hero-lede">
-          ChartControl reads the candles you are already looking at and draws the <b>entry, the invalidation and the reward-to-risk</b> straight onto the screen. Every level names the rule that produced it and the candle it came from.
+          You already know how to read a chart. The hard part is the sixty seconds before you click — and doing it the same way twice. ChartControl reads the candles already on your screen and draws the <b>entry, the invalidation and the reward-to-risk</b> straight onto them, each level naming the rule that produced it and the candle it came from.
         </p>
         <div class="hero-actions">
           <a class="btn btn-mag" href="/login.html"><span>Start free</span>
@@ -1065,7 +1074,7 @@ body{overflow-x:clip}
           </a>
           <a class="btn btn-glass" href="#product">See what a read contains</a>
         </div>
-        <p class="hero-note">NO CARD · FREE POINTS ON SIGNUP · FEE DISCOUNT VIA OUR LINK</p>
+        <p class="hero-note">NO CARD · FREE POINTS ON SIGNUP · READ + TRADE ONLY — WE NEVER ASK FOR WITHDRAWAL</p>
       </div>
 
       <aside>
@@ -1085,9 +1094,9 @@ body{overflow-x:clip}
         </div>
         <div class="glass hstat">
           <div class="hstat-grid">
-            <div><dt>Pairs live</dt><dd>660<em>+</em></dd></div>
+            <div><dt>Exchanges live</dt><dd>2</dd></div>
             <div><dt>Median answer</dt><dd>4.2<em>s</em></dd></div>
-            <div><dt>Workspace</dt><dd>24<em>col</em></dd></div>
+            <div><dt>Grid columns</dt><dd>96</dd></div>
             <div><dt>Custody</dt><dd>None</dd></div>
           </div>
           <p class="hstat-foot">
@@ -1424,7 +1433,7 @@ body{overflow-x:clip}
 <section class="proof">
   <div class="shell">
     <div class="cell"><dt>Exchanges live</dt><dd>KuCoin · BitMart</dd></div>
-    <div class="cell"><dt>Perpetual pairs</dt><dd>660+</dd></div>
+    <div class="cell"><dt>Perpetual pairs</dt><dd></dd></div>
     <div class="cell"><dt>Withdraw permission</dt><dd>Refused</dd></div>
     <div class="cell"><dt>Permissions asked</dt><dd>Read + Trade</dd></div>
     <div class="cell"><dt>Custody of funds</dt><dd>None</dd></div>
@@ -1472,10 +1481,31 @@ body{overflow-x:clip}
       </div>
       <div class="sheet-row spot">
         <div class="sheet-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></div>
-        <dt>24-column workspace</dt>
+        <dt>96-column workspace</dt>
         <dd>Build the cockpit you want — charts, depth, positions, order entry, notes and the copilot in one persistent grid. Layouts are saved per account.</dd>
       </div>
     </dl>
+  </div>
+</section>
+
+
+<section class="sec sec-tight" id="capabilities">
+  <div class="shell">
+    <div class="rule"><span>What you can actually open</span></div>
+    <h2 class="h2">Ten surfaces. Every one of them yours.</h2>
+    <p class="lede">Not a feature list written for a deck — these are the screens your account unlocks the moment you sign in. Verified against the shipping product.</p>
+    <div class="capgrid">
+      <div class="cap"><b>Trade</b><span>AI-marked levels drawn on live candles, with the order ticket on the same screen</span></div>
+      <div class="cap"><b>Markets</b><span>Sortable market table with live WebSocket depth on every row</span></div>
+      <div class="cap"><b>Market scanner</b><span>Screen every listed pair for breakouts, compression and volume spikes</span></div>
+      <div class="cap"><b>Strategy library</b><span>Rule sets that run against real candles, with the numbers shown — wins and losses</span></div>
+      <div class="cap"><b>Analytics</b><span>Equity curve, drawdown, win rate and profit factor on your own fills</span></div>
+      <div class="cap"><b>Portfolio &amp; Wallet</b><span>Positions, balances and your exchange connections in one place</span></div>
+      <div class="cap"><b>Order history &amp; Notifications</b><span>Every order and every alert, timestamped and searchable</span></div>
+      <div class="cap"><b>Autotrade</b><span>Only rules you wrote and started — a stop-loss and a daily loss limit are required, and you can stop it at any time</span></div>
+      <div class="cap"><b>Points &amp; Referral</b><span>What each read cost you and what you earned back, line by line</span></div>
+      <div class="cap"><b>Settings</b><span>Language, theme, density and your API keys, all under your control</span></div>
+    </div>
   </div>
 </section>
 
@@ -1515,12 +1545,12 @@ body{overflow-x:clip}
     <div class="sec-head">
       <div class="rule"><span>The workspace</span></div>
       <h2>A workspace, not a webpage.</h2>
-      <p>Twenty-four columns, every panel yours to place. Built for a trader who keeps three monitors and still wants a fourth.</p>
+      <p>Ninety-six columns, every panel yours to place. Built for a trader who keeps three monitors and still wants a fourth.</p>
     </div>
     <div class="ws">
       <div class="ws-bar">
         <b>WORKSPACE / DESK-01</b>
-        <span>24 COLUMNS</span><span>/</span><span>LAYOUT SAVED</span>
+        <span>96 COLUMNS</span><span>/</span><span>LAYOUT SAVED</span>
         <span style="margin-left:auto">BTC-USDT · ETH-USDT · SOL-USDT</span>
       </div>
       <div class="ws-grid">
@@ -1617,7 +1647,7 @@ body{overflow-x:clip}
         <div class="cov-name">KuCoin</div>
         <p class="cov-sub">USDT-margined perpetual futures, with full AI copilot coverage.</p>
         <dl class="cov-stats">
-          <div><dt>Pairs</dt><dd>660+</dd></div>
+          <div><dt>Pairs</dt><dd></dd></div>
           <div><dt>Depth feed</dt><dd>WebSocket</dd></div>
           <div><dt>Custody</dt><dd>Your keys</dd></div>
         </dl>
@@ -1675,7 +1705,7 @@ body{overflow-x:clip}
           <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>1,000 points</li>
           <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Full chart reads</li>
           <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Indicators &amp; drawings</li>
-          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>24-column workspace</li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>96-column workspace</li>
         </ul></div>
       <div class="tier spot"><div class="tier-name">Basic</div><div class="tier-icp">For a few reads a day</div>
         <div class="tier-price"><sup>$</sup>19</div><div class="tier-per">PER MONTH</div>
@@ -1736,11 +1766,11 @@ body{overflow-x:clip}
       <details><summary>Is this a signal service that promises returns?<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
         <div class="ans">No. We publish no win rate and no performance claim. The AI reads the chart, can give its own view with entry, stop and targets, marks the levels, and shows <b>what would prove it wrong</b>. It is analysis, not investment advice.</div></details>
       <details><summary>What can I do on the free tier?<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="ans">Full AI chart reads on any listed pair, indicators and drawings, and the 24-column workspace. No card, no deposit — free points land on signup, so you reach your first read in about a minute.</div></details>
+        <div class="ans">Full AI chart reads on any listed pair, indicators and drawings, and the 96-column workspace. No card, no deposit — free points land on signup, so you reach your first read in about a minute.</div></details>
       <details><summary>Which exchanges are supported?<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="ans">KuCoin and BitMart today. KuCoin carries <b>660+ USDT perpetual pairs</b> with real-time WebSocket depth; BitMart adds deep alt liquidity across spot, perpetual and futures markets. Further venues are announced only once their integration passes the full test suite.</div></details>
+        <div class="ans">KuCoin and BitMart today. KuCoin carries <b> USDT perpetual pairs</b> with real-time WebSocket depth; BitMart adds deep alt liquidity across spot, perpetual and futures markets. Further venues are announced only once their integration passes the full test suite.</div></details>
       <details><summary>What languages does the terminal support?<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-        <div class="ans">Seven: English, Türkçe, Tiếng Việt, Español, Português, हिन्दी and Filipino. <b>The AI answers in the language you write in.</b> Legal documents are published in all seven.</div></details>
+        <div class="ans">Ten, with the whole product translated — not just the marketing page: English, 한국어, 日本語, 简体中文, Español, Português, Türkçe, Tiếng Việt, हिन्दी and Filipino. <b>The AI answers in the language you write in.</b> Legal documents are published in every one of them.</div></details>
       <details><summary>Is my chart data private?<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
         <div class="ans">Yes. Reads are processed with versioned prompts against your own session, and your positions and keys are never shared with other accounts or used to train models.</div></details>
     </div>
@@ -1753,7 +1783,7 @@ body{overflow-x:clip}
       <div class="rule"><span>Start here</span></div>
       <h2>The next chart you open, the AI is already on it.</h2>
       <p>Signup takes a minute. Your first read is free, and it lands on the chart you are already watching.</p>
-      <p class="final-note">NON-CUSTODIAL · NO CARD · LIVE ON KUCOIN AND BITMART</p>
+      NON-CUSTODIAL · NO CARD · YOUR KEYS, YOUR ACCOUNT · ANALYSIS, NEVER ADVICE
     </div>
     <div class="final-actions">
       <a class="btn btn-mag" href="/login.html"><span>Start free</span>
