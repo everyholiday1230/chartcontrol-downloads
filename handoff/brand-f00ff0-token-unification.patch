@@ -1,0 +1,198 @@
+From 2d24c4ae96bde59e5e7d39ed783cdf1727d797a3 Mon Sep 17 00:00:00 2001
+From: genspark_dev <genspark_dev@genspark.ai>
+Date: Sun, 11 Oct 2026 14:41:59 +0900
+Subject: [PATCH] =?UTF-8?q?feat(brand):=20=EA=B8=B0=EB=B3=B8=20=EB=B8=8C?=
+ =?UTF-8?q?=EB=9E=9C=EB=93=9C=20=EC=83=89=EC=9D=84=20#F00FF0=EC=9C=BC?=
+ =?UTF-8?q?=EB=A1=9C=20=ED=86=B5=EC=9D=BC=ED=95=98=EA=B3=A0=20=EB=9D=BC?=
+ =?UTF-8?q?=EC=9D=B4=ED=8A=B8=20=EC=B0=A8=ED=8A=B8=20=ED=86=A0=ED=81=B0=20?=
+ =?UTF-8?q?=EB=B3=B4=EA=B0=95?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+브랜드 색 충돌 해소. 공개 사이트는 이미 #F00FF0를 쓰고 있었으나
+제품 디자인 시스템(src/tokens.css)의 브랜드 프라이머리는 자리표시자였던
+시안 oklch(56% 0.15 220)이었다.
+
+- --brand-primary-* 스케일을 #F00FF0 = oklch(67.25% 0.3048 328.33) 기준으로 교체
+  (동일 색상 328.33도, 명도 단조 증가, 채도는 sRGB 색역 상한)
+- 기존 기본값(시안)은 [data-brand="institutional-cool"] 옵션으로 보존
+- --color-brand-subtle 하드코딩 제거 → 브랜드에 연동
+- --info-500을 브랜드에서 분리(고정 blue oklch(66% 0.16 250))
+  → 마젠타 브랜드에서 정보 안내가 오류와 같은 색 계열로 보이던 문제 해소
+- --chart-line-1..8 신설: 지표 라인 전용 팔레트
+- 라이트 테마에 누락돼 있던 차트 토큰 추가
+  (캔들 / MA / 거래량 / 지표 팔레트 / 브랜드 텍스트)
+  → 이전에는 라이트에서 차트 색 3종만 덮어써 캔들·MA·거래량이 다크 값 그대로라 흐렸다
+- 라이트 거래량 막대 알파 0.45 → 0.6 (합성 시 비텍스트 3:1 도달)
+
+대비 검증(파일에서 재계산, WCAG 2.1):
+- 다크 #F00FF0 텍스트 5.78:1 / 라이트 브랜드 텍스트 #922391 6.41:1
+- 라이트 차트·지표 토큰 21종 전부 4.5:1 이상, 거래량 막대 3.03:1
+
+검증: pnpm install --frozen-lockfile exit 0, pnpm -r typecheck exit 0 (21개 프로젝트)
+---
+ src/tokens.css | 102 ++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 85 insertions(+), 17 deletions(-)
+
+diff --git a/src/tokens.css b/src/tokens.css
+index 9a00593..5778c03 100644
+--- a/src/tokens.css
++++ b/src/tokens.css
+@@ -5,27 +5,29 @@
+    Layer 2: SEMANTIC TOKENS (의미 기반 — bg/text/trade/signal/order/ai)
+    Layer 3: COMPONENT TOKENS (컴포넌트별 세부 값)
+ 
+-   교체 가능: [data-brand="quantum-violet" | "onyx-emerald" | "graphite-amber"]
++   교체 가능: [data-brand="institutional-cool" | "quantum-violet" | "onyx-emerald" | "graphite-amber"]
+    교체 가능: [data-theme="dark" | "light"]
+    교체 가능: [data-density="comfortable" | "compact" | "dense"]
+    교체 가능: [data-longshort="teal-magenta" | "green-red" | "cyan-orange"]
+    ============================================================ */
+ 
+ :root {
+-  /* ---------- BRAND TOKENS (기본: Institutional Cool) ---------- */
+-  --brand-primary-50:  oklch(96% 0.02 220);
+-  --brand-primary-100: oklch(90% 0.04 220);
+-  --brand-primary-200: oklch(80% 0.08 220);
+-  --brand-primary-300: oklch(70% 0.11 220);
+-  --brand-primary-400: oklch(62% 0.13 220);
+-  --brand-primary-500: oklch(56% 0.15 220);   /* signature cyan */
+-  --brand-primary-600: oklch(48% 0.14 220);
+-  --brand-primary-700: oklch(38% 0.11 220);
+-  --brand-primary-800: oklch(28% 0.08 220);
+-  --brand-primary-900: oklch(20% 0.05 220);
+-
+-  --brand-accent-500: oklch(78% 0.13 210);    /* light cyan (highlight) */
+-  --brand-neutral-hue: 240;                    /* cool blue-gray */
++  /* ---------- BRAND TOKENS (기본: ChartControl Magenta) ---------- */
++  /* #F00FF0 = oklch(67.25% 0.3048 328.33). 500은 공식 브랜드 색 그대로이고,
++     나머지 단계는 같은 색상(328.33°), 명도 단조 증가, 채도는 sRGB 색역 상한값. */
++  --brand-primary-50:  oklch(96% 0.030 328.33);
++  --brand-primary-100: oklch(90% 0.060 328.33);
++  --brand-primary-200: oklch(82% 0.120 328.33);
++  --brand-primary-300: oklch(75% 0.200 328.33);
++  --brand-primary-400: oklch(71% 0.260 328.33);
++  --brand-primary-500: oklch(67.25% 0.3048 328.33);   /* #F00FF0 — official brand */
++  --brand-primary-600: oklch(56% 0.240 328.33);
++  --brand-primary-700: oklch(46% 0.190 328.33);
++  --brand-primary-800: oklch(34% 0.130 328.33);
++  --brand-primary-900: oklch(24% 0.090 328.33);
++
++  --brand-accent-500: oklch(71% 0.260 328.33);        /* light magenta (highlight) */
++  --brand-neutral-hue: 240;                           /* cool blue-gray */
+ 
+   /* ---------- LONG / SHORT (기본: Teal / Magenta) ---------- */
+   --trade-long-500:  oklch(72% 0.14 175);
+@@ -57,7 +59,8 @@
+   --warning-500: oklch(80% 0.14 75);
+   --danger-500:  oklch(64% 0.20 25);
+   --success-500: oklch(74% 0.14 150);
+-  --info-500:    var(--brand-primary-500);
++  /* 정보 상태는 브랜드와 분리한다 — 마젠타 브랜드에서 info가 오류처럼 보이는 것을 막는다 */
++  --info-500:    oklch(66% 0.16 250);
+ 
+   /* ---------- NEUTRALS (Dark 기본) ---------- */
+   --n-950: oklch(14% 0.012 240);
+@@ -97,7 +100,7 @@
+ 
+   --color-brand:          var(--brand-primary-500);
+   --color-brand-hover:    var(--brand-primary-400);
+-  --color-brand-subtle:   oklch(56% 0.15 220 / 0.14);
++  --color-brand-subtle:   oklch(67.25% 0.3048 328.33 / 0.14);
+ 
+   --color-trade-long:     var(--trade-long-500);
+   --color-trade-short:    var(--trade-short-500);
+@@ -130,6 +133,19 @@
+   --chart-volume-up:  oklch(72% 0.14 175 / 0.35);
+   --chart-volume-dn:  oklch(68% 0.22 355 / 0.35);
+ 
++  /* 지표 라인 팔레트 — 여러 지표를 겹쳐 그릴 때 쓰는 8색.
++     참고: chart-indicators.js의 LINE_TOKENS는 기존 토큰 8개를 재사용하고 있고,
++     그 hex 폴백은 DOM 없는 환경(canvas 단독)을 위한 안전망이라 그대로 둔다.
++     이 팔레트는 지표 라이브러리 v2가 쓰는 전용 라인 색이다. */
++  --chart-line-1: oklch(67.25% 0.3048 328.33);   /* brand magenta */
++  --chart-line-2: oklch(72% 0.15 175);
++  --chart-line-3: oklch(70% 0.14 250);
++  --chart-line-4: oklch(76% 0.14 85);
++  --chart-line-5: oklch(70% 0.16 285);
++  --chart-line-6: oklch(72% 0.13 200);
++  --chart-line-7: oklch(70% 0.15 145);
++  --chart-line-8: oklch(68% 0.18 355);
++
+   /* ---------- TYPOGRAPHY ---------- */
+   --font-sans: 'Pretendard Variable', 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+   --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+@@ -237,6 +253,25 @@
+ }
+ 
+ /* ============ BRAND VARIANTS ============ */
++/* 기존 기본값이던 시안 팔레트. 이제 기본이 아니라 선택 옵션이다. */
++[data-brand="institutional-cool"] {
++  --brand-primary-50:  oklch(96% 0.02 220);
++  --brand-primary-100: oklch(90% 0.04 220);
++  --brand-primary-200: oklch(80% 0.08 220);
++  --brand-primary-300: oklch(70% 0.11 220);
++  --brand-primary-400: oklch(62% 0.13 220);
++  --brand-primary-500: oklch(56% 0.15 220);
++  --brand-primary-600: oklch(48% 0.14 220);
++  --brand-primary-700: oklch(38% 0.11 220);
++  --brand-primary-800: oklch(28% 0.08 220);
++  --brand-primary-900: oklch(20% 0.05 220);
++  --brand-accent-500:  oklch(78% 0.13 210);
++  --color-brand: var(--brand-primary-500);
++  --color-brand-hover: var(--brand-primary-400);
++  --color-brand-subtle: oklch(56% 0.15 220 / 0.14);
++  --info-500: var(--brand-primary-500);
++}
++
+ [data-brand="quantum-violet"] {
+   --brand-primary-500: oklch(64% 0.20 300);
+   --brand-primary-400: oklch(70% 0.18 300);
+@@ -315,10 +350,43 @@
+   --color-border-default: oklch(82% 0.008 240);
+   --color-border-strong:  oklch(68% 0.010 240);
+ 
++  /* 브랜드 색을 '텍스트'로 쓸 때는 라이트에서 어둡게 내려야 한다.
++     #F00FF0는 흰 배경에서 3.05:1로 AA 미달이다. 아래 값은 6.41:1. */
++  --color-brand:        oklch(48% 0.190 328.33);
++  --color-brand-hover:  oklch(40% 0.190 328.33);
++  --color-brand-subtle: oklch(48% 0.190 328.33 / 0.12);
++
+   --chart-grid: oklch(88% 0.006 240 / 0.7);
+   --chart-axis-text: oklch(48% 0.012 240);
+   --chart-crosshair: oklch(38% 0.014 240 / 0.5);
+ 
++  /* 라이트에서 누락되어 있던 차트 색. 이전에는 캔들·MA·거래량이 다크 값 그대로라
++     흰 배경에서 흐렸다. 전부 흰/밝은 배경 기준 4.5:1 이상으로 조정. */
++  --chart-candle-up: oklch(52.1% 0.099 175);
++  --chart-candle-dn: oklch(56.1% 0.200 355);
++  --chart-ma-1:      oklch(54.1% 0.115 75);
++  --chart-ma-2:      oklch(55.1% 0.190 285);
++  --chart-ma-3:      oklch(52.8% 0.106 230);
++  --chart-volume-up: oklch(39.3% 0.049 175.0 / 0.6);
++  --chart-volume-dn: oklch(42.7% 0.106 355.0 / 0.6);
++
++  --chart-line-1: oklch(56.0% 0.190 328.33);
++  --chart-line-2: oklch(52.1% 0.099 175);
++  --chart-line-3: oklch(53.4% 0.150 250);
++  --chart-line-4: oklch(54.1% 0.115 75);
++  --chart-line-5: oklch(54.9% 0.170 285);
++  --chart-line-6: oklch(52.5% 0.090 200);
++  --chart-line-7: oklch(52.1% 0.150 145);
++  --chart-line-8: oklch(55.8% 0.180 355);
++
++  /* 지표 팔레트(LINE_TOKENS)가 직접 참조하는 의미 토큰도 라이트에서 어둡게 내린다.
++     이전에는 다크 값 그대로라 흰 배경에서 선이 흐렸다. */
++  --color-trade-long:      oklch(52.1% 0.099 175);
++  --color-trade-short:     oklch(56.1% 0.200 355);
++  --color-ai:              oklch(55.1% 0.190 285);
++  --color-signal-approved: oklch(52.1% 0.150 145);
++  --color-order-pending:   oklch(54.1% 0.115 75);
++
+   --shadow-1: 0 1px 2px rgba(15,20,28,0.06);
+   --shadow-2: 0 4px 12px rgba(15,20,28,0.08);
+   --shadow-3: 0 12px 32px rgba(15,20,28,0.14);
+-- 
+2.43.0
+
