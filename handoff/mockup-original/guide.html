@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works — ChartControl</title>
+<meta name="description" content="From sign-up to your first marked chart: create an account through our link or referral code, connect your KuCoin API key from the Wallet, set permissions, and ask the chart.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>(function(){try{var t=localStorage.getItem('cc-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<style>
+:root{
+  --void:#07070B;
+  --void-2:#0B0B12;
+  --panel:rgba(255,255,255,.034);
+  --panel-2:rgba(255,255,255,.06);
+  --edge:rgba(255,255,255,.09);
+  --edge-2:rgba(255,255,255,.16);
+  --bone:#F2F3F7;
+  --steel:#A7AEBD;
+  --slate:#7A8292;
+  --dim:#7E879A;
+  --mag:#F00FF0;
+  --mag-soft:#FF6BFF;
+  --mag-deep:#A800A8;
+  --violet:#7C5CFF;
+  --cyan:#3BE8FF;
+  --up:#25D07A;
+  --dn:#FF4D6A;
+  --btn-fg:#FFFFFF;
+  --glass-dark:rgba(9,9,14,.72);
+  --glass-dark-2:rgba(9,9,14,.6);
+  --scroll-track:#0A0A10;
+  --scroll-thumb:#22222E;
+  --axis:#59606F;
+  --cross-dot:#F2F3F7;
+  --cross-ring:#07070B;
+  --grain-op:.32;
+  --grain-invert:0;
+  --field-op:.5;
+  --shadow-ink:var(--shadow-ink);
+  --foot-bg:rgba(0,0,0,.32);
+  --ov012:rgba(255,255,255,.012);
+  --ov015:rgba(255,255,255,.015);
+  --ov016:rgba(255,255,255,.016);
+  --ov018:rgba(255,255,255,.018);
+  --ov02:rgba(255,255,255,.02);
+  --ov022:rgba(255,255,255,.022);
+  --ov025:rgba(255,255,255,.025);
+  --ov026:rgba(255,255,255,.026);
+  --ov028:rgba(255,255,255,.028);
+  --ov034:rgba(255,255,255,.034);
+  --ov035:rgba(255,255,255,.035);
+  --ov045:rgba(255,255,255,.045);
+  --ov05:rgba(255,255,255,.05);
+  --ov055:rgba(255,255,255,.055);
+  --ov06:rgba(255,255,255,.06);
+  --ov07:rgba(255,255,255,.07);
+  --ov08:rgba(255,255,255,.08);
+  --ov09:rgba(255,255,255,.09);
+  --ov16:rgba(255,255,255,.16);
+  --ov20:rgba(255,255,255,.20);
+  --ov26:rgba(255,255,255,.26);
+  --ov36:rgba(255,255,255,.36);
+  --ov42:rgba(255,255,255,.42);
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Public Sans","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  --shell:1280px;
+  --gut:34px;
+}
+
+html[data-theme="light"]{
+  --void:#EEF0F5;
+  --void-2:#FFFFFF;
+  --panel:rgba(255,255,255,.78);
+  --panel-2:rgba(255,255,255,.95);
+  --edge:rgba(16,18,28,.11);
+  --edge-2:rgba(16,18,28,.20);
+  --bone:#0C0E15;
+  --steel:#3B4250;
+  --slate:#5A6270;
+  --dim:#6A7284;
+  --mag:#F00FF0;
+  --mag-soft:#B000B0;
+  --mag-deep:#8A008A;
+  --violet:#5B3BE0;
+  --cyan:#0A93AC;
+  --up:#0B9A58;
+  --dn:#D8284A;
+  --btn-fg:#0C0E15;
+  --glass-dark:rgba(255,255,255,.86);
+  --glass-dark-2:rgba(255,255,255,.72);
+  --scroll-track:#E4E7EE;
+  --scroll-thumb:#BFC5D2;
+  --axis:#6B7280;
+  --cross-dot:#0C0E15;
+  --cross-ring:#FFFFFF;
+  --grain-op:.05;
+  --grain-invert:1;
+  --field-op:.55;
+  --shadow-ink:rgba(16,18,28,.16);
+  --foot-bg:rgba(16,18,28,.035);
+  --nav-bg:rgba(255,255,255,.74);
+  --ov012:rgba(16,18,28,.03);
+  --ov015:rgba(16,18,28,.035);
+  --ov016:rgba(16,18,28,.04);
+  --ov018:rgba(16,18,28,.04);
+  --ov02:rgba(16,18,28,.045);
+  --ov022:rgba(16,18,28,.045);
+  --ov025:rgba(16,18,28,.05);
+  --ov026:rgba(16,18,28,.05);
+  --ov028:rgba(16,18,28,.055);
+  --ov034:rgba(16,18,28,.06);
+  --ov035:rgba(16,18,28,.06);
+  --ov045:rgba(16,18,28,.07);
+  --ov05:rgba(16,18,28,.075);
+  --ov055:rgba(16,18,28,.08);
+  --ov06:rgba(16,18,28,.085);
+  --ov07:rgba(16,18,28,.09);
+  --ov08:rgba(16,18,28,.10);
+  --ov09:rgba(16,18,28,.11);
+  --ov16:rgba(16,18,28,.16);
+  --ov20:rgba(16,18,28,.20);
+  --ov26:rgba(16,18,28,.26);
+  --ov36:rgba(16,18,28,.36);
+  --ov42:rgba(16,18,28,.42);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--bone);font-family:var(--font-body);font-size:15.5px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background-color .45s ease,color .45s ease}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);font-weight:800;letter-spacing:-.03em;line-height:1.06}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit}
+code{font-family:var(--font-mono);font-size:.92em}
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:3px}
+::selection{background:rgba(240,15,240,.32);color:var(--btn-fg)}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--scroll-track)}
+::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:6px;border:2px solid var(--scroll-track)}
+
+.field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.field .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--field-op);will-change:transform}
+.field .b1{width:740px;height:740px;left:-220px;top:-250px;background:radial-gradient(circle at 40% 40%,rgba(240,15,240,.5),transparent 68%);animation:drift1 36s ease-in-out infinite}
+.field .b2{width:620px;height:620px;right:-180px;top:30%;background:radial-gradient(circle at 50% 50%,rgba(124,92,255,.42),transparent 68%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(120px,90px,0) scale(1.12)}}
+@keyframes drift2{0%,100%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-130px,100px,0) scale(.94)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:var(--grain-op);filter:invert(var(--grain-invert));
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.grid-veil{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(var(--ov028) 1px,transparent 1px),linear-gradient(90deg,var(--ov028) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 78%)}
+.progress{position:fixed;top:0;left:0;height:2px;z-index:60;width:0;
+  background:linear-gradient(90deg,var(--mag),var(--violet),var(--cyan));box-shadow:0 0 14px rgba(240,15,240,.7)}
+
+.shell{width:100%;max-width:1220px;margin:0 auto;padding:0 30px;position:relative;z-index:2}
+
+.nav{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--edge);background:var(--nav-bg);
+  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5)}
+.nav .shell{display:flex;align-items:center;gap:28px;height:74px}
+.brand svg{height:28px;width:auto;display:block}
+.nav-links{display:flex;align-items:center;gap:22px;margin-left:6px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--steel);transition:color .16s}
+.nav-links a:hover,.nav-links a.is-on{color:var(--bone)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.themebtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;
+  border:1px solid var(--edge-2);background:var(--panel-2);color:var(--steel);cursor:pointer;flex:none;
+  transition:color .25s,border-color .25s,box-shadow .25s}
+.themebtn:hover{color:var(--mag);border-color:var(--mag);box-shadow:0 0 20px -6px rgba(240,15,240,.7)}
+.themebtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+html[data-theme="dark"] .i-moon{display:none}
+html[data-theme="light"] .i-sun{display:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:44px;padding:0 20px;border-radius:11px;
+  border:1px solid transparent;font-weight:600;font-size:14.5px;cursor:pointer;transition:.22s;white-space:nowrap}
+.btn .ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn-mag{background:linear-gradient(96deg,var(--mag),#D900DA);color:#0C0E15;box-shadow:0 14px 34px -16px rgba(240,15,240,.75)}
+.btn-mag:hover{transform:translateY(-1px);box-shadow:0 18px 40px -16px rgba(240,15,240,.9)}
+.btn-glass{border-color:var(--edge-2);background:var(--panel);color:var(--bone);backdrop-filter:blur(10px)}
+.btn-glass:hover{border-color:var(--mag);color:var(--mag)}
+.btn-sm{height:38px;padding:0 15px;font-size:13.5px}
+
+/* hero */
+.hero{padding:84px 0 62px;position:relative;overflow:hidden}
+.kicker{display:flex;align-items:center;gap:11px;font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--slate);margin-bottom:22px}
+.kicker::before{content:"";width:28px;height:2px;background:var(--mag);flex:none;box-shadow:0 0 12px rgba(240,15,240,.8)}
+.hero h1{font-size:clamp(36px,4.9vw,62px);max-width:19ch}
+.grad{background:linear-gradient(96deg,var(--mag),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:22px;max-width:62ch;color:var(--steel);font-size:17px}
+.hero .lede b{color:var(--bone);font-weight:600}
+.hero-cta{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+.need{margin-top:48px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--edge);
+  border:1px solid var(--edge);border-radius:14px;overflow:hidden}
+.need div{background:var(--void-2);padding:18px 20px}
+.need dt{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:7px}
+.need dd{margin:0;font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-.02em}
+.need dd em{font-style:normal;color:var(--mag)}
+
+/* layout */
+.wrap{padding:20px 0 40px}
+.cols{display:grid;grid-template-columns:262px minmax(0,1fr);gap:56px;align-items:start}
+.rail{position:sticky;top:98px}
+.rail .rh{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.rail ol{display:flex;flex-direction:column;gap:2px}
+.rail a{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:10px;font-size:14px;color:var(--steel);
+  border-left:2px solid transparent;transition:.22s}
+.rail a:hover{background:var(--panel);color:var(--bone)}
+.rail a .rn{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--slate);padding-top:2px;flex:none;transition:color .22s}
+.rail a.is-on{border-left-color:var(--mag);background:var(--panel);color:var(--bone)}
+.rail a.is-on .rn{color:var(--mag)}
+.rail .rcta{margin-top:20px;padding-top:18px;border-top:1px solid var(--edge)}
+.rail .rcta .btn{width:100%}
+
+.step{padding:0 0 56px;scroll-margin-top:96px}
+.step + .step{border-top:1px solid var(--edge);padding-top:52px}
+.step-head{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.step-num{width:46px;height:46px;border-radius:13px;flex:none;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-weight:700;font-size:15px;color:var(--mag);
+  border:1px solid rgba(240,15,240,.45);background:rgba(240,15,240,.1);box-shadow:0 0 26px -10px rgba(240,15,240,.8)}
+.step-head h2{font-size:clamp(23px,2.7vw,31px)}
+.step-head .meta{margin-left:auto;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate)}
+.step>p{color:var(--steel);max-width:70ch}
+.step>p b{color:var(--bone);font-weight:600}
+
+.paths{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.path{border:1px solid var(--edge);border-radius:14px;background:var(--panel);padding:22px 22px 24px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.path:hover{border-color:var(--edge-2);transform:translateY(-2px)}
+.path .tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:9.5px;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--mag-soft);border:1px solid rgba(240,15,240,.4);
+  background:rgba(240,15,240,.08);border-radius:5px;padding:3px 8px;margin-bottom:14px}
+.path .tag.is-alt{color:var(--cyan);border-color:rgba(59,232,255,.4);background:rgba(59,232,255,.08)}
+.path h4{font-size:16.5px;margin-bottom:8px}
+.path p{font-size:13.8px;color:var(--steel);line-height:1.6}
+.path ol{margin-top:14px;display:flex;flex-direction:column;gap:9px;counter-reset:p}
+.path ol li{position:relative;padding-left:26px;font-size:13.5px;color:var(--steel)}
+.path ol li::before{counter-increment:p;content:counter(p);position:absolute;left:0;top:1px;width:17px;height:17px;border-radius:50%;
+  background:var(--panel-2);border:1px solid var(--edge-2);color:var(--slate);font-family:var(--font-mono);font-size:9.5px;
+  display:flex;align-items:center;justify-content:center;font-weight:700}
+.codechip{margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1px dashed rgba(240,15,240,.5);border-radius:10px;
+  background:rgba(240,15,240,.07);padding:12px 14px}
+.codechip .lbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--slate);white-space:nowrap;flex:none}
+.codechip .val{font-family:var(--font-mono);font-size:15px;font-weight:700;letter-spacing:.14em;color:var(--mag)}
+.codechip .cp{margin-left:auto;border:1px solid var(--edge-2);background:var(--panel-2);color:var(--steel);border-radius:7px;
+  padding:5px 10px;font-family:var(--font-mono);font-size:10.5px;cursor:pointer;transition:.2s}
+.codechip .cp:hover{color:var(--mag);border-color:var(--mag)}
+.note{margin-top:16px;display:flex;gap:10px;font-size:13px;color:var(--slate);line-height:1.6}
+.note svg{width:15px;height:15px;stroke:var(--slate);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:3px}
+
+/* callout */
+.callout{margin-top:26px;border-radius:14px;border:1px solid rgba(240,15,240,.42);background:rgba(240,15,240,.075);
+  padding:22px 24px;display:flex;gap:16px;position:relative;overflow:hidden}
+.callout::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--mag),var(--violet))}
+.callout .ci{width:38px;height:38px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:rgba(240,15,240,.16);border:1px solid rgba(240,15,240,.4)}
+.callout .ci svg{width:19px;height:19px;stroke:var(--mag);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.callout h4{font-size:16px;margin-bottom:7px}
+.callout p{font-size:13.8px;color:var(--steel);line-height:1.62}
+.callout p b{color:var(--bone);font-weight:600}
+.callout.danger{border-color:rgba(255,77,106,.45);background:rgba(255,77,106,.07)}
+.callout.danger::before{background:linear-gradient(180deg,var(--dn),#8A1030)}
+.callout.danger .ci{background:rgba(255,77,106,.16);border-color:rgba(255,77,106,.42)}
+.callout.danger .ci svg{stroke:var(--dn)}
+
+.perm{margin-top:22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pbox{border:1px solid var(--edge);border-radius:12px;padding:16px 18px;background:var(--void-2)}
+.pbox .pl{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.pbox .pl svg{width:15px;height:15px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pbox p{font-size:12.8px;color:var(--slate);line-height:1.55}
+.pbox.ok .pl{color:var(--up)}.pbox.ok .pl svg{stroke:var(--up)}
+.pbox.never .pl{color:var(--dn)}.pbox.never .pl svg{stroke:var(--dn)}
+.pbox.never{border-color:rgba(255,77,106,.34);background:rgba(255,77,106,.055)}
+
+/* order flow */
+.flow{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.flow .f{display:flex;align-items:center;gap:9px;border:1px solid var(--edge);border-radius:10px;background:var(--void-2);
+  padding:11px 14px;font-size:13px;color:var(--steel);transition:.25s}
+.flow .f:hover{border-color:var(--edge-2);color:var(--bone);transform:translateY(-2px)}
+.flow .f i{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--mag);font-style:normal}
+.flow .f.is-gate{border-color:rgba(240,15,240,.45);background:rgba(240,15,240,.08);color:var(--bone)}
+
+/* cards / faq */
+.faq{margin-top:22px;border-top:1px solid var(--edge)}
+.faq details{border-bottom:1px solid var(--edge)}
+.faq summary{list-style:none;cursor:pointer;padding:18px 2px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  font-family:var(--font-display);font-weight:700;font-size:15.5px;letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{width:17px;height:17px;stroke:var(--slate);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s;flex:none}
+.faq details[open] summary svg{transform:rotate(180deg);stroke:var(--mag)}
+.faq .ans{padding:0 2px 20px;color:var(--steel);font-size:14.3px;max-width:80ch}
+.faq .ans b{color:var(--bone);font-weight:600}
+
+.final{padding:80px 0 86px;border-top:1px solid var(--edge);position:relative;overflow:hidden}
+.final h2{font-size:clamp(27px,3.5vw,44px);max-width:19ch}
+.final .lede{margin-top:16px;color:var(--steel);max-width:54ch}
+.foot{padding:50px 0 34px;border-top:1px solid var(--edge);background:var(--foot-bg)}
+.foot .top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.foot .brand svg{height:26px}
+.foot p{margin-top:14px;font-size:13.5px;color:var(--slate);max-width:44ch}
+.foot .cols2{display:flex;gap:54px;flex-wrap:wrap}
+.foot h5{margin:0 0 12px;font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.foot ul{display:flex;flex-direction:column;gap:9px}
+.foot li a{font-size:13.5px;color:var(--steel)}
+.foot li a:hover{color:var(--mag-soft)}
+.foot .base{margin-top:32px;padding-top:20px;border-top:1px solid var(--edge);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.07em;color:var(--dim)}
+
+@media (max-width:1000px){
+  .cols{grid-template-columns:1fr;gap:34px}
+  .rail{position:static}
+  .rail ol{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .rail a{border-left:0;border:1px solid var(--edge);border-radius:999px;padding:7px 13px}
+  .rail a.is-on{border-color:var(--mag)}
+  .paths{grid-template-columns:1fr}
+  .need{grid-template-columns:1fr 1fr}
+  .perm{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media (max-width:620px){
+  .shell{padding:0 20px}
+  .hero{padding:60px 0 48px}
+  .step-head{flex-wrap:wrap}
+  .step-head .meta{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){.field .blob{animation:none}}
+</style>
+<style id="cc-ux">
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:10px;z-index:400;background:var(--void-2);color:var(--bone);
+  border:1px solid var(--mag);padding:12px 18px;border-radius:12px;font-size:13px;text-decoration:none;font-weight:600}
+.skip:focus{left:10px}
+body{overflow-x:clip}
+.cc-spot{position:relative}
+.cc-spot::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  transition:opacity .4s ease;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(240,15,240,.14),transparent 62%)}
+.cc-spot:hover::before{opacity:1}
+.cc-tip{position:relative}
+.cc-tip::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translate(-50%,5px);
+  white-space:nowrap;background:var(--void-2);border:1px solid var(--edge);color:var(--bone);
+  font-size:11px;letter-spacing:.02em;padding:6px 10px;border-radius:9px;opacity:0;pointer-events:none;z-index:90;
+  box-shadow:0 12px 34px rgba(0,0,0,.45);transition:opacity .2s,transform .3s cubic-bezier(.22,.9,.3,1)}
+.cc-tip:hover::after{opacity:1;transform:translate(-50%,0)}
+.cc-glow{animation:ccglow 3.4s ease-in-out infinite}
+@keyframes ccglow{
+  0%,100%{box-shadow:0 0 0 1px rgba(240,15,240,.55),0 0 20px rgba(240,15,240,.38)}
+  50%{box-shadow:0 0 0 1px rgba(124,92,255,.70),0 0 32px rgba(240,15,240,.60),0 0 58px rgba(59,232,255,.22)}}
+@media (max-width:1024px){:root{--gut:26px}}
+@media (max-width:390px){:root{--gut:15px}}
+@media (prefers-reduced-motion:reduce){.cc-glow{animation:none}.cc-spot::before{transition:none}}
+</style></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" id="prog"></div>
+<div class="field" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span></div>
+<div class="grid-veil" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="shell">
+    <a class="brand" href="/" aria-label="ChartControl home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="412 292 1075 338" width="1075" height="338" role="img" aria-label="ChartControl AI">
+<title>ChartControl AI - CCAI wordmark</title>
+
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="#F00FF0" stroke="none">
+<path d="M5720 6493 c-439 -34 -894 -258 -1173 -578 -453 -518 -544 -1243 -225 -1802 234 -411 617 -676 1119 -775 110 -21 137 -22 769 -26 l655 -3 -3 55 c-2 30 1 62 6 73 10 17 -11 18 -651 18 -649 0 -664 0 -774 23 -603 122 -1042 557 -1139 1126 -23 136 -16 402 14 531 143 615 586 1042 1226 1182 121 26 122 26 646 30 289 2 559 3 600 3 l75 0 -3 54 c-2 30 1 63 7 74 11 20 10 20 -547 20 -306 -1 -577 -3 -602 -5z M8917 6489 c-253 -25 -556 -134 -777 -281 -607 -405 -894 -1158 -689 -1805 178 -563 629 -952 1239 -1069 84 -16 167 -19 740 -22 l645 -3 -1 68 -1 68 -659 6 c-724 6 -713 5 -926 74 -403 130 -744 468 -877 870 -170 511 -23 1095 374 1490 172 170 340 279 555 359 265 98 268 98 982 103 l616 4 -9 32 c-5 19 -5 45 1 66 5 19 7 38 4 43 -7 10 -1101 8 -1217 -3z M5615 6011 c-479 -86 -846 -406 -983 -856 -44 -144 -56 -235 -49 -383 19 -448 333 -836 802 -991 168 -55 236 -61 697 -61 l419 0 -3 68 -3 67 -445 5 c-443 6 -446 6 -540 32 -407 114 -658 352 -756 718 -28 103 -26 338 4 455 73 288 277 546 539 682 225 118 318 133 821 133 l383 0 -3 73 -3 72 -390 2 c-336 1 -404 -1 -490 -16z M8935 6023 c-501 -59 -902 -387 -1053 -863 -84 -266 -68 -547 47 -786 136 -283 369 -488 671 -588 185 -61 242 -66 727 -66 l433 0 0 70 0 70 -424 0 c-448 0 -514 5 -671 51 -320 95 -583 365 -661 679 -28 111 -26 375 4 483 97 353 351 626 696 746 158 56 217 61 657 61 l399 0 0 75 0 75 -397 -1 c-219 -1 -411 -4 -428 -6z"/>
+</g>
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="var(--bone)" stroke="none">
+<path d="M11706 6047 c-67 -157 -338 -798 -564 -1332 -60 -143 -144 -343 -187 -445 -146 -349 -397 -945 -402 -952 -2 -5 170 -8 384 -8 l388 0 135 326 c74 180 141 335 148 345 13 18 38 19 621 19 475 0 611 -3 618 -12 5 -7 18 -33 27 -58 10 -25 72 -174 138 -332 l121 -288 372 0 373 0 -35 88 c-19 48 -117 287 -218 532 -101 245 -284 697 -408 1005 -222 553 -386 958 -474 1168 l-45 107 -461 0 -462 0 -69 -163z m593 -684 c145 -334 331 -777 328 -780 -2 -2 -184 -2 -404 -1 l-401 3 137 320 c189 442 262 605 270 605 3 0 35 -66 70 -147z M14180 4760 l0 -1450 350 0 350 0 0 1450 0 1450 -350 0 -350 0 0 -1450z"/>
+<circle cx="7024.50" cy="6426.16" r="161.99"/>
+<circle cx="10264.07" cy="6426.16" r="161.99"/>
+<circle cx="7024.50" cy="3383.84" r="161.99"/>
+<circle cx="10264.07" cy="3383.84" r="161.99"/>
+</g>
+</svg></a>
+    <div class="nav-links">
+      <a href="#account">Account</a>
+      <a href="#connect">Connect</a>
+      <a href="#permissions">Permissions</a>
+      <a href="#firstread">First read</a>
+      <a href="#orders">Orders</a>
+      <a href="#help">Help</a>
+    </div>
+    <div class="nav-right">
+      <button class="themebtn" id="themebtn" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <a class="btn btn-glass btn-sm" href="/login.html">Sign in</a>
+      <a class="btn btn-mag btn-sm" href="/signup.html"><span>Start free</span></a>
+        <a class="btn" href="/app.html">Terminal</a>
+  </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="shell">
+    <div class="kicker">Getting started</div>
+    <h1>From sign-up to a chart that <span class="grad">answers back</span>.</h1>
+    <p class="lede">Five steps, about five minutes, and no deposit at any point. You create the account, connect <b>your own exchange API key</b> from the Wallet, and the AI starts marking <b>entry, invalidation and reward-to-risk</b> on the candles you already watch.</p>
+    <div class="hero-cta">
+      <a class="btn btn-mag" href="/signup.html"><span>Create your account</span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a class="btn btn-glass" href="#connect">Jump to connecting an exchange</a>
+    </div>
+
+    <dl class="need">
+      <div><dt>Total time</dt><dd>~5 <em>min</em></dd></div>
+      <div><dt>What you need</dt><dd>Email + exchange</dd></div>
+      <div><dt>Deposit required</dt><dd>None</dd></div>
+      <div><dt>Withdraw permission</dt><dd>Never</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="shell">
+    <div class="cols">
+
+      <aside class="rail">
+        <div class="rh">On this page</div>
+        <ol>
+          <li><a href="#account" class="is-on"><span class="rn">01</span><span>Create your account</span></a></li>
+          <li><a href="#connect"><span class="rn">02</span><span>Connect exchange</span></a></li>
+          <li><a href="#permissions"><span class="rn">03</span><span>Set permissions</span></a></li>
+          <li><a href="#firstread"><span class="rn">04</span><span>Your first read</span></a></li>
+          <li><a href="#orders"><span class="rn">05</span><span>Place an order</span></a></li>
+          <li><a href="#help"><span class="rn">06</span><span>Help &amp; safety</span></a></li>
+        </ol>
+        <div class="rcta">
+          <a class="btn btn-mag btn-sm" href="/signup.html"><span>Start free</span></a>
+        </div>
+      </aside>
+
+      <main id="main">
+        <!-- 01 -->
+        <section class="step" id="account">
+          <div class="step-head">
+            <span class="step-num">01</span>
+            <h2>Create your account</h2>
+            <span class="meta">~1 min</span>
+          </div>
+          <p>Your account is the ChartControl workspace — it is <b>not</b> an exchange account and it never holds money. Sign up either through our link or with a referral code; both land you in exactly the same place.</p>
+
+          <div class="paths">
+            <article class="path">
+              <span class="tag">Path A · Direct link</span>
+              <h4>Sign up through our link</h4>
+              <p>Click through from our page or a partner's link and the referral is attached automatically — nothing to type.</p>
+              <ol>
+                <li>Open the sign-up page and create the account with your email.</li>
+                <li>If you do not have a KuCoin account yet, use the exchange sign-up link shown in the Wallet — or the code below — so the referral is recorded at the source.</li>
+                <li>Your free points are credited immediately.</li>
+              </ol>
+            </article>
+
+            <article class="path">
+              <span class="tag is-alt">Path B · Referral code</span>
+              <h4>Already in the exchange app?</h4>
+              <p>Paste our code into the exchange's own <b>Referral Code</b> field during KuCoin sign-up instead of using the link.</p>
+              <div class="codechip">
+                <span class="lbl">KuCoin code</span>
+                <span class="val">CXE8HTY1</span>
+                <button class="cp" type="button" data-copy>Copy</button>
+              </div>
+              <div class="codechip">
+                <span class="lbl">BitMart code</span>
+                <span class="val">ctCAsR</span>
+                <button class="cp" type="button" data-copy>Copy</button>
+              </div>
+              <div class="note" style="margin-top:12px">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+                <span>Links: <code>kucoin.com/r/broker/CXE8HTY1</code> · <code>bitmart.com/invite/ctCAsR</code></span>
+              </div>
+              <div class="callout" style="margin-top:16px">
+                <span class="ci"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                <div>
+                  <h4>Signing up through our link may lower your fees</h4>
+                  <p>New accounts created through our link or code may qualify for the exchange's <b>new-account fee discount</b> — that is the exchange's own offer, applied to your account, not a rebate taken from you. The broker rebate we receive is not an extra cost to you either way.</p>
+                </div>
+              </div>
+              <div class="note">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                <span>Attribution is decided <b>at the moment of sign-up</b> and cannot be added afterwards. If you already have an exchange account, you simply continue as-is.</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 02 -->
+        <section class="step" id="connect">
+          <div class="step-head">
+            <span class="step-num">02</span>
+            <h2>Connect your exchange</h2>
+            <span class="meta">~2 min</span>
+          </div>
+          <p>Open <b>Wallet → Exchange connections</b> inside the app. That page lists the supported exchanges, manages your API keys, and shows asset balances with deposit and withdrawal links. <b>KuCoin and BitMart are both live today</b>; further venues are added only once their integration is production-ready.</p>
+
+          <div class="paths">
+            <article class="path">
+              <span class="tag">Fast path · Recommended</span>
+              <h4>One-click KuCoin authorisation</h4>
+              <p>Authorise on KuCoin's own screen and the key is created for you — with <b>read and trading permissions only</b>. No key strings to copy.</p>
+              <ol>
+                <li>Choose KuCoin in Exchange connections and start the authorisation.</li>
+                <li>Approve it on KuCoin. The key is generated and stored server-side, encrypted.</li>
+                <li>The connection goes green and your balances appear.</li>
+              </ol>
+            </article>
+
+            <article class="path">
+              <span class="tag is-alt">Manual path</span>
+              <h4>Bring your own API key</h4>
+              <p>Prefer to create the key yourself? The wizard walks you through it in four steps — on KuCoin or on BitMart.</p>
+              <ol>
+                <li>Create the key in the exchange → API Management.</li>
+                <li>Enable <b>Read</b> and <b>Trade</b> only — leave Withdraw off.</li>
+                <li>Paste the credentials — KuCoin needs key, secret and passphrase; BitMart needs key, secret and memo.</li>
+                <li>The server verifies the key before it is accepted.</li>
+              </ol>
+            </article>
+          </div>
+
+          <div class="note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Key values are never readable by anyone — not by support, not by admins. They are used to sign requests and are excluded from every log.</span>
+          </div>
+        </section>
+
+        <!-- 03 -->
+        <section class="step" id="permissions">
+          <div class="step-head">
+            <span class="step-num">03</span>
+            <h2>Set the permissions</h2>
+            <span class="meta">~30 sec</span>
+          </div>
+          <p>This is the step that decides whether ChartControl can ever touch your money. The rule is enforced by the server, not just displayed in the interface.</p>
+
+          <div class="perm">
+            <div class="pbox ok">
+              <div class="pl"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Read</div>
+              <p>Required. Lets the AI read candles, balances and your fills so it can analyse the chart at all.</p>
+            </div>
+            <div class="pbox ok">
+              <div class="pl"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Trade</div>
+              <p>Optional. Needed only if you want the copilot to prefill an order you approve. Nothing is sent without your confirmation.</p>
+            </div>
+            <div class="pbox never">
+              <div class="pl"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>Withdraw</div>
+              <p>Never enable this. It is forbidden by policy and rejected by the server — an API key with withdrawal rights is refused outright.</p>
+            </div>
+          </div>
+
+          <div class="callout danger">
+            <span class="ci"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+            <div>
+              <h4>Withdrawal permission is refused, not discouraged</h4>
+              <p>If a key arrives with Withdraw enabled, the connection is rejected — nothing can be read and nothing is stored. This is what <b>non-custodial</b> means here: we cannot move your funds even if we wanted to.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04 -->
+        <section class="step" id="firstread">
+          <div class="step-head">
+            <span class="step-num">04</span>
+            <h2>Ask the chart</h2>
+            <span class="meta">~1 min</span>
+          </div>
+          <p>Open a chart and type the question you would ask a desk — "is this a breakout or a trap?" — against the symbol and timeframe already on your screen. The answer is not an essay: it is <b>levels drawn onto the candles</b>, each one naming the rule that produced it and the candle it came from.</p>
+
+          <div class="paths">
+            <article class="path">
+              <span class="tag">What you get back</span>
+              <h4>Three levels, not a paragraph</h4>
+              <ol>
+                <li><b>Entry</b> — where the setup becomes valid.</li>
+                <li><b>Invalidation</b> — the price that proves the idea wrong.</li>
+                <li><b>Reward-to-risk</b> — the ratio between the two, sized to your account.</li>
+              </ol>
+            </article>
+            <article class="path">
+              <span class="tag is-alt">Why you can check it</span>
+              <h4>Numbers first, prose second</h4>
+              <p>Candles, live prices, indicator values and risk-based sizing are computed <b>server-side against timestamped data</b> before the model says a word — so it reads real numbers instead of guessing them. Every signal also ships with the case against it.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- 05 -->
+        <section class="step" id="orders">
+          <div class="step-head">
+            <span class="step-num">05</span>
+            <h2>Place an order</h2>
+            <span class="meta">your call</span>
+          </div>
+          <p>The copilot can prefill a draft order, but the path from draft to exchange runs through your approval at every gate.</p>
+
+          <div class="flow">
+            <span class="f"><i>01</i>AI analysis</span>
+            <span class="f"><i>02</i>Your review</span>
+            <span class="f is-gate"><i>03</i>Approve</span>
+            <span class="f"><i>04</i>Preview</span>
+            <span class="f"><i>05</i>Risk check</span>
+            <span class="f is-gate"><i>06</i>Final confirm</span>
+            <span class="f"><i>07</i>Submitted</span>
+          </div>
+
+          <div class="callout">
+            <span class="ci"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/></svg></span>
+            <div>
+              <h4>Nothing reaches the exchange without you</h4>
+              <p>Automated strategies exist, but they only run rules <b>you</b> wrote and started, with a required stop-loss and a daily loss limit — and you can stop them at any time.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 06 -->
+        <section class="step" id="help">
+          <div class="step-head">
+            <span class="step-num">06</span>
+            <h2>Help &amp; safety</h2>
+            <span class="meta">reference</span>
+          </div>
+          <p>The things that most often come up during setup.</p>
+
+          <div class="faq">
+            <details open>
+              <summary>My key was rejected — what now?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+              <div class="ans">Almost always a permissions or IP problem. Check the key in KuCoin → API Management: it must have <b>Read</b> (and <b>Trade</b> if you want order drafts) and <b>Withdraw must be off</b>. If you set an IP allow-list on the key, add the address the app shows you. Nothing is stored while the key fails verification.</div>
+            </details>
+            <details>
+              <summary>The KuCoin authorisation would not start<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+              <div class="ans">Nothing is changed when the one-click flow fails — you can always fall back to the <b>manual path</b> and create the key yourself in KuCoin. The wizard will walk you through it.</div>
+            </details>
+            <details>
+              <summary>Does ChartControl hold my funds?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+              <div class="ans">No. Orders execute on <b>your own exchange account</b> under your own keys. There is no deposit step, no wallet to fund, and no withdrawal permission anywhere in the system.</div>
+            </details>
+            <details>
+              <summary>What does the referral actually give me?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+              <div class="ans">Signing up through our link may qualify you for whatever the exchange offers new accounts, and the broker rebate we receive is not an extra cost to you. Our own payback programme has not started yet — when it does, the terms will be stated plainly rather than promised in advance.</div>
+            </details>
+            <details>
+              <summary>Can I use it without connecting an exchange?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+              <div class="ans">You can create the account and look around, but chart reads, balances and any tier assessment need a connected key — without one the system cannot see your trades, so it says so rather than guessing.</div>
+            </details>
+            <details>
+              <summary>Which exchanges are supported?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+              <div class="ans">KuCoin and BitMart are both live. KuCoin carries <b>660+ USDT-margined perpetual pairs</b> with real-time WebSocket depth; BitMart adds deep alt liquidity across spot, perpetual and futures markets. Additional venues are announced only when their integration passes the full test suite.</div>
+            </details>
+          </div>
+        </section>
+      </main>
+
+    </div>
+  </div>
+</div>
+
+<section class="final">
+  <div class="shell">
+    <div class="kicker">Start here</div>
+    <h2>The next chart you open, the AI is already on it.</h2>
+    <p class="lede">Create the account, connect KuCoin, and your first read is free.</p>
+    <div class="hero-cta">
+      <a class="btn btn-mag" href="/signup.html"><span>Create your account</span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a class="btn btn-glass" href="/">See the product</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="top">
+      <div>
+        <a class="brand" href="/" aria-label="ChartControl home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="412 292 1075 338" width="1075" height="338" role="img" aria-label="ChartControl AI">
+<title>ChartControl AI - CCAI wordmark</title>
+
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="#F00FF0" stroke="none">
+<path d="M5720 6493 c-439 -34 -894 -258 -1173 -578 -453 -518 -544 -1243 -225 -1802 234 -411 617 -676 1119 -775 110 -21 137 -22 769 -26 l655 -3 -3 55 c-2 30 1 62 6 73 10 17 -11 18 -651 18 -649 0 -664 0 -774 23 -603 122 -1042 557 -1139 1126 -23 136 -16 402 14 531 143 615 586 1042 1226 1182 121 26 122 26 646 30 289 2 559 3 600 3 l75 0 -3 54 c-2 30 1 63 7 74 11 20 10 20 -547 20 -306 -1 -577 -3 -602 -5z M8917 6489 c-253 -25 -556 -134 -777 -281 -607 -405 -894 -1158 -689 -1805 178 -563 629 -952 1239 -1069 84 -16 167 -19 740 -22 l645 -3 -1 68 -1 68 -659 6 c-724 6 -713 5 -926 74 -403 130 -744 468 -877 870 -170 511 -23 1095 374 1490 172 170 340 279 555 359 265 98 268 98 982 103 l616 4 -9 32 c-5 19 -5 45 1 66 5 19 7 38 4 43 -7 10 -1101 8 -1217 -3z M5615 6011 c-479 -86 -846 -406 -983 -856 -44 -144 -56 -235 -49 -383 19 -448 333 -836 802 -991 168 -55 236 -61 697 -61 l419 0 -3 68 -3 67 -445 5 c-443 6 -446 6 -540 32 -407 114 -658 352 -756 718 -28 103 -26 338 4 455 73 288 277 546 539 682 225 118 318 133 821 133 l383 0 -3 73 -3 72 -390 2 c-336 1 -404 -1 -490 -16z M8935 6023 c-501 -59 -902 -387 -1053 -863 -84 -266 -68 -547 47 -786 136 -283 369 -488 671 -588 185 -61 242 -66 727 -66 l433 0 0 70 0 70 -424 0 c-448 0 -514 5 -671 51 -320 95 -583 365 -661 679 -28 111 -26 375 4 483 97 353 351 626 696 746 158 56 217 61 657 61 l399 0 0 75 0 75 -397 -1 c-219 -1 -411 -4 -428 -6z"/>
+</g>
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="var(--bone)" stroke="none">
+<path d="M11706 6047 c-67 -157 -338 -798 -564 -1332 -60 -143 -144 -343 -187 -445 -146 -349 -397 -945 -402 -952 -2 -5 170 -8 384 -8 l388 0 135 326 c74 180 141 335 148 345 13 18 38 19 621 19 475 0 611 -3 618 -12 5 -7 18 -33 27 -58 10 -25 72 -174 138 -332 l121 -288 372 0 373 0 -35 88 c-19 48 -117 287 -218 532 -101 245 -284 697 -408 1005 -222 553 -386 958 -474 1168 l-45 107 -461 0 -462 0 -69 -163z m593 -684 c145 -334 331 -777 328 -780 -2 -2 -184 -2 -404 -1 l-401 3 137 320 c189 442 262 605 270 605 3 0 35 -66 70 -147z M14180 4760 l0 -1450 350 0 350 0 0 1450 0 1450 -350 0 -350 0 0 -1450z"/>
+<circle cx="7024.50" cy="6426.16" r="161.99"/>
+<circle cx="10264.07" cy="6426.16" r="161.99"/>
+<circle cx="7024.50" cy="3383.84" r="161.99"/>
+<circle cx="10264.07" cy="3383.84" r="161.99"/>
+</g>
+</svg></a>
+        <p>AI chart intelligence for traders who live on charts. Non-custodial by design.</p>
+      </div>
+      <div class="cols2">
+        <div><h5>Get started</h5><ul>
+          <li><a href="#account">Create an account</a></li><li><a href="#connect">Connect your exchange</a></li>
+          <li><a href="#permissions">Permissions</a></li><li><a href="#firstread">Your first read</a></li></ul></div>
+        <div><h5>Product</h5><ul>
+          <li><a href="/#product">What a read contains</a></li><li><a href="/#coverage">Coverage</a></li>
+          <li><a href="/#pricing">Pricing</a></li><li><a href="/partner.html">Partner programme</a></li></ul></div>
+        <div><h5>Account</h5><ul>
+          <li><a href="/login.html">Sign in</a></li><li><a href="/signup.html">Create account</a></li></ul></div>
+      </div>
+    </div>
+    <div class="base">
+      <span>© 2026 CHART CONTROL. ALL RIGHTS RESERVED.</span>
+      <span>NOT CUSTODIAL · NOT INVESTMENT ADVICE · ANALYSIS ONLY</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('themebtn'); if(b) b.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+    var nxt=cur==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem('cc-theme',nxt);}catch(e){}
+  });
+  var bar=document.getElementById('prog');
+  function onScroll(){
+    if(!bar) return;
+    var h=document.documentElement, max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?(h.scrollTop/max)*100:0)+'%';
+  }
+  document.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  var links=[].slice.call(document.querySelectorAll('.rail a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  function mark(){
+    var y=window.scrollY+140, cur=0;
+    secs.forEach(function(s,i){ if(s && s.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.classList.toggle('is-on', i===cur); });
+  }
+  document.addEventListener('scroll',mark,{passive:true}); mark();
+
+  [].forEach.call(document.querySelectorAll('[data-copy]'),function(btn){
+    btn.addEventListener('click',function(){
+      var t=btn.parentNode.querySelector('.val');
+      if(!t) return;
+      try{navigator.clipboard.writeText(t.textContent.trim());}catch(e){}
+      btn.textContent='Copied'; setTimeout(function(){btn.textContent='Copy';},1400);
+    });
+  });
+})();
+</script>
+<script id="cc-ux-js">
+(function(){
+  if(window.__ccUx) return; window.__ccUx=1;
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hov=window.matchMedia('(hover:hover)').matches;
+  if(hov&&!rm){
+    [].forEach.call(document.querySelectorAll('a.btn,.btn,.cta,button[type=submit]'),function(el){
+      if(el.dataset.mag||el.classList.contains('glow-border'))return; el.dataset.mag='1';
+      el.style.transition='transform .4s cubic-bezier(.22,.9,.3,1)';
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        el.style.transform='translate('+((e.clientX-r.left-r.width/2)*0.14).toFixed(2)+'px,'+((e.clientY-r.top-r.height/2)*0.20).toFixed(2)+'px)';
+      });
+      el.addEventListener('pointerleave',function(){el.style.transform='';});
+    });
+    [].forEach.call(document.querySelectorAll('article,.card,.tier,.cov-card,.howcard,.prin article'),function(el){
+      if(el.dataset.sp||el.classList.contains('spot'))return; el.dataset.sp='1'; el.classList.add('cc-spot');
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        el.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+        el.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+      });
+    });
+  }
+  [].forEach.call(document.querySelectorAll('.u,.chip,.metric,.badge,.pill'),function(el){
+    var t=(el.textContent||'').trim();
+    if(t.length>2&&t.length<34&&!el.dataset.tip){el.dataset.tip=t;el.classList.add('cc-tip');}
+  });
+  var hb=document.querySelector('.hero .btn,.hero .cta,.hero a.btn');
+  if(hb&&!hb.classList.contains('glow-border'))hb.classList.add('cc-glow');
+})();
+</script></body>
+</html>

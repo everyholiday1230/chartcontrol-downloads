@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner program — ChartControl</title>
+<meta name="description" content="Partner with ChartControl — affiliate, integration and white-label programmes for an AI-native, non-custodial trading terminal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>(function(){try{var t=localStorage.getItem('cc-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+<style>
+:root{
+  --void:#07070B;
+  --void-2:#0B0B12;
+  --panel:rgba(255,255,255,.034);
+  --panel-2:rgba(255,255,255,.06);
+  --edge:rgba(255,255,255,.09);
+  --edge-2:rgba(255,255,255,.16);
+  --bone:#F2F3F7;
+  --steel:#A7AEBD;
+  --slate:#7A8292;
+  --dim:#7E879A;
+  --mag:#F00FF0;
+  --mag-soft:#FF6BFF;
+  --mag-deep:#A800A8;
+  --violet:#7C5CFF;
+  --cyan:#3BE8FF;
+  --up:#25D07A;
+  --dn:#FF4D6A;
+  --btn-fg:#FFFFFF;
+  --glass-dark:rgba(9,9,14,.72);
+  --glass-dark-2:rgba(9,9,14,.6);
+  --scroll-track:#0A0A10;
+  --scroll-thumb:#22222E;
+  --axis:#59606F;
+  --cross-dot:#F2F3F7;
+  --cross-ring:#07070B;
+  --grain-op:.32;
+  --grain-invert:0;
+  --field-op:.5;
+  --shadow-ink:var(--shadow-ink);
+  --foot-bg:rgba(0,0,0,.32);
+  --ov012:rgba(255,255,255,.012);
+  --ov015:rgba(255,255,255,.015);
+  --ov016:rgba(255,255,255,.016);
+  --ov018:rgba(255,255,255,.018);
+  --ov02:rgba(255,255,255,.02);
+  --ov022:rgba(255,255,255,.022);
+  --ov025:rgba(255,255,255,.025);
+  --ov026:rgba(255,255,255,.026);
+  --ov028:rgba(255,255,255,.028);
+  --ov034:rgba(255,255,255,.034);
+  --ov035:rgba(255,255,255,.035);
+  --ov045:rgba(255,255,255,.045);
+  --ov05:rgba(255,255,255,.05);
+  --ov055:rgba(255,255,255,.055);
+  --ov06:rgba(255,255,255,.06);
+  --ov07:rgba(255,255,255,.07);
+  --ov08:rgba(255,255,255,.08);
+  --ov09:rgba(255,255,255,.09);
+  --ov16:rgba(255,255,255,.16);
+  --ov20:rgba(255,255,255,.20);
+  --ov26:rgba(255,255,255,.26);
+  --ov36:rgba(255,255,255,.36);
+  --ov42:rgba(255,255,255,.42);
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Public Sans","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  --shell:1280px;
+  --gut:34px;
+}
+
+html[data-theme="light"]{
+  --void:#EEF0F5;
+  --void-2:#FFFFFF;
+  --panel:rgba(255,255,255,.78);
+  --panel-2:rgba(255,255,255,.95);
+  --edge:rgba(16,18,28,.11);
+  --edge-2:rgba(16,18,28,.20);
+  --bone:#0C0E15;
+  --steel:#3B4250;
+  --slate:#5A6270;
+  --dim:#6A7284;
+  --mag:#F00FF0;
+  --mag-soft:#B000B0;
+  --mag-deep:#8A008A;
+  --violet:#5B3BE0;
+  --cyan:#0A93AC;
+  --up:#0B9A58;
+  --dn:#D8284A;
+  --btn-fg:#0C0E15;
+  --glass-dark:rgba(255,255,255,.86);
+  --glass-dark-2:rgba(255,255,255,.72);
+  --scroll-track:#E4E7EE;
+  --scroll-thumb:#BFC5D2;
+  --axis:#6B7280;
+  --cross-dot:#0C0E15;
+  --cross-ring:#FFFFFF;
+  --grain-op:.05;
+  --grain-invert:1;
+  --field-op:.55;
+  --shadow-ink:rgba(16,18,28,.16);
+  --foot-bg:rgba(16,18,28,.035);
+  --nav-bg:rgba(255,255,255,.74);
+  --ov012:rgba(16,18,28,.03);
+  --ov015:rgba(16,18,28,.035);
+  --ov016:rgba(16,18,28,.04);
+  --ov018:rgba(16,18,28,.04);
+  --ov02:rgba(16,18,28,.045);
+  --ov022:rgba(16,18,28,.045);
+  --ov025:rgba(16,18,28,.05);
+  --ov026:rgba(16,18,28,.05);
+  --ov028:rgba(16,18,28,.055);
+  --ov034:rgba(16,18,28,.06);
+  --ov035:rgba(16,18,28,.06);
+  --ov045:rgba(16,18,28,.07);
+  --ov05:rgba(16,18,28,.075);
+  --ov055:rgba(16,18,28,.08);
+  --ov06:rgba(16,18,28,.085);
+  --ov07:rgba(16,18,28,.09);
+  --ov08:rgba(16,18,28,.10);
+  --ov09:rgba(16,18,28,.11);
+  --ov16:rgba(16,18,28,.16);
+  --ov20:rgba(16,18,28,.20);
+  --ov26:rgba(16,18,28,.26);
+  --ov36:rgba(16,18,28,.36);
+  --ov42:rgba(16,18,28,.42);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--bone);font-family:var(--font-body);font-size:15.5px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background-color .45s ease,color .45s ease}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);font-weight:800;letter-spacing:-.03em;line-height:1.05}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:3px}
+::selection{background:rgba(240,15,240,.32);color:var(--btn-fg)}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--scroll-track)}
+::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:6px;border:2px solid var(--scroll-track)}
+
+.field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.field .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--field-op);will-change:transform}
+.field .b1{width:760px;height:760px;left:-220px;top:-260px;background:radial-gradient(circle at 40% 40%,rgba(240,15,240,.5),transparent 68%);animation:drift1 36s ease-in-out infinite}
+.field .b2{width:640px;height:640px;right:-180px;top:24%;background:radial-gradient(circle at 50% 50%,rgba(124,92,255,.42),transparent 68%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(120px,90px,0) scale(1.12)}}
+@keyframes drift2{0%,100%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-130px,100px,0) scale(.94)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:var(--grain-op);filter:invert(var(--grain-invert));
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.grid-veil{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(var(--ov028) 1px,transparent 1px),linear-gradient(90deg,var(--ov028) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 78%)}
+
+.shell{width:100%;max-width:1180px;margin:0 auto;padding:0 30px;position:relative;z-index:2}
+
+.nav{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--edge);background:var(--nav-bg);
+  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5)}
+.nav .shell{display:flex;align-items:center;gap:30px;height:74px}
+.brand svg{height:28px;width:auto;display:block}
+.nav-links{display:flex;align-items:center;gap:24px;margin-left:8px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--steel);transition:color .16s}
+.nav-links a:hover{color:var(--bone)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.themebtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;
+  border:1px solid var(--edge-2);background:var(--panel-2);color:var(--steel);cursor:pointer;flex:none;
+  transition:color .25s,border-color .25s,box-shadow .25s}
+.themebtn:hover{color:var(--mag);border-color:var(--mag);box-shadow:0 0 20px -6px rgba(240,15,240,.7)}
+.themebtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+html[data-theme="dark"] .i-moon{display:none}
+html[data-theme="light"] .i-sun{display:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:44px;padding:0 20px;border-radius:11px;
+  border:1px solid transparent;font-weight:600;font-size:14.5px;cursor:pointer;transition:.22s;white-space:nowrap}
+.btn .ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn-mag{background:linear-gradient(96deg,var(--mag),#D900DA);color:#0C0E15;box-shadow:0 14px 34px -16px rgba(240,15,240,.75)}
+.btn-mag:hover{transform:translateY(-1px);box-shadow:0 18px 40px -16px rgba(240,15,240,.9)}
+.btn-glass{border-color:var(--edge-2);background:var(--panel);color:var(--bone);backdrop-filter:blur(10px)}
+.btn-glass:hover{border-color:var(--mag);color:var(--mag)}
+.btn-sm{height:38px;padding:0 15px;font-size:13.5px}
+
+.hero{padding:96px 0 76px;position:relative}
+.kicker{display:flex;align-items:center;gap:11px;font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--slate);margin-bottom:22px}
+.kicker::before{content:"";width:28px;height:2px;background:var(--mag);flex:none;box-shadow:0 0 12px rgba(240,15,240,.8)}
+.hero h1{font-size:clamp(38px,5.2vw,68px);max-width:17ch}
+.grad{background:linear-gradient(96deg,var(--mag),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin-top:22px;max-width:60ch;color:var(--steel);font-size:17px}
+.hero .lede b{color:var(--bone);font-weight:600}
+.hero-cta{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap}
+.hero-stats{margin-top:52px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--edge);
+  border:1px solid var(--edge);border-radius:14px;overflow:hidden}
+.hero-stats div{background:var(--void-2);padding:20px 22px}
+.hero-stats dt{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:7px}
+.hero-stats dd{margin:0;font-family:var(--font-display);font-weight:800;font-size:24px;letter-spacing:-.02em}
+.hero-stats dd em{font-style:normal;color:var(--mag)}
+
+section.band{padding:84px 0;position:relative}
+.band + .band{border-top:1px solid var(--edge)}
+.band h2{font-size:clamp(27px,3.2vw,40px);max-width:20ch}
+.band .sub{margin-top:16px;max-width:58ch;color:var(--steel)}
+.band .sub b{color:var(--bone);font-weight:600}
+
+.cards{margin-top:46px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pcard{border:1px solid var(--edge);border-radius:16px;background:var(--panel);backdrop-filter:blur(14px);
+  padding:28px 26px 30px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s,box-shadow .3s}
+.pcard:hover{border-color:var(--edge-2);transform:translateY(-3px);box-shadow:var(--shadow-ink) 0 24px 60px -30px}
+.pcard .ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--edge);background:var(--panel-2);margin-bottom:20px}
+.pcard .ico svg{width:20px;height:20px;stroke:var(--mag);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.pcard h3{font-size:19px;margin-bottom:9px}
+.pcard p{font-size:14px;color:var(--steel);line-height:1.6}
+.pcard ul{margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.pcard li{display:flex;gap:9px;font-size:13.5px;color:var(--steel)}
+.pcard li svg{width:15px;height:15px;stroke:var(--up);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:3px}
+
+.steps{margin-top:46px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.step{padding:0 22px;border-left:1px solid var(--edge);position:relative}
+.step:first-child{border-left:0;padding-left:0}
+.step .n{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--mag);margin-bottom:14px;display:block}
+.step h4{font-size:16px;margin-bottom:8px}
+.step p{font-size:13.5px;color:var(--slate);line-height:1.6}
+
+.terms{margin-top:42px;border:1px solid var(--edge);border-radius:16px;overflow:hidden}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:20px;padding:18px 24px;border-bottom:1px solid var(--edge)}
+.trow:last-child{border-bottom:0}
+.trow:nth-child(odd){background:var(--panel)}
+.trow dt{font-family:var(--font-mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--slate);padding-top:3px}
+.trow dd{margin:0;font-size:14.5px;color:var(--steel)}
+.ph{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:12.5px;font-weight:600;
+  color:var(--mag);border:1px dashed rgba(240,15,240,.55);border-radius:6px;padding:1px 8px;background:rgba(240,15,240,.07)}
+.ph::after{content:"TO CONFIRM";font-size:8.5px;letter-spacing:.1em;color:var(--slate);font-weight:600}
+
+.apply{margin-top:44px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:44px;align-items:start}
+.apply .note{color:var(--steel);font-size:14.5px}
+.apply .note b{color:var(--bone)}
+.apply .bullets{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.apply .bullets div{display:flex;gap:10px;font-size:13.8px;color:var(--steel)}
+.apply .bullets svg{width:16px;height:16px;stroke:var(--mag);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:3px}
+.form{border:1px solid var(--edge);border-radius:16px;background:var(--panel);backdrop-filter:blur(14px);padding:28px 26px 30px}
+.form .grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.fld{display:flex;flex-direction:column}
+.fld label{font-family:var(--font-mono);font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--slate);margin-bottom:7px}
+.inp,.sel,.ta{width:100%;border-radius:11px;border:1px solid var(--edge-2);background:var(--void-2);color:var(--bone);
+  padding:0 14px;font:inherit;font-size:14.5px;transition:border-color .2s,box-shadow .2s}
+.inp,.sel{height:46px}
+.sel{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--slate) 50%),linear-gradient(135deg,var(--slate) 50%,transparent 50%);
+  background-position:calc(100% - 19px) 20px,calc(100% - 14px) 20px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.ta{height:112px;padding:12px 14px;resize:vertical;line-height:1.55}
+.inp::placeholder,.ta::placeholder{color:var(--dim)}
+.inp:focus,.sel:focus,.ta:focus{outline:none;border-color:var(--mag);box-shadow:0 0 0 3px rgba(240,15,240,.17)}
+.form form{display:flex;flex-direction:column;gap:15px}
+
+.faq{margin-top:36px;border-top:1px solid var(--edge)}
+.faq details{border-bottom:1px solid var(--edge)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 2px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+  font-family:var(--font-display);font-weight:700;font-size:16px;letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{width:18px;height:18px;stroke:var(--slate);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s;flex:none}
+.faq details[open] summary svg{transform:rotate(180deg);stroke:var(--mag)}
+.faq .ans{padding:0 2px 22px;color:var(--steel);font-size:14.5px;max-width:82ch}
+.faq .ans b{color:var(--bone);font-weight:600}
+
+.final{padding:84px 0 90px;border-top:1px solid var(--edge);position:relative;overflow:hidden}
+.final h2{font-size:clamp(28px,3.6vw,46px);max-width:18ch}
+.final .sub{margin-top:16px;color:var(--steel);max-width:52ch}
+.final .hero-cta{margin-top:30px}
+
+.foot{padding:52px 0 36px;border-top:1px solid var(--edge);background:var(--foot-bg)}
+.foot .top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.foot .brand svg{height:26px}
+.foot p{margin-top:14px;font-size:13.5px;color:var(--slate);max-width:44ch}
+.foot .cols{display:flex;gap:56px;flex-wrap:wrap}
+.foot h5{margin:0 0 12px;font-family:var(--font-mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.foot ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.foot li a{font-size:13.5px;color:var(--steel)}
+.foot li a:hover{color:var(--mag-soft)}
+.foot .base{margin-top:34px;padding-top:22px;border-top:1px solid var(--edge);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.07em;color:var(--dim)}
+
+@media (max-width:1000px){
+  .cards{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr;gap:26px 0}
+  .step:nth-child(3){border-left:0;padding-left:0}
+  .apply{grid-template-columns:1fr;gap:30px}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+}
+@media (max-width:620px){
+  .shell{padding:0 20px}
+  .steps{grid-template-columns:1fr}
+  .step{border-left:0;padding-left:0}
+  .trow{grid-template-columns:1fr;gap:6px}
+  .form .grid2{grid-template-columns:1fr}
+  .hero{padding:64px 0 54px}
+  section.band{padding:62px 0}
+}
+@media (prefers-reduced-motion:reduce){.field .blob{animation:none}}
+</style>
+<style id="cc-ux">
+:focus-visible{outline:2px solid var(--mag);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:10px;z-index:400;background:var(--void-2);color:var(--bone);
+  border:1px solid var(--mag);padding:12px 18px;border-radius:12px;font-size:13px;text-decoration:none;font-weight:600}
+.skip:focus{left:10px}
+body{overflow-x:clip}
+.cc-spot{position:relative}
+.cc-spot::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  transition:opacity .4s ease;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(240,15,240,.14),transparent 62%)}
+.cc-spot:hover::before{opacity:1}
+.cc-tip{position:relative}
+.cc-tip::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translate(-50%,5px);
+  white-space:nowrap;background:var(--void-2);border:1px solid var(--edge);color:var(--bone);
+  font-size:11px;letter-spacing:.02em;padding:6px 10px;border-radius:9px;opacity:0;pointer-events:none;z-index:90;
+  box-shadow:0 12px 34px rgba(0,0,0,.45);transition:opacity .2s,transform .3s cubic-bezier(.22,.9,.3,1)}
+.cc-tip:hover::after{opacity:1;transform:translate(-50%,0)}
+.cc-glow{animation:ccglow 3.4s ease-in-out infinite}
+@keyframes ccglow{
+  0%,100%{box-shadow:0 0 0 1px rgba(240,15,240,.55),0 0 20px rgba(240,15,240,.38)}
+  50%{box-shadow:0 0 0 1px rgba(124,92,255,.70),0 0 32px rgba(240,15,240,.60),0 0 58px rgba(59,232,255,.22)}}
+@media (max-width:1024px){:root{--gut:26px}}
+@media (max-width:390px){:root{--gut:15px}}
+@media (prefers-reduced-motion:reduce){.cc-glow{animation:none}.cc-spot::before{transition:none}}
+</style></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="field" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span></div>
+<div class="grid-veil" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="shell">
+    <a class="brand" href="/" aria-label="ChartControl home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="412 292 1075 338" width="1075" height="338" role="img" aria-label="ChartControl AI">
+<title>ChartControl AI - CCAI wordmark</title>
+
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="#F00FF0" stroke="none">
+<path d="M5720 6493 c-439 -34 -894 -258 -1173 -578 -453 -518 -544 -1243 -225 -1802 234 -411 617 -676 1119 -775 110 -21 137 -22 769 -26 l655 -3 -3 55 c-2 30 1 62 6 73 10 17 -11 18 -651 18 -649 0 -664 0 -774 23 -603 122 -1042 557 -1139 1126 -23 136 -16 402 14 531 143 615 586 1042 1226 1182 121 26 122 26 646 30 289 2 559 3 600 3 l75 0 -3 54 c-2 30 1 63 7 74 11 20 10 20 -547 20 -306 -1 -577 -3 -602 -5z M8917 6489 c-253 -25 -556 -134 -777 -281 -607 -405 -894 -1158 -689 -1805 178 -563 629 -952 1239 -1069 84 -16 167 -19 740 -22 l645 -3 -1 68 -1 68 -659 6 c-724 6 -713 5 -926 74 -403 130 -744 468 -877 870 -170 511 -23 1095 374 1490 172 170 340 279 555 359 265 98 268 98 982 103 l616 4 -9 32 c-5 19 -5 45 1 66 5 19 7 38 4 43 -7 10 -1101 8 -1217 -3z M5615 6011 c-479 -86 -846 -406 -983 -856 -44 -144 -56 -235 -49 -383 19 -448 333 -836 802 -991 168 -55 236 -61 697 -61 l419 0 -3 68 -3 67 -445 5 c-443 6 -446 6 -540 32 -407 114 -658 352 -756 718 -28 103 -26 338 4 455 73 288 277 546 539 682 225 118 318 133 821 133 l383 0 -3 73 -3 72 -390 2 c-336 1 -404 -1 -490 -16z M8935 6023 c-501 -59 -902 -387 -1053 -863 -84 -266 -68 -547 47 -786 136 -283 369 -488 671 -588 185 -61 242 -66 727 -66 l433 0 0 70 0 70 -424 0 c-448 0 -514 5 -671 51 -320 95 -583 365 -661 679 -28 111 -26 375 4 483 97 353 351 626 696 746 158 56 217 61 657 61 l399 0 0 75 0 75 -397 -1 c-219 -1 -411 -4 -428 -6z"/>
+</g>
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="var(--bone)" stroke="none">
+<path d="M11706 6047 c-67 -157 -338 -798 -564 -1332 -60 -143 -144 -343 -187 -445 -146 -349 -397 -945 -402 -952 -2 -5 170 -8 384 -8 l388 0 135 326 c74 180 141 335 148 345 13 18 38 19 621 19 475 0 611 -3 618 -12 5 -7 18 -33 27 -58 10 -25 72 -174 138 -332 l121 -288 372 0 373 0 -35 88 c-19 48 -117 287 -218 532 -101 245 -284 697 -408 1005 -222 553 -386 958 -474 1168 l-45 107 -461 0 -462 0 -69 -163z m593 -684 c145 -334 331 -777 328 -780 -2 -2 -184 -2 -404 -1 l-401 3 137 320 c189 442 262 605 270 605 3 0 35 -66 70 -147z M14180 4760 l0 -1450 350 0 350 0 0 1450 0 1450 -350 0 -350 0 0 -1450z"/>
+<circle cx="7024.50" cy="6426.16" r="161.99"/>
+<circle cx="10264.07" cy="6426.16" r="161.99"/>
+<circle cx="7024.50" cy="3383.84" r="161.99"/>
+<circle cx="10264.07" cy="3383.84" r="161.99"/>
+</g>
+</svg></a>
+    <div class="nav-links">
+      <a href="#programmes">Programmes</a>
+      <a href="#how">How it works</a>
+      <a href="#terms">Terms</a>
+      <a href="#apply">Apply</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-right">
+      <button class="themebtn" id="themebtn" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <a class="btn btn-glass btn-sm" href="/login.html">Sign in</a>
+      <a class="btn btn-mag btn-sm" href="#apply"><span>Become a partner</span></a>
+        <a class="btn" href="/app.html">Terminal</a>
+  </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="shell">
+    <div class="kicker">Partner programme</div>
+    <h1>Put an AI copilot on your <span class="grad">traders' charts</span>.</h1>
+    <p class="lede">ChartControl is an AI-native, <b>non-custodial</b> trading terminal: it reads the chart a trader is already watching and draws the <b>entry, invalidation and reward-to-risk</b> onto it. Live on KuCoin and BitMart. Partner with us to bring it to your audience, your platform or your desk.</p>
+    <div class="hero-cta">
+      <a class="btn btn-mag" href="#apply"><span>Apply to the programme</span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a class="btn btn-glass" href="#terms">See programme terms</a>
+    </div>
+
+    <dl class="hero-stats">
+      <div><dt>Exchanges live</dt><dd>KuCoin · BitMart</dd></div>
+      <div><dt>Perpetual pairs</dt><dd>660<em>+</em></dd></div>
+      <div><dt>Median answer</dt><dd>4.2<em>s</em></dd></div>
+      <div><dt>Custody of funds</dt><dd>None</dd></div>
+    </dl>
+  </div>
+</header>
+
+<section class="band" id="programmes">
+  <div class="shell">
+    <h2>Three ways to work with us.</h2>
+    <p class="sub">Every programme runs on the same product and the same rule: <b>the partner never touches the trader's funds</b> — orders always execute on the trader's own exchange account.</p>
+
+    <div class="cards">
+      <article class="pcard">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Affiliate</h3>
+        <p>For creators, educators and trading communities. Send traders to a product that earns its place on their screen.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Tracked referral link and dashboard</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Recurring share of plan revenue</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Launch kit and demo workspace</span></li>
+        </ul>
+      </article>
+
+      <article class="pcard">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></div>
+        <h3>Integration / API</h3>
+        <p>For platforms, data vendors and tooling that want chart reads and signal rules inside their own product.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Server-side market tools and SSE streams</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Rules expressed as formulas, not prose</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Sandbox keys and test fixtures</span></li>
+        </ul>
+      </article>
+
+      <article class="pcard">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="2"/></svg></div>
+        <h3>White-label desk</h3>
+        <p>For prop desks, funds and brokerages that want the workspace and copilot under their own brand.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Branded workspace and layouts per seat</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Seat management and usage reporting</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Priority support channel</span></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="shell">
+    <h2>From application to first referral.</h2>
+    <p class="sub">A short process, on purpose. We would rather run one programme properly than four at demo depth.</p>
+
+    <div class="steps">
+      <div class="step"><span class="n">01</span><h4>Apply</h4><p>Tell us who you are and who you reach. Two minutes, one form.</p></div>
+      <div class="step"><span class="n">02</span><h4>Qualify</h4><p>A short call to match you to the right programme and set the commercial terms.</p></div>
+      <div class="step"><span class="n">03</span><h4>Launch</h4><p>Tracking, keys or branding are provisioned, plus a demo workspace to show.</p></div>
+      <div class="step"><span class="n">04</span><h4>Get paid</h4><p>Reporting in your dashboard, payouts on the cycle in the programme terms.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="terms">
+  <div class="shell">
+    <h2>Programme terms.</h2>
+    <p class="sub">Commercial figures are set per partner and per programme. The items marked below are the ones we confirm with you before anything is signed.</p>
+
+    <dl class="terms">
+      <div class="trow"><dt>Revenue share</dt><dd>A share of the broker rebate the exchange pays us on your audience's trades. It is never taken from their funds, and the exact figure is set per programme.</dd></div>
+      <div class="trow"><dt>Attribution</dt><dd>Decided at the moment of sign-up, through your link or your code. It cannot be applied to an account afterwards.</dd></div>
+      <div class="trow"><dt>Payout</dt><dd>Your share is sent directly once it clears the programme minimum — it is not credited automatically, because we hold no wallet to credit it from.</dd></div>
+      <div class="trow"><dt>Minimum payout</dt><dd>Carried over until the balance reaches the threshold. The amount and currency are fixed when the programme is switched on.</dd></div>
+      <div class="trow"><dt>Custody</dt><dd>Never. Orders execute on the trader's own exchange account under their own API keys — the partner and ChartControl cannot withdraw.</dd></div>
+      <div class="trow"><dt>Claims</dt><dd>No win rate, no performance promise and no signal guarantees may be published under any programme. Analysis, not investment advice.</dd></div>
+      <div class="trow"><dt>Brand use</dt><dd>The official wordmark and an asset pack are supplied with the programme.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="band" id="apply">
+  <div class="shell">
+    <h2>Apply to the programme.</h2>
+    <div class="apply">
+      <div class="note">
+        <p>Tell us how you reach traders and which programme fits. We read every application and reply either way.</p>
+        <div class="bullets">
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>No exclusivity and no minimum volume to start.</span></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Your audience keeps its own exchange accounts and its own keys.</span></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>We will not ask you to make a performance claim you cannot substantiate.</span></div>
+        </div>
+        <p style="margin-top:22px;font-size:13.5px;color:var(--slate)">Send the form and we reply by email — no account is required to apply.</p>
+      </div>
+
+      <div class="form">
+        <form onsubmit="return false">
+          <div class="grid2">
+            <div class="fld"><label for="pname">Name</label><input class="inp" id="pname" type="text" placeholder="Nuri Kwon"></div>
+            <div class="fld"><label for="pemail">Email</label><input class="inp" id="pemail" type="email" placeholder="you@company.com"></div>
+          </div>
+          <div class="grid2">
+            <div class="fld"><label for="pcompany">Company / channel</label><input class="inp" id="pcompany" type="text" placeholder="Desk, community or platform"></div>
+            <div class="fld"><label for="ptype">Programme</label>
+              <select class="sel" id="ptype">
+                <option>Affiliate</option>
+                <option>Integration / API</option>
+                <option>White-label desk</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="fld"><label for="preach">Audience and reach</label><input class="inp" id="preach" type="text" placeholder="e.g. 40k followers on X, KuCoin perp traders"></div>
+          <div class="fld"><label for="pmsg">Anything else</label><textarea class="ta" id="pmsg" placeholder="Tell us what you want to build."></textarea></div>
+          <button class="btn btn-mag" type="submit" style="width:100%">
+            <span>Send application</span>
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="shell">
+    <h2>Straight answers.</h2>
+    <div class="faq">
+      <details open>
+        <summary>Does the partner ever handle client money?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <div class="ans">No. ChartControl is non-custodial by design. Orders run on the trader's <b>own exchange account</b> under their own API keys — neither ChartControl nor the partner can withdraw funds.</div>
+      </details>
+      <details>
+        <summary>Can I publish performance claims to promote it?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <div class="ans">No. We publish no win rate and no performance promise, and neither may partners. The product reads the chart and can give its own view — it does not forecast the next move. <b>Analysis, not investment advice.</b></div>
+      </details>
+      <details>
+        <summary>Which exchanges are covered?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <div class="ans"><b>KuCoin</b> and <b>BitMart</b> are both live and connectable today. KuCoin carries 660+ USDT-margined perpetual pairs with real-time WebSocket depth; BitMart adds deep alt liquidity across spot, perpetual and futures markets. Further venues are announced only once their integration passes the full test suite.</div>
+      </details>
+      <details>
+        <summary>Is there a cost to join?<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <div class="ans">Joining is free and there is no minimum volume to start. Your audience can begin on the free tier — no card required.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="shell">
+    <div class="kicker">Start here</div>
+    <h2>The next chart your audience opens, the AI is already on it.</h2>
+    <p class="sub">Apply once and we will match you to the programme that fits how you actually work.</p>
+    <div class="hero-cta">
+      <a class="btn btn-mag" href="#apply"><span>Become a partner</span>
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a class="btn btn-glass" href="/">See the product</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="top">
+      <div>
+        <a class="brand" href="/" aria-label="ChartControl home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="412 292 1075 338" width="1075" height="338" role="img" aria-label="ChartControl AI">
+<title>ChartControl AI - CCAI wordmark</title>
+
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="#F00FF0" stroke="none">
+<path d="M5720 6493 c-439 -34 -894 -258 -1173 -578 -453 -518 -544 -1243 -225 -1802 234 -411 617 -676 1119 -775 110 -21 137 -22 769 -26 l655 -3 -3 55 c-2 30 1 62 6 73 10 17 -11 18 -651 18 -649 0 -664 0 -774 23 -603 122 -1042 557 -1139 1126 -23 136 -16 402 14 531 143 615 586 1042 1226 1182 121 26 122 26 646 30 289 2 559 3 600 3 l75 0 -3 54 c-2 30 1 63 7 74 11 20 10 20 -547 20 -306 -1 -577 -3 -602 -5z M8917 6489 c-253 -25 -556 -134 -777 -281 -607 -405 -894 -1158 -689 -1805 178 -563 629 -952 1239 -1069 84 -16 167 -19 740 -22 l645 -3 -1 68 -1 68 -659 6 c-724 6 -713 5 -926 74 -403 130 -744 468 -877 870 -170 511 -23 1095 374 1490 172 170 340 279 555 359 265 98 268 98 982 103 l616 4 -9 32 c-5 19 -5 45 1 66 5 19 7 38 4 43 -7 10 -1101 8 -1217 -3z M5615 6011 c-479 -86 -846 -406 -983 -856 -44 -144 -56 -235 -49 -383 19 -448 333 -836 802 -991 168 -55 236 -61 697 -61 l419 0 -3 68 -3 67 -445 5 c-443 6 -446 6 -540 32 -407 114 -658 352 -756 718 -28 103 -26 338 4 455 73 288 277 546 539 682 225 118 318 133 821 133 l383 0 -3 73 -3 72 -390 2 c-336 1 -404 -1 -490 -16z M8935 6023 c-501 -59 -902 -387 -1053 -863 -84 -266 -68 -547 47 -786 136 -283 369 -488 671 -588 185 -61 242 -66 727 -66 l433 0 0 70 0 70 -424 0 c-448 0 -514 5 -671 51 -320 95 -583 365 -661 679 -28 111 -26 375 4 483 97 353 351 626 696 746 158 56 217 61 657 61 l399 0 0 75 0 75 -397 -1 c-219 -1 -411 -4 -428 -6z"/>
+</g>
+<g transform="translate(0.000000,952.000000) scale(0.100000,-0.100000)" fill="var(--bone)" stroke="none">
+<path d="M11706 6047 c-67 -157 -338 -798 -564 -1332 -60 -143 -144 -343 -187 -445 -146 -349 -397 -945 -402 -952 -2 -5 170 -8 384 -8 l388 0 135 326 c74 180 141 335 148 345 13 18 38 19 621 19 475 0 611 -3 618 -12 5 -7 18 -33 27 -58 10 -25 72 -174 138 -332 l121 -288 372 0 373 0 -35 88 c-19 48 -117 287 -218 532 -101 245 -284 697 -408 1005 -222 553 -386 958 -474 1168 l-45 107 -461 0 -462 0 -69 -163z m593 -684 c145 -334 331 -777 328 -780 -2 -2 -184 -2 -404 -1 l-401 3 137 320 c189 442 262 605 270 605 3 0 35 -66 70 -147z M14180 4760 l0 -1450 350 0 350 0 0 1450 0 1450 -350 0 -350 0 0 -1450z"/>
+<circle cx="7024.50" cy="6426.16" r="161.99"/>
+<circle cx="10264.07" cy="6426.16" r="161.99"/>
+<circle cx="7024.50" cy="3383.84" r="161.99"/>
+<circle cx="10264.07" cy="3383.84" r="161.99"/>
+</g>
+</svg></a>
+        <p>AI chart intelligence for traders who live on charts. Non-custodial by design.</p>
+      </div>
+      <div class="cols">
+        <div><h5>Product</h5><ul>
+          <li><a href="/#product">What a read contains</a></li><li><a href="/#workspace">Workspace</a></li>
+          <li><a href="/#coverage">Coverage</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+        <div><h5>Partner</h5><ul>
+          <li><a href="#programmes">Programmes</a></li><li><a href="#terms">Terms</a></li>
+          <li><a href="#apply">Apply</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+        <div><h5>Account</h5><ul>
+          <li><a href="/login.html">Sign in</a></li><li><a href="/signup.html">Create account</a></li></ul></div>
+      </div>
+    </div>
+    <div class="base">
+      <span>© 2026 CHART CONTROL. ALL RIGHTS RESERVED.</span>
+      <span>NOT CUSTODIAL · NOT INVESTMENT ADVICE · ANALYSIS ONLY</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('themebtn'); if(b) b.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+    var nxt=cur==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem('cc-theme',nxt);}catch(e){}
+  });
+})();
+</script>
+<script id="cc-ux-js">
+(function(){
+  if(window.__ccUx) return; window.__ccUx=1;
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hov=window.matchMedia('(hover:hover)').matches;
+  if(hov&&!rm){
+    [].forEach.call(document.querySelectorAll('a.btn,.btn,.cta,button[type=submit]'),function(el){
+      if(el.dataset.mag||el.classList.contains('glow-border'))return; el.dataset.mag='1';
+      el.style.transition='transform .4s cubic-bezier(.22,.9,.3,1)';
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        el.style.transform='translate('+((e.clientX-r.left-r.width/2)*0.14).toFixed(2)+'px,'+((e.clientY-r.top-r.height/2)*0.20).toFixed(2)+'px)';
+      });
+      el.addEventListener('pointerleave',function(){el.style.transform='';});
+    });
+    [].forEach.call(document.querySelectorAll('article,.card,.tier,.cov-card,.howcard,.prin article'),function(el){
+      if(el.dataset.sp||el.classList.contains('spot'))return; el.dataset.sp='1'; el.classList.add('cc-spot');
+      el.addEventListener('pointermove',function(e){
+        var r=el.getBoundingClientRect();
+        el.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+        el.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+      });
+    });
+  }
+  [].forEach.call(document.querySelectorAll('.u,.chip,.metric,.badge,.pill'),function(el){
+    var t=(el.textContent||'').trim();
+    if(t.length>2&&t.length<34&&!el.dataset.tip){el.dataset.tip=t;el.classList.add('cc-tip');}
+  });
+  var hb=document.querySelector('.hero .btn,.hero .cta,.hero a.btn');
+  if(hb&&!hb.classList.contains('glow-border'))hb.classList.add('cc-glow');
+})();
+</script></body>
+</html>
