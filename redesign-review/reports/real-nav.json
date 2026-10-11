@@ -1,0 +1,75 @@
+{
+ "links": [
+  {
+   "href": "#/trade",
+   "text": "Trade",
+   "title": "Trade"
+  },
+  {
+   "href": "#/markets",
+   "text": "Markets",
+   "title": "Markets"
+  },
+  {
+   "href": "#/scanner",
+   "text": "Market scanner",
+   "title": "Market scanner"
+  },
+  {
+   "href": "#/strategy-library",
+   "text": "Strategy library",
+   "title": "Strategy library"
+  },
+  {
+   "href": "#/analytics",
+   "text": "Analytics",
+   "title": "Analytics"
+  },
+  {
+   "href": "#/portfolio",
+   "text": "Portfolio",
+   "title": "Portfolio"
+  },
+  {
+   "href": "#/wallet",
+   "text": "Wallet",
+   "title": "Wallet"
+  },
+  {
+   "href": "#/order-history",
+   "text": "Order History",
+   "title": "Order History"
+  },
+  {
+   "href": "#/notifications",
+   "text": "Notifications",
+   "title": "Notifications"
+  },
+  {
+   "href": "#/referral",
+   "text": "Referral",
+   "title": "Referral"
+  },
+  {
+   "href": "#/points",
+   "text": "Points",
+   "title": "Points"
+  },
+  {
+   "href": "#/settings",
+   "text": "Settings",
+   "title": "Settings"
+  },
+  {
+   "href": "#/help",
+   "text": "Help",
+   "title": "Help"
+  }
+ ],
+ "sections": [
+  "TRADING",
+  "MARKETS",
+  "ACCOUNT",
+  "TOOLS"
+ ]
+}

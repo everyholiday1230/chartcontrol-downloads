@@ -1,0 +1,75 @@
+<main class="page">
+  <aside class="arail" aria-label="Admin routes">
+    <div class="agrp">Overview</div>
+    <button class="aitem" type="button" data-r="0" aria-selected="true"><span>Admin Home</span><span class="sp"></span><span class="abadge abadge--ops">ops</span></button>
+    <div class="agrp">Money</div>
+    <button class="aitem" type="button" data-r="1"><span>Fees &amp; Rebates</span></button>
+    <button class="aitem" type="button" data-r="5"><span>Deposits</span></button>
+    <button class="aitem" type="button" data-r="6"><span>Withdrawals</span></button>
+    <button class="aitem" type="button" data-r="7"><span>Assets</span></button>
+    <div class="agrp">Risk &amp; trading</div>
+    <button class="aitem" type="button" data-r="3"><span>Trade Monitor</span><span class="sp"></span><span class="abadge">admin</span></button>
+    <button class="aitem" type="button" data-r="4"><span>Risk</span></button>
+    <button class="aitem" type="button" data-r="14"><span>Auto trading</span></button>
+    <button class="aitem" type="button" data-r="19"><span>Leaderboard</span><span class="sp"></span><span class="abadge">admin</span></button>
+    <div class="agrp">Content &amp; comms</div>
+    <button class="aitem" type="button" data-r="9"><span>Notices &amp; CS</span></button>
+    <button class="aitem" type="button" data-r="10"><span>Broadcast</span></button>
+    <button class="aitem" type="button" data-r="13"><span>Legal</span></button>
+    <button class="aitem" type="button" data-r="8"><span>AI Ops</span></button>
+    <div class="agrp">Growth</div>
+    <button class="aitem" type="button" data-r="11"><span>Referral</span></button>
+    <button class="aitem" type="button" data-r="12"><span>Points</span></button>
+    <div class="agrp">Platform</div>
+    <button class="aitem" type="button" data-r="2"><span>Users</span><span class="sp"></span><span class="abadge abadge--ops">ops</span></button>
+    <button class="aitem" type="button" data-r="16"><span>System</span></button>
+    <button class="aitem" type="button" data-r="17"><span>Audit</span></button>
+    <button class="aitem" type="button" data-r="15"><span>Activity</span></button>
+    <button class="aitem" type="button" data-r="18"><span>Design ops</span></button>
+    <p class="foot-note" style="margin:6px 7px 0">Every route here is a real one from the product. A route whose read is denied by the server shows that refusal — it never renders a stand-in.</p>
+  </aside>
+
+  <div class="acol" id="admCol"></div>
+
+  <aside class="aright">
+    <div class="sec">
+      <div class="sec__t">Data source legend <span class="sp"></span></div>
+      <div class="legrow"><span class="sw" style="background:oklch(52% .11 175)"></span><b style="color:var(--text-secondary);font-weight:600">LIVE</b>&nbsp;read from the venue or database</div>
+      <div class="legrow"><span class="sw" style="background:oklch(54% .115 75)"></span><b style="color:var(--text-secondary);font-weight:600">PARTIAL</b>&nbsp;some fields refused</div>
+      <div class="legrow"><span class="sw" style="background:oklch(55% .16 250)"></span><b style="color:var(--text-secondary);font-weight:600">MOCK</b>&nbsp;seeded data, actions still work</div>
+      <p class="foot-note" style="margin:0">This console runs against the same server as the terminal. When a read fails, the affected panel says so and the rest of the page keeps working.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec__t">Your access <span class="sp"></span></div>
+      <div class="lay"><span class="k">Role</span><span class="sp"></span><span class="v">super</span></div>
+      <div class="lay"><span class="k">Can read users</span><span class="sp"></span><span class="v" id="admReadUsers">yes</span></div>
+      <div class="lay"><span class="k">Can move funds</span><span class="sp"></span><span class="v" style="color:oklch(44% .115 75)">no</span></div>
+      <div class="lay"><span class="k">Can publish notices</span><span class="sp"></span><span class="v">yes</span></div>
+      <div class="lay"><span class="k">Can impersonate</span><span class="sp"></span><span class="v" style="color:oklch(44% .115 75)">no</span></div>
+      <p class="foot-note" style="margin:0">Fund-moving and impersonation are deliberately off even for a super role. Those two actions need a second operator, so they are not a checkbox here.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec__t">Audit trail <span class="sp"></span><span class="n mono">this session</span></div>
+      <div id="admAudit"></div>
+      <p class="foot-note" style="margin:0">Every write on this console is appended to the audit log with actor, target and before/after. Reads are not logged.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec__t">Environment <span class="sp"></span></div>
+      <div class="lay"><span class="k">Mode</span><span class="sp"></span><span class="v">MOCK_REPLAY</span></div>
+      <div class="lay"><span class="k">Trading</span><span class="sp"></span><span class="v">MOCK</span></div>
+      <div class="lay"><span class="k">Venues</span><span class="sp"></span><span class="v">KuCoin · Bybit</span></div>
+      <div class="lay"><span class="k">Regions</span><span class="sp"></span><span class="v">—</span></div>
+      <p class="foot-note" style="margin:0">Region is not configured, so it reads as a dash rather than a guess. The badge in the bottom bar shows the same three states as the legend above.</p>
+    </div>
+  </aside>
+
+  <div class="cmdk-pop" id="cmdkPop">
+    <div class="cmdk-box">
+      <input id="cmdkQ" placeholder="Jump to a route or run an action…" aria-label="Command menu">
+      <div class="cmdk-list" id="cmdkList"></div>
+    </div>
+  </div>
+</main>

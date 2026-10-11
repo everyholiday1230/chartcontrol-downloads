@@ -1,0 +1,299 @@
+<main class="aicp">
+
+  <!-- ============ conversations rail (thefrontkit: session list + search) ============ -->
+  <aside class="sess" aria-label="Conversations">
+    <div class="sess__hd">
+      <button class="sess__new" type="button" id="aiNewChat">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3.5v9M3.5 8h9"/></svg>
+        New analysis
+      </button>
+      <div class="sess__search">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+        <input placeholder="Search conversations" aria-label="Search conversations">
+      </div>
+    </div>
+    <div class="sess__list">
+      <div class="sgrp">Today</div>
+      <div class="sitem" aria-selected="true">
+        <span class="tt">BTCUSDT 1h — long setup?</span>
+        <span class="mt"><span>BTCUSDT · 1h</span><span style="flex:1 1 auto"></span><span class="pts">600</span></span>
+      </div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">ETHUSDT 4h — where is invalidation?</span>
+        <span class="mt"><span>ETHUSDT · 4h</span><span style="flex:1 1 auto"></span><span class="pts">300</span></span>
+      </div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">Draft my pullback setup</span>
+        <span class="mt"><span>Strategy draft</span><span style="flex:1 1 auto"></span><span class="pts">300</span></span>
+      </div>
+      <div class="sgrp">Yesterday</div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">Find support &amp; resistance, 1h</span>
+        <span class="mt"><span>BTCUSDT · 1h</span><span style="flex:1 1 auto"></span><span class="pts">150</span></span>
+      </div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">R/R calculator — 63,900 entry</span>
+        <span class="mt"><span>Tool</span><span style="flex:1 1 auto"></span><span class="pts">150</span></span>
+      </div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">Draw ascending trendline</span>
+        <span class="mt"><span>BTCUSDT · 15m</span><span style="flex:1 1 auto"></span><span class="pts">300</span></span>
+      </div>
+      <div class="sgrp">Earlier</div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">Scanner — 2 live pairs</span>
+        <span class="mt"><span>Scanner</span><span style="flex:1 1 auto"></span><span class="pts">150</span></span>
+      </div>
+      <div class="sitem" aria-selected="false">
+        <span class="tt">Review my position after the fill</span>
+        <span class="mt"><span>ETHUSDT · 1h</span><span style="flex:1 1 auto"></span><span class="pts">300</span></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ thread ============ -->
+  <section class="thr" aria-label="Conversation">
+    <div class="thr__hd">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="color:var(--ai);flex:0 0 auto" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+      <span class="ttl">BTCUSDT 1h — long setup?</span>
+      <span class="sp"></span>
+      <div class="seg" role="group" aria-label="Model" style="padding:2px">
+        <button type="button" aria-pressed="true">Fast</button>
+        <button type="button" aria-pressed="false">Deep</button>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" id="aiTabs">
+      <button type="button" role="tab" aria-pressed="true">AI Chart Analysis</button>
+      <button type="button" role="tab" aria-pressed="false">My AI Strategies</button>
+      <button type="button" role="tab" aria-pressed="false">Position Review</button>
+      <button type="button" role="tab" aria-pressed="false">Market Scanner</button>
+    </div>
+
+    <div class="scope" id="aiScope">
+      <span class="lbl">Scope</span>
+      <span class="chip">BTCUSDT <span class="x">&times;</span></span>
+      <span class="chip">1h <span class="x">&times;</span></span>
+      <span class="chip">500 candles <span class="x">&times;</span></span>
+      <span class="chip chip--no"><span class="lk">not in scope:</span> order book <span class="x">&times;</span></span>
+    </div>
+
+    <div class="thread" id="aiThread">
+
+      <div class="msg msg--you">
+        <div class="msg__av">YOU</div>
+        <div class="msg__in">
+          <div class="msg__who"><span class="nm">You</span><span class="ts">14:02:11</span></div>
+          <div class="you-bub">Analyze this chart — BTCUSDT 1h. Is there a long setup worth taking, and where would it be invalidated?</div>
+        </div>
+      </div>
+
+      <div class="msg msg--ai">
+        <div class="msg__av">CC</div>
+        <div class="msg__in">
+          <div class="msg__who">
+            <span class="nm">CCAI</span><span class="ts">14:02:12</span>
+            <span class="tagai">Analysis</span>
+          </div>
+
+          <div class="ledger" id="aiLedger">
+            <div class="lrow" data-st="done">
+              <span class="g g--done"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 8.4 3.2 3.4L13 5.2"/></svg></span>
+              <span class="nm">Read chart context — BTCUSDT · 1h · 500 candles</span><span class="st">done</span>
+            </div>
+            <div class="lrow" data-st="done">
+              <span class="g g--done"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 8.4 3.2 3.4L13 5.2"/></svg></span>
+              <span class="nm">Computed indicator set — RSI, EMA 20/50, MACD, volume</span><span class="st">done</span>
+            </div>
+            <div class="lrow" data-st="done">
+              <span class="g g--done"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 8.4 3.2 3.4L13 5.2"/></svg></span>
+              <span class="nm">Scanned swing structure and the last 3 reaction levels</span><span class="st">done</span>
+            </div>
+            <div class="lrow" data-st="done">
+              <span class="g g--done"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 8.4 3.2 3.4L13 5.2"/></svg></span>
+              <span class="nm">Drafted 3 analysis layers and an R/R check</span><span class="st">done</span>
+            </div>
+            <div class="lrow is-run" data-st="pend" id="aiLrowDraw">
+              <span class="g g--pend"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="8" cy="8" r="5.4"/></svg></span>
+              <span class="nm">Draw on chart — waiting for your approval</span><span class="st">held</span>
+            </div>
+          </div>
+
+          <div class="tools">
+            <div class="tc" data-open="false">
+              <div class="tc__hd">
+                <svg class="tc__ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 13.6V8.4M6.4 13.6V4.2M10.4 13.6V9.8M14.4 13.6V2.6"/></svg>
+                <span class="tc__nm">get_chart_context</span><span class="tc__ms">84 ms</span>
+                <svg class="tc__chev" width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </div>
+              <div class="tc__bd">{ <span class="k">"symbol"</span>: "BTCUSDT", <span class="k">"timeframe"</span>: "1h",
+  <span class="k">"candles"</span>: 500, <span class="k">"last"</span>: <b>64294.0</b>, <span class="k">"indicator_set"</span>: "default-21" }</div>
+            </div>
+            <div class="tc" data-open="false">
+              <div class="tc__hd">
+                <svg class="tc__ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.6 11.4 6 7.6l2.6 2.4L13.4 4"/><path d="M9.8 4h3.6v3.6"/></svg>
+                <span class="tc__nm">compute_indicators</span><span class="tc__ms">126 ms</span>
+                <svg class="tc__chev" width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </div>
+              <div class="tc__bd">rsi14 <b>46.2</b> · ema20 <b>64112.4</b> · ema50 <b>63780.9</b> · macd_hist <b>+38.6</b>
+vol_ratio <b>1.42&times;</b> (vs 20-bar mean) · atr14 <b>512.7</b></div>
+            </div>
+            <div class="tc" data-open="false">
+              <div class="tc__hd">
+                <svg class="tc__ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 6.2h11.2M2.4 9.8h11.2M5.6 3v10M10.4 3v10"/></svg>
+                <span class="tc__nm">find_support_resistance</span><span class="tc__ms">211 ms</span>
+                <svg class="tc__chev" width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </div>
+              <div class="tc__bd">support   <b>63180.0</b>  (3 touches, 62 candles back)
+support   <b>62040.5</b>  (2 touches)
+resistance <b>65980.0</b> (2 touches, 41 candles back)</div>
+            </div>
+          </div>
+
+          <div class="prose">
+            Structure is a clean series of <b>higher lows</b> since 62,180 and price is holding above the 20-EMA on the 1h<a class="cite" title="BTCUSDT 1h candle series">1</a>.
+            RSI(14) reset to <b>46.2</b> without breaking 40 — on this pair that has kept the up-leg intact<a class="cite" title="RSI(14) computed on 500 candles">2</a>.
+            Volume on the last three up candles is <b>1.42&times;</b> the 20-bar average, so the push has participation<a class="cite" title="20-bar volume average">3</a>.
+          </div>
+
+          <div class="res">
+            <div class="res__hd">
+              <svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+              <span class="tt">Drafted chart levels</span><span class="sp"></span><span class="fmt">3 layers · editable</span>
+            </div>
+            <div class="res__bd">
+              <div class="lv"><span class="k"><i class="sw" style="background:var(--long)"></i>Entry</span><span class="v up">64,294.0</span></div>
+              <div class="lv"><span class="k"><i class="sw" style="background:var(--short)"></i>Invalidation</span><span class="v dn">63,180.0</span></div>
+              <div class="lv"><span class="k"><i class="sw" style="background:var(--ai)"></i>Target</span><span class="v">65,980.0</span></div>
+              <div class="lv"><span class="k">Risk / reward</span><span class="v">1.51</span></div>
+              <div class="code"><span class="fn">draw_levels</span>(symbol=<span class="k">"BTCUSDT"</span>, tf=<span class="k">"1h"</span>, layers=[
+  {name: <span class="k">"Entry"</span>,        price: 64294.0, style: <span class="k">"line-solid"</span>},
+  {name: <span class="k">"Invalidation"</span>, price: 63180.0, style: <span class="k">"line-dashed"</span>},
+  {name: <span class="k">"Target"</span>,       price: 65980.0, style: <span class="k">"line-dashed"</span>}])</div>
+            </div>
+          </div>
+
+          <div class="srcs">
+            <div class="src"><span class="n">1</span><span class="t">BTCUSDT 1h candle series — 500 candles</span><span class="d">live</span></div>
+            <div class="src"><span class="n">2</span><span class="t">RSI(14) &amp; EMA(20/50) computed on that series</span><span class="d">14:02</span></div>
+            <div class="src"><span class="n">3</span><span class="t">Swing scan — support / resistance levels</span><span class="d">14:02</span></div>
+          </div>
+
+          <div class="cp" id="aiCp">
+            <div class="cp__hd">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 2.2 14.6 13.4H1.4Z"/><path d="M8 6.4v3.2M8 11.4v.1"/></svg>
+              <span>Draw these 3 levels on my chart?</span>
+            </div>
+            <div class="cp__bd">CCAI can add Entry, Invalidation and Target as <b>editable layers</b> on your chart. Rename, move or delete them afterwards — they are your annotations, not orders.</div>
+            <div class="cp__acts">
+              <button class="sbtn sbtn--brand sbtn--sm js-approve" type="button">Approve &amp; draw</button>
+              <button class="sbtn sbtn--sm" type="button">Adjust first</button>
+              <button class="sbtn sbtn--sm" type="button">Cancel</button>
+              <span class="capnote">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 5v3.4l2.2 1.4"/></svg>
+                300 credits charged · <b>150</b> if nothing is drawn
+              </span>
+            </div>
+          </div>
+
+          <div class="acts">
+            <button class="act js-copy" type="button" title="Copy answer" aria-label="Copy answer"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5.4" y="5.4" width="8.2" height="8.2" rx="1.4"/><path d="M10.6 5.4V3.8a1.4 1.4 0 0 0-1.4-1.4H3.8a1.4 1.4 0 0 0-1.4 1.4v5.4a1.4 1.4 0 0 0 1.4 1.4h1.6"/></svg></button>
+            <button class="act js-up" type="button" aria-pressed="false" title="Helpful" aria-label="Helpful"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5.2 7.4 8 2.6l.6.3c.7.4 1 1.3.8 2.1L9 7h3.4a1.4 1.4 0 0 1 1.4 1.7l-.9 4A1.4 1.4 0 0 1 11.5 14H5.2M5.2 7.4H2.4v6.6h2.8V7.4Z"/></svg></button>
+            <button class="act js-down" type="button" aria-pressed="false" title="Not helpful" aria-label="Not helpful"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10.8 8.6 8 13.4l-.6-.3c-.7-.4-1-1.3-.8-2.1L7 9H3.6a1.4 1.4 0 0 1-1.4-1.7l.9-4A1.4 1.4 0 0 1 4.5 2h6.3M10.8 8.6h2.8V2h-2.8v6.6Z"/></svg></button>
+            <span style="flex:1 1 auto"></span>
+            <span class="ts mono">14:02:14 · 421 ms · 1,842 tokens</span>
+          </div>
+          <div class="fbk" id="aiFbk">
+            <span class="lbl">What was off?</span>
+            <button type="button" aria-pressed="false">Wrong level</button>
+            <button type="button" aria-pressed="false">Too verbose</button>
+            <button type="button" aria-pressed="false">Missed context</button>
+            <button type="button" aria-pressed="false">Too cautious</button>
+            <span style="flex:1 1 auto"></span>
+            <button type="button" class="js-fbsend">Send feedback</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cmp">
+      <div class="qs" id="aiQs">
+        <button type="button">Analyze this chart</button>
+        <button type="button">Entry scenario</button>
+        <button type="button">Find support &amp; resistance</button>
+        <button type="button">Draw ascending trendline</button>
+        <button type="button">R/R calculator</button>
+      </div>
+      <div class="cmp__box">
+        <textarea id="aiCmd" rows="1" aria-label="Command" placeholder="Enter a command… (e.g. draw trendline / draft my setup / find S/R)"></textarea>
+        <button class="cmp__send" id="aiSend" type="button" disabled aria-label="Send">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2.4 8h11.2M9.2 3.6 13.6 8l-4.4 4.4"/></svg>
+        </button>
+      </div>
+      <div class="cmp__meta">
+        <span class="cost">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 4.6v6.8M6.2 6.4h3.2M6.2 9.6h3.2"/></svg>
+          300 credits per question · <b>150</b> if nothing is drawn
+        </span>
+        <span style="flex:1 1 auto"></span>
+        <span>Analysis assistance — not investment advice. You review and place every order.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ artifact panel (aiuxplayground: artifact + version history) ============ -->
+  <aside class="art" aria-label="Artifacts">
+    <div class="art__hd">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--text-tertiary)" aria-hidden="true"><path d="M2.4 3.6h11.2v8.8H2.4z"/><path d="M2.4 6.4h11.2"/></svg>
+      <span class="tt">Chart artifacts</span>
+      <span class="sp"></span>
+      <div class="vh" id="aiVhead">
+        <button class="vpill" type="button" aria-pressed="false">v1</button>
+        <button class="vpill" type="button" aria-pressed="true">v2</button>
+        <button class="vpill" type="button" aria-pressed="false">v3</button>
+      </div>
+    </div>
+    <div class="art__bd">
+      <div class="sec">
+        <div class="sec__t">Context <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">pinned</span></div>
+        <div class="ctx"><span class="k">Symbol</span><span class="v">BTCUSDT</span></div>
+        <div class="ctx"><span class="k">Timeframe</span><span class="v">1h</span></div>
+        <div class="ctx"><span class="k">Candles read</span><span class="v">500</span></div>
+        <div class="ctx"><span class="k">Indicator set</span><span class="v">default-21</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">MY ANALYSIS LAYERS <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0" id="aiLayerN">3</span></div>
+        <div class="wl" id="aiLayers">
+          <div class="wlrow"><i class="sw" style="width:9px;height:2.5px;border-radius:2px;background:var(--long);flex:0 0 auto"></i><span>Entry</span><span style="flex:1 1 auto"></span><span class="n">64,294.0</span>
+            <button class="act js-eye" type="button" aria-pressed="true" aria-label="Toggle Entry"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1.6 8S3.9 3.9 8 3.9 14.4 8 14.4 8 12.1 12.1 8 12.1 1.6 8 1.6 8Z"/><circle cx="8" cy="8" r="1.9"/></svg></button></div>
+          <div class="wlrow"><i class="sw" style="width:9px;height:2.5px;border-radius:2px;background:var(--short);flex:0 0 auto"></i><span>Invalidation</span><span style="flex:1 1 auto"></span><span class="n">63,180.0</span>
+            <button class="act js-eye" type="button" aria-pressed="true" aria-label="Toggle Invalidation"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1.6 8S3.9 3.9 8 3.9 14.4 8 14.4 8 12.1 12.1 8 12.1 1.6 8 1.6 8Z"/><circle cx="8" cy="8" r="1.9"/></svg></button></div>
+          <div class="wlrow"><i class="sw" style="width:9px;height:2.5px;border-radius:2px;background:var(--ai);flex:0 0 auto"></i><span>Target</span><span style="flex:1 1 auto"></span><span class="n">65,980.0</span>
+            <button class="act js-eye" type="button" aria-pressed="true" aria-label="Toggle Target"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1.6 8S3.9 3.9 8 3.9 14.4 8 14.4 8 12.1 12.1 8 12.1 1.6 8 1.6 8Z"/><circle cx="8" cy="8" r="1.9"/></svg></button></div>
+        </div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p class="foot-note">Layers are yours. They live on the chart, not on the exchange — nothing here places an order.</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Watchlist <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">2 of 21 live</span></div>
+        <div class="wl">
+          <div class="wlrow"><span>BTCUSDT</span><span style="flex:1 1 auto"></span><span class="n">64,294.0</span><span class="pillst pillst--on"><span class="d"></span>Charted</span></div>
+          <div class="wlrow"><span>ETHUSDT</span><span style="flex:1 1 auto"></span><span class="n">3,148.2</span><span class="pillst pillst--on"><span class="d"></span>Charted</span></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">This thread <span class="sp"></span></div>
+        <div class="ctx"><span class="k">Questions</span><span class="v">2</span></div>
+        <div class="ctx"><span class="k">Credits used</span><span class="v">600</span></div>
+        <div class="ctx"><span class="k">Layers drawn</span><span class="v" id="aiDrawnN">0</span></div>
+      </div>
+
+      <p class="foot-note">Every answer cites the chart data it read. Credits are charged per question, half price when nothing is drawn on the chart.</p>
+    </div>
+  </aside>
+
+</main>

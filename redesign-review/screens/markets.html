@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-brand="chartcontrol" data-density="comfortable" data-longshort="teal-magenta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChartControl AI — Markets &amp; Market scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  /* neutral scale — hue 240 */
+  --n-950:oklch(14% .012 240); --n-925:oklch(17% .013 240); --n-900:oklch(20% .014 240);
+  --n-850:oklch(24% .014 240); --n-800:oklch(28% .013 240); --n-700:oklch(38% .012 240);
+  --n-600:oklch(48% .010 240); --n-500:oklch(66% .008 240); --n-400:oklch(68% .006 240);
+  --n-300:oklch(78% .005 240); --n-200:oklch(86% .004 240); --n-100:oklch(92% .003 240);
+  --n-050:oklch(97% .002 240); --n-000:oklch(100% 0 0);
+
+  /* brand — 328.33deg */
+  --brand-300:oklch(75% .200 328.33); --brand-400:oklch(71% .260 328.33);
+  --brand-500:oklch(69% .3048 328.33); --brand-600:oklch(56% .240 328.33);
+  --brand-700:oklch(46% .190 328.33);
+
+  /* surfaces (light theme — the product's default) */
+  --bg-app:oklch(98% .003 240);
+  --bg-surface:oklch(100% 0 0);
+  --bg-panel:oklch(99% .002 240);
+  --bg-elevated:oklch(100% 0 0);
+  --bg-hover:oklch(94% .006 240);
+  --bg-active:oklch(90% .008 240);
+  --bg-input:oklch(100% 0 0);
+  --bg-sunken:oklch(96.5% .004 240);
+
+  --text-primary:oklch(20% .014 240);
+  --text-secondary:oklch(38% .014 240);
+  --text-tertiary:oklch(48% .012 240);
+  --text-disabled:oklch(72% .008 240);
+  --text-inverse:oklch(98% .003 240);
+
+  --border-subtle:oklch(90% .006 240);
+  --border-default:oklch(82% .008 240);
+  --border-strong:oklch(68% .010 240);
+
+  /* semantic */
+  --brand:oklch(48% .190 328.33);
+  --brand-hover:oklch(40% .190 328.33);
+  --brand-subtle:oklch(48% .190 328.33 / .12);
+  --long:oklch(52.1% .099 175);
+  --long-600:oklch(44% .090 175);
+  --short:oklch(56.1% .200 355);
+  --ai:oklch(55.1% .190 285);
+  --success:oklch(52.1% .150 145);
+  --warning:oklch(54.1% .115 75);
+  --danger:oklch(64% .20 25);
+  --on-trade:rgb(10,14,20);
+
+  /* chart */
+  --chart-grid:oklch(88% .006 240 / .7);
+  --chart-axis:oklch(48% .012 240);
+  --chart-crosshair:oklch(38% .014 240 / .5);
+  --chart-up:oklch(52.1% .099 175);
+  --chart-dn:oklch(56.1% .200 355);
+  --chart-ma1:oklch(54.1% .115 75);
+  --chart-ma2:oklch(55.1% .190 285);
+  --chart-ma3:oklch(52.8% .106 230);
+  --chart-vol-up:oklch(39.3% .049 175 / .6);
+  --chart-vol-dn:oklch(42.7% .106 355 / .6);
+
+  --shadow-1:0 1px 2px rgba(15,20,28,.06);
+  --shadow-2:0 4px 12px rgba(15,20,28,.08);
+  --shadow-3:0 12px 32px rgba(15,20,28,.14);
+
+  /* type */
+  --font-ui:'Pretendard Variable',pretendard,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'IBM Plex Sans',var(--font-ui);
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+
+  --r-sm:3px; --r-md:4px; --r-lg:6px; --r-xl:8px;
+  --header-h:48px;
+  --rail-w:44px; --watch-w:226px; --order-w:262px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  height:100vh;overflow:hidden;display:flex;flex-direction:column;
+  background:var(--bg-app);color:var(--text-primary);
+  font-family:var(--font-ui);font-size:13px;line-height:1.45;
+  font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+::selection{background:var(--brand-subtle)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:1px;border-radius:2px}
+
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-feature-settings:"zero" 1}
+.up{color:var(--long)} .dn{color:var(--short)}
+.eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:.44px;text-transform:uppercase;
+  color:var(--text-tertiary);
+}
+
+/* ---------- scrollbars: thin, quiet ---------- */
+.scroll{overflow:auto;scrollbar-width:thin;scrollbar-color:var(--border-default) transparent}
+.scroll::-webkit-scrollbar{width:9px;height:9px}
+.scroll::-webkit-scrollbar-thumb{background:var(--border-default);border-radius:9px;border:2px solid transparent;background-clip:content-box}
+.scroll::-webkit-scrollbar-thumb:hover{background:var(--border-strong);background-clip:content-box}
+.scroll::-webkit-scrollbar-track{background:transparent}
+
+/* ==========================================================================
+   Header — 48px, pure white, hairline bottom border
+   ========================================================================== */
+.hdr{
+  height:var(--header-h);flex:0 0 var(--header-h);
+  display:flex;align-items:center;gap:8px;
+  padding:0 16px 0 12px;
+  background:var(--bg-surface);border-bottom:1px solid var(--border-subtle);
+  position:relative;z-index:40;
+}
+.brand{display:flex;align-items:center;gap:9px;padding-right:20px;height:47px;
+  border-right:1px solid var(--border-subtle);flex:0 0 auto}
+.brand svg{display:block;flex:0 0 auto}
+.brand__word{
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  letter-spacing:.26px;color:var(--text-primary);white-space:nowrap;
+}
+.seg{
+  display:flex;gap:2px;padding:2px;border:1px solid var(--border-subtle);
+  border-radius:var(--r-md);background:var(--bg-surface);flex:0 0 auto;
+}
+.seg button{
+  height:26px;padding:0 12px;border-radius:var(--r-sm);border:1px solid transparent;
+  font-size:12.5px;font-weight:500;color:var(--text-secondary);
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .12s,color .12s;
+}
+.seg button:hover{background:var(--bg-hover);color:var(--text-primary)}
+.seg button[aria-pressed="true"]{
+  background:var(--bg-elevated);border-color:var(--border-subtle);
+  color:var(--text-primary);font-weight:600;box-shadow:var(--shadow-1);
+}
+.hdr__links{display:flex;align-items:center;gap:2px;margin-left:4px;flex:0 1 auto;min-width:0;overflow:hidden}
+.hdr__links a{
+  display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 9px;border-radius:var(--r-md);
+  font-size:12.5px;color:var(--text-secondary);text-decoration:none;white-space:nowrap;transition:background .12s,color .12s;
+}
+.hdr__links a:hover{background:var(--bg-hover);color:var(--text-primary)}
+.hdr__links svg{opacity:.62;flex:0 0 auto}
+.hdr__links a:hover svg{opacity:.9}
+.hdr__spacer{flex:1 1 auto;min-width:8px}
+.hdr__tools{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.iconbtn{
+  width:28px;height:28px;border-radius:var(--r-md);display:grid;place-items:center;
+  color:var(--text-secondary);transition:background .12s,color .12s;position:relative;
+}
+.iconbtn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.iconbtn[aria-pressed="true"]{background:var(--bg-active);color:var(--text-primary)}
+.iconbtn .dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;
+  background:var(--brand);box-shadow:0 0 0 2px var(--bg-surface)}
+.langbtn{
+  height:28px;padding:0 8px;border-radius:var(--r-md);font-size:12.5px;font-weight:500;
+  color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px;
+}
+.langbtn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.avatar{
+  width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700;margin-left:4px;
+  font-family:var(--font-display);letter-spacing:.3px;flex:0 0 auto;
+}
+
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);
+  display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;
+}
+.panel__hd{
+  flex:0 0 auto;height:30px;display:flex;align-items:center;gap:8px;padding:0 10px;
+  border-bottom:1px solid var(--border-subtle);background:var(--bg-panel);
+}
+.panel__hd .ttl{font-size:11.5px;font-weight:600;letter-spacing:.2px;color:var(--text-secondary);white-space:nowrap}
+.panel__hd .sp{flex:1 1 auto}
+.panel__bd{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+
+.foot{
+  flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:4px 12px;
+  font-size:10.5px;color:var(--text-tertiary);background:var(--bg-surface);
+  border-top:1px solid var(--border-subtle);
+}
+.foot .sp{flex:1 1 auto}
+.foot a{color:var(--text-tertiary);text-decoration:none}
+.foot a:hover{color:var(--text-secondary);text-decoration:underline;text-underline-offset:2px}
+.foot .mode{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.foot .mode .d{width:6px;height:6px;border-radius:50%;background:var(--long)}
+.foot .mode.paper .d{background:var(--warning)}
+
+.desk-guard{display:none}
+@media (max-width:1279px){
+  .desk-guard{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    background:var(--bg-app);padding:32px;text-align:center;
+  }
+  .desk-guard__in{max-width:420px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .desk-guard h2{margin:0;font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.2px}
+  .desk-guard p{margin:0;font-size:12.5px;color:var(--text-tertiary);line-height:1.6}
+}
+
+/* ===================== page frame ===================== */
+.page{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-app)}
+.page__hd{flex:0 0 auto;background:var(--bg-surface);border-bottom:1px solid var(--border-subtle);padding:11px 16px 0}
+.hdrow{display:flex;align-items:flex-start;gap:12px}
+.hdrow .sp{flex:1 1 auto}
+.crumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-tertiary);margin-bottom:5px}
+.crumb a{color:var(--text-tertiary);text-decoration:none}
+.crumb a:hover{color:var(--brand)}
+.page__hd h1{margin:0;font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.3px;line-height:1.2}
+.page__hd .sub{margin:3px 0 0;font-size:11.5px;color:var(--text-tertiary)}
+.page__hd .sub b{color:var(--text-secondary);font-weight:600}
+.page__hd .sub .warn{color:oklch(46% .115 75);font-weight:600}
+.hdacts{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.viewseg{display:inline-flex;padding:2px;background:var(--bg-sunken);border:1px solid var(--border-subtle);border-radius:var(--r-md)}
+.viewseg button{height:26px;padding:0 10px;border-radius:var(--r-sm);font-size:11.5px;font-weight:500;color:var(--text-tertiary);display:inline-flex;align-items:center;gap:5px;transition:.12s}
+.viewseg button[aria-pressed="true"]{background:var(--bg-surface);color:var(--text-primary);font-weight:600;box-shadow:0 1px 2px rgba(10,14,20,.07)}
+.sbtn{height:29px;padding:0 10px;border:1px solid var(--border-default);border-radius:var(--r-md);background:var(--bg-surface);
+  font-size:11.5px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:.12s}
+.sbtn:hover{border-color:var(--border-strong);color:var(--text-primary);background:var(--bg-hover)}
+.sbtn--brand{background:var(--brand);border-color:var(--brand);color:#fff}
+.sbtn--brand:hover{background:var(--brand-hover);border-color:var(--brand-hover);color:#fff}
+.sbtn--sm{height:25px;padding:0 8px;font-size:11px}
+.sbtn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* route switcher (Markets / Market scanner — both are real routes) */
+.routes{display:flex;gap:0;margin-top:9px}
+.routes button{height:31px;padding:0 13px;font-size:12px;font-weight:500;color:var(--text-tertiary);
+  border-bottom:2px solid transparent;transition:.12s;display:inline-flex;align-items:center;gap:6px}
+.routes button:hover{color:var(--text-primary)}
+.routes button[aria-pressed="true"]{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}
+.routes .n{font-family:var(--font-mono);font-size:10px;color:var(--text-disabled)}
+
+/* ===================== body ===================== */
+.body{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 306px;overflow:hidden}
+.main{min-width:0;min-height:0;overflow-y:auto;padding:12px 14px 20px;display:flex;flex-direction:column;gap:11px}
+.rail{min-height:0;overflow-y:auto;border-left:1px solid var(--border-subtle);background:var(--bg-panel);padding:11px;display:flex;flex-direction:column;gap:11px}
+.view[hidden]{display:none}
+
+/* KPI cards — real figures */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.kpi{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);padding:10px 11px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.kpi__k{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:600;letter-spacing:.45px;text-transform:uppercase;color:var(--text-tertiary)}
+.kpi__k svg{color:var(--text-disabled)}
+.kpi__v{font-family:var(--font-mono);font-size:19px;font-weight:600;letter-spacing:-.4px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi__v.sm{font-size:14px}
+.kpi__s{font-size:10px;color:var(--text-tertiary);line-height:1.4}
+.kpi__s .u{font-family:var(--font-mono);font-weight:600}
+
+/* toolbar */
+.card{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden}
+.card__hd{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--border-subtle);min-height:41px;flex-wrap:wrap}
+.card__hd h2{margin:0;font-family:var(--font-display);font-size:12.5px;font-weight:600;letter-spacing:-.1px}
+.card__hd .sp{flex:1 1 auto}
+.search{display:flex;align-items:center;gap:6px;height:27px;padding:0 8px;background:var(--bg-input);
+  border:1px solid var(--border-subtle);border-radius:var(--r-md);min-width:172px}
+.search:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-subtle)}
+.search input{border:0;outline:0;background:none;width:100%;font-size:11.5px;font-family:inherit}
+.search input::placeholder{color:var(--text-disabled)}
+.ftabs{display:inline-flex;gap:2px}
+.ftabs button{height:25px;padding:0 9px;border-radius:var(--r-md);font-size:11px;font-weight:500;color:var(--text-tertiary);border:1px solid transparent;transition:.12s}
+.ftabs button:hover{background:var(--bg-hover);color:var(--text-primary)}
+.ftabs button[aria-pressed="true"]{background:var(--brand-subtle);color:var(--brand);border-color:color-mix(in oklab,var(--brand) 26%,transparent);font-weight:600}
+.ftabs button .n{font-family:var(--font-mono);font-size:9.5px;opacity:.7;margin-left:3px}
+
+/* dropdown (screener template menu — TradingView pattern) */
+.dd{position:relative}
+.dd__btn{display:inline-flex;align-items:center;gap:6px;height:27px;padding:0 9px;border:1px solid var(--border-default);
+  border-radius:var(--r-md);background:var(--bg-surface);font-size:11.5px;font-weight:600;color:var(--text-secondary);transition:.12s}
+.dd__btn:hover{border-color:var(--border-strong);color:var(--text-primary)}
+.dd__btn .cur{font-weight:500;color:var(--text-tertiary);max-width:132px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd__pop{position:absolute;right:0;top:calc(100% + 4px);z-index:40;min-width:214px;background:var(--bg-surface);
+  border:1px solid var(--border-default);border-radius:var(--r-lg);box-shadow:0 10px 28px rgba(10,14,20,.14);padding:4px;display:none}
+.dd[data-open="true"] .dd__pop{display:block}
+.dd__i{display:flex;align-items:center;gap:8px;width:100%;padding:6px 8px;border-radius:var(--r-md);font-size:11.5px;color:var(--text-secondary);text-align:left;transition:.1s}
+.dd__i:hover{background:var(--bg-hover);color:var(--text-primary)}
+.dd__i .k{margin-left:auto;font-family:var(--font-mono);font-size:9.5px;color:var(--text-disabled)}
+.dd__i svg{color:var(--text-tertiary);flex:0 0 auto}
+.dd__sep{height:1px;background:var(--border-subtle);margin:4px 2px}
+.dd__lbl{padding:5px 8px 3px;font-size:9px;font-weight:600;letter-spacing:.45px;text-transform:uppercase;color:var(--text-disabled)}
+
+/* ===================== markets table ===================== */
+.tblwrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.tbl thead th{position:sticky;top:0;z-index:5;background:var(--bg-sunken);border-bottom:1px solid var(--border-subtle);
+  padding:7px 9px;text-align:right;font-size:9.5px;font-weight:600;letter-spacing:.45px;text-transform:uppercase;
+  color:var(--text-tertiary);white-space:nowrap}
+.tbl thead th.l{text-align:left}
+.tbl thead th.srt{cursor:pointer;user-select:none}
+.tbl thead th.srt:hover{color:var(--text-secondary)}
+.tbl thead th .car{opacity:0;margin-left:3px;font-size:8px}
+.tbl thead th[aria-sort] .car{opacity:1;color:var(--brand)}
+.tbl tbody td{padding:7px 9px;border-bottom:1px solid var(--border-subtle);text-align:right;white-space:nowrap;vertical-align:middle}
+.tbl tbody td.l{text-align:left}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tbody tr:hover{background:var(--bg-hover)}
+.tbl tbody tr[data-dead="true"]{background:repeating-linear-gradient(-45deg,color-mix(in oklab,var(--text-disabled) 7%,transparent) 0 1px,transparent 1px 8px)}
+.tbl tbody tr[data-dead="true"]:hover{background:color-mix(in oklab,var(--bg-hover) 60%,transparent)}
+.tbl tbody tr[data-dead="true"] .sym,.tbl tbody tr[data-dead="true"] .num{color:var(--text-tertiary)}
+.fav{width:20px;height:20px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--border-strong);transition:.12s}
+.fav:hover{color:var(--text-tertiary);background:var(--bg-hover)}
+.fav[aria-pressed="true"]{color:oklch(58% .15 75)}
+.pairc{display:flex;align-items:center;gap:8px;min-width:0}
+.sym{font-family:var(--font-display);font-size:12.5px;font-weight:600;letter-spacing:-.1px;color:var(--text-primary)}
+.tagp{font-size:8.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--text-tertiary);
+  border:1px solid var(--border-subtle);border-radius:3px;padding:1px 4px}
+.num{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--text-primary)}
+.num.up{color:oklch(42% .11 175)} .num.dn{color:oklch(45% .18 355)}
+.dash{color:var(--text-tertiary);font-family:var(--font-mono)}
+.rng{font-family:var(--font-mono);font-size:11px;color:var(--text-secondary)}
+.rng .lo{color:oklch(45% .18 355)} .rng .hi{color:oklch(42% .11 175)}
+.dead{display:inline-flex;align-items:center;gap:5px;margin-left:2px;font-size:10px;font-weight:600;letter-spacing:.2px;
+  color:oklch(44% .115 75);background:color-mix(in oklab,var(--warning) 13%,transparent);
+  border:1px dashed color-mix(in oklab,var(--warning) 34%,transparent);border-radius:11px;padding:1px 7px}
+.dead svg{flex:0 0 auto}
+canvas.spk{display:block;width:82px;height:24px;margin-left:auto}
+.btnTrade{height:24px;padding:0 10px;border-radius:var(--r-md);border:1px solid var(--brand);background:var(--brand);
+  color:#fff;font-size:11px;font-weight:600;transition:.12s}
+.btnTrade:hover{background:var(--brand-hover);border-color:var(--brand-hover)}
+.btnTrade[disabled]{background:transparent;border-color:var(--border-subtle);color:var(--text-disabled);cursor:not-allowed}
+.tfoot{display:flex;align-items:center;gap:10px;padding:8px 11px;border-top:1px solid var(--border-subtle);
+  font-size:10.5px;color:var(--text-tertiary);flex-wrap:wrap;background:var(--bg-panel)}
+.tfoot .sp{flex:1 1 auto}
+.tfoot b{font-weight:600;color:var(--text-secondary)}
+
+/* ===================== scanner ===================== */
+.aiask{display:flex;gap:11px;align-items:center;padding:11px 12px;border-radius:var(--r-lg);
+  background:color-mix(in oklab,var(--brand) 6%,var(--bg-panel));border:1px solid color-mix(in oklab,var(--brand) 22%,transparent)}
+.aiask__in{flex:1 1 auto;min-width:0}
+.aiask h3{margin:0 0 2px;font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:-.1px}
+.aiask p{margin:0;font-size:11.5px;line-height:1.5;color:var(--text-secondary)}
+.pills{display:flex;flex-wrap:wrap;gap:5px}
+.pill{height:26px;padding:0 10px;border:1px solid var(--border-subtle);border-radius:13px;background:var(--bg-surface);
+  font-size:11px;font-weight:500;color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px;transition:.12s}
+.pill:hover{border-color:var(--border-strong);background:var(--bg-hover)}
+.pill[aria-pressed="true"]{background:var(--brand-subtle);border-color:color-mix(in oklab,var(--brand) 32%,transparent);color:var(--brand);font-weight:600}
+.pill .d{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto}
+.pill .d--up{background:oklch(52% .11 175)} .pill .d--dn{background:oklch(56% .2 355)}
+.formula{display:flex;gap:9px;align-items:flex-start;padding:9px 11px;border-radius:var(--r-md);
+  background:var(--bg-sunken);border:1px solid var(--border-subtle)}
+.formula .txt{flex:1 1 auto;font-size:11.5px;line-height:1.55;color:var(--text-secondary);min-width:0}
+.formula .txt code{font-family:var(--font-mono);font-size:10.5px;color:var(--text-primary);background:var(--bg-surface);
+  border:1px solid var(--border-subtle);border-radius:3px;padding:1px 4px;margin:0 2px}
+.fctl{display:flex;align-items:flex-end;gap:9px;flex-wrap:wrap}
+.f{display:flex;flex-direction:column;gap:3px;min-width:0}
+.f label{font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--text-tertiary)}
+.f select,.f input{height:28px;padding:0 8px;background:var(--bg-input);border:1px solid var(--border-subtle);
+  border-radius:var(--r-md);font-size:11.5px;outline:0;font-family:inherit;min-width:104px}
+.f select:focus,.f input:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-subtle)}
+.foot-note{font-size:10px;line-height:1.55;color:var(--text-tertiary)}
+.empty2{padding:22px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px;
+  background-image:repeating-linear-gradient(-45deg,color-mix(in oklab,var(--brand) 4%,transparent) 0 1px,transparent 1px 9px)}
+.empty2 svg{color:var(--text-disabled)}
+.empty2 .t{font-size:12.5px;font-weight:600;color:var(--text-secondary)}
+.empty2 .s{font-size:11px;color:var(--text-tertiary);max-width:430px;line-height:1.5}
+.mtch{display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 8px;border-radius:10px;font-size:9.5px;
+  font-weight:700;letter-spacing:.35px;text-transform:uppercase;white-space:nowrap}
+.mtch--yes{background:color-mix(in oklab,var(--long) 15%,transparent);color:oklch(40% .1 175)}
+.mtch--no{background:var(--bg-sunken);color:var(--text-tertiary)}
+.mtch .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+.bar2{height:3px;border-radius:2px;background:var(--border-subtle);overflow:hidden;width:62px;display:inline-block;vertical-align:middle}
+.bar2 i{display:block;height:100%;background:var(--brand)}
+
+/* right rail */
+.sec{display:flex;flex-direction:column;gap:7px}
+.sec__t{font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-tertiary);
+  display:flex;align-items:center;gap:6px}
+.sec__t .sp{flex:1 1 auto}
+.brow{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-secondary)}
+.brow .k{color:var(--text-tertiary);white-space:nowrap}
+.brow .sp{flex:1 1 auto}
+.brow .v{font-family:var(--font-mono);font-weight:600}
+.breadth{height:7px;border-radius:4px;overflow:hidden;display:flex;background:var(--bg-sunken)}
+.breadth i{display:block;height:100%}
+.heat{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.heatc{padding:7px 8px;border-radius:var(--r-md);border:1px solid var(--border-subtle);display:flex;flex-direction:column;gap:2px;min-width:0}
+.heatc .s{font-family:var(--font-display);font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.heatc .p{font-family:var(--font-mono);font-size:10.5px;font-weight:600}
+.heatc .r{font-size:9px;color:var(--text-tertiary);font-family:var(--font-mono)}
+.wlrow{display:flex;align-items:center;gap:7px;padding:5px 7px;border:1px solid var(--border-subtle);border-radius:var(--r-md);
+  background:var(--bg-surface);font-size:11px;color:var(--text-secondary)}
+.wlrow .sp{flex:1 1 auto}
+.wlrow .n{font-family:var(--font-mono);font-size:10.5px;font-weight:600}
+.lay{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--r-md);background:var(--bg-sunken);font-size:11px}
+.lay .k{color:var(--text-tertiary)}
+.lay .sp{flex:1 1 auto}
+.lay .v{font-family:var(--font-mono);font-size:10.5px;font-weight:600;color:var(--text-secondary)}
+.lay .why{font-size:10px;color:var(--text-disabled);line-height:1.45}
+.explain{border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-panel);overflow:hidden}
+.explain__hd{display:flex;align-items:center;gap:7px;padding:7px 9px;cursor:pointer}
+.explain__hd:hover{background:var(--bg-hover)}
+.explain__hd .tt{font-size:11px;font-weight:600;color:var(--text-secondary)}
+.explain__hd .sp{flex:1 1 auto}
+.explain__bd{display:none;padding:0 9px 9px;flex-direction:column;gap:6px}
+.explain[data-open="true"] .explain__bd{display:flex}
+.explrow{display:flex;flex-direction:column;gap:1px;padding:6px 8px;border-radius:var(--r-sm);background:var(--bg-sunken)}
+.explrow .q{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--brand)}
+.explrow .a{font-size:10.5px;color:var(--text-tertiary);line-height:1.45}
+
+/* [hidden] must win over display:flex or the empty state paints over the results table */
+.empty2[hidden],.tblwrap[hidden],.card[hidden],.view[hidden]{display:none !important}
+
+:root{--ai:oklch(55.1% .190 285)}
+.up{color:oklch(42% .11 175)} .dn{color:oklch(45% .18 355)}
+.mono{font-family:var(--font-mono)}
+.sep{color:var(--text-disabled)}
+.page > *{min-width:0}
+
+:root{
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="brand">
+    <svg width="46" height="22" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/>
+        <path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <circle cx="4.4" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <circle cx="25.6" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <span class="brand__word">ChartControl AI</span>
+  </div>
+
+  <div class="seg" role="group" aria-label="Account mode">
+    <button type="button" aria-pressed="false">Spot</button>
+    <button type="button" aria-pressed="true">Futures</button>
+    <button type="button" aria-pressed="false">Paper</button>
+  </div>
+
+  <div class="seg" role="group" aria-label="Exchange">
+    <button type="button" aria-pressed="true">KuCoin</button>
+    <button type="button" aria-pressed="false">Bybit</button>
+    <button type="button" aria-pressed="false">Bitget</button>
+  </div>
+
+  <nav class="hdr__links" aria-label="Community">
+    <a href="#/help"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.2 2.5h9.6a1.2 1.2 0 0 1 1.2 1.2v6.6a1.2 1.2 0 0 1-1.2 1.2H7.6L4.4 14v-2.5H3.2A1.2 1.2 0 0 1 2 10.3V3.7a1.2 1.2 0 0 1 1.2-1.2Z"/></svg>YouTube</a>
+    <a href="#/help"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M14 2.6 12.1 13c-.1.6-.5.8-1 .5l-2.8-2-1.4 1.3c-.2.2-.3.3-.6.3l.2-2.8 5.1-4.6c.2-.2 0-.3-.3-.1L5.3 9.4 2.5 8.5c-.6-.2-.6-.6.1-.9l10.6-4.1c.5-.2.9.1.8 1.1Z"/></svg>Telegram</a>
+    <a href="#/points"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.7 5.6l4.7.3-3.6 3 1.1 4.6L8 11.2 4.1 13.5l1.1-4.6-3.6-3 4.7-.3Z"/></svg>KuCoin campaign</a>
+    <a href="#/referral"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.6a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 7.6c3 0 5.4 1.7 5.4 3.8v1.4H2.6V13c0-2.1 2.4-3.8 5.4-3.8Z"/></svg>Join KuCoin</a>
+  </nav>
+
+  <div class="hdr__spacer"></div>
+
+  <div class="hdr__tools">
+    <button class="iconbtn" type="button" aria-label="Notifications"><span class="dot"></span>
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 6.5a4 4 0 1 1 8 0v3l1 1.6H3l1-1.6v-3Z"/><path d="M6.4 12.6a1.7 1.7 0 0 0 3.2 0"/></svg></button>
+    <button class="iconbtn" type="button" id="themeBtn" aria-label="Toggle theme" aria-pressed="false">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="3.1"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M13 3l-1.1 1.1M4.1 11.9 3 13"/></svg></button>
+    <button class="iconbtn" type="button" id="fsBtn" aria-label="Toggle fullscreen">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></button>
+    <button class="langbtn" type="button">EN
+      <svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.5 6h9L8 11.5Z"/></svg></button>
+    <button class="avatar" type="button" aria-label="Signed in as super_1791709600000@example.com — click to sign out">SU</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="page__hd">
+    <div class="hdrow">
+      <div style="min-width:0">
+        <nav class="crumb"><a href="#/trade">Home</a><span class="sep">/</span><span id="mkCrumb">Markets</span></nav>
+        <h1 id="mkTitle">Markets</h1>
+        <p class="sub" id="mkSub">2 of 21 pairs live · Perpetual · USDT-margined · <span class="warn">19 not listed</span></p>
+      </div>
+      <span class="sp"></span>
+      <div class="hdacts">
+        <div class="viewseg" id="mkView" role="group" aria-label="View">
+          <button type="button" aria-pressed="true">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 4h11.2M2.4 8h11.2M2.4 12h11.2"/></svg>
+            Table</button>
+          <button type="button" aria-pressed="false">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.4" y="2.4" width="4.6" height="4.6"/><rect x="9" y="2.4" width="4.6" height="4.6"/><rect x="2.4" y="9" width="4.6" height="4.6"/><rect x="9" y="9" width="4.6" height="4.6"/></svg>
+            Heatmap</button>
+        </div>
+        <div class="dd" id="ddScreen">
+          <button class="dd__btn" type="button">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 4.2h11.2M4.6 8h6.8M6.8 11.8h2.4"/></svg>
+            Screens <span class="cur" id="ddCur">My live pairs</span>
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+          </button>
+          <div class="dd__pop">
+            <div class="dd__lbl">Saved screens</div>
+            <button class="dd__i js-screen" type="button" data-s="live">My live pairs <span class="k">2</span></button>
+            <button class="dd__i js-screen" type="button" data-s="gain">Gainers only <span class="k">1</span></button>
+            <button class="dd__i js-screen" type="button" data-s="fav">Favorites <span class="k">2</span></button>
+            <div class="dd__sep"></div>
+            <div class="dd__lbl">Popular screens</div>
+            <button class="dd__i js-screen" type="button" data-s="all">All markets <span class="k">16</span></button>
+            <button class="dd__i js-screen" type="button" data-s="dead">Not listed on the exchange <span class="k">14</span></button>
+            <div class="dd__sep"></div>
+            <button class="dd__i" type="button" id="mkSaveScreen">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3.4 2.6h9.2v10.8L8 10.4l-4.6 3z"/></svg>
+              Save screen</button>
+            <button class="dd__i" type="button" id="mkCopyScreen">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5.4" y="5.4" width="8.2" height="8.2" rx="1.4"/><path d="M10.6 5.4V3.8a1.4 1.4 0 0 0-1.4-1.4H3.8a1.4 1.4 0 0 0-1.4 1.4v5.4a1.4 1.4 0 0 0 1.4 1.4h1.6"/></svg>
+              Make a copy</button>
+            <button class="dd__i" type="button" id="mkExport">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2.6v7.4M5 7.2 8 10.2l3-3M3 13h10"/></svg>
+              Export screen results (CSV)</button>
+            <div class="dd__sep"></div>
+            <button class="dd__i" type="button" id="mkAuto" aria-pressed="false">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2.6v2M8 11.4v2M2.6 8h2M11.4 8h2"/><circle cx="8" cy="8" r="2.4"/></svg>
+              Autosave <span class="k" id="mkAutoK">off</span></button>
+          </div>
+        </div>
+        <button class="sbtn" type="button" id="mkFilters">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 4.2h11.2M4.6 8h6.8M6.8 11.8h2.4"/></svg>
+          Filters <span id="mkFilterN" class="mono" style="font-size:10px">0</span></button>
+        <button class="sbtn" type="button" id="mkUndo" title="Undo" aria-label="Undo">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 7.4h6.4a3.3 3.3 0 1 1 0 6.6H6"/><path d="M5.6 4.6 2.8 7.4l2.8 2.8"/></svg></button>
+        <button class="sbtn" type="button" id="mkRedo" title="Redo" aria-label="Redo">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M13 7.4H6.6a3.3 3.3 0 1 0 0 6.6H10"/><path d="M10.4 4.6l2.8 2.8-2.8 2.8"/></svg></button>
+      </div>
+    </div>
+    <div class="routes" id="mkRoutes">
+      <button type="button" aria-pressed="true">Markets <span class="n">16</span></button>
+      <button type="button" aria-pressed="false">Market scanner</button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <!-- ================= MARKETS VIEW ================= -->
+      <div class="view" id="vMarkets">
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 13.6V8.4M6.4 13.6V4.2M10.4 13.6V9.8M14.4 13.6V2.6"/></svg>24h volume</div>
+            <div class="kpi__v">410.66M</div>
+            <div class="kpi__s">Across <span class="u">2</span> listed pairs</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8.6 1.8 3.4 8.8h3.2l-.6 5.4 5.2-7h-3.2z"/></svg>Gainers</div>
+            <div class="kpi__v">1 / 2</div>
+            <div class="kpi__s">Pairs with a positive 24h change</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 1.6 9.7 6l4.5.3-3.4 3 1 4.4L8 11.3 4.2 13.7l1-4.4-3.4-3L6.3 6z"/></svg>Biggest gainer · 24h</div>
+            <div class="kpi__v sm up" style="color:oklch(42% .11 175)">ETH/USDT · +6.44%</div>
+            <div class="kpi__s"><span class="u">$3,618.96</span></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2.2 14.6 13.4H1.4Z"/><path d="M8 6.4v3.2M8 11.4v.1"/></svg>Biggest loser · 24h</div>
+            <div class="kpi__v sm" style="color:oklch(45% .18 355)">BTC/USDT · −5.45%</div>
+            <div class="kpi__s"><span class="u">$64,294.00</span></div>
+          </div>
+        </div>
+
+        <section class="card">
+          <div class="card__hd">
+            <h2>All markets</h2>
+            <span class="sp"></span>
+            <div class="search">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+              <input id="mkSearch" placeholder="Search symbols…" aria-label="Search symbols">
+            </div>
+            <div class="ftabs" id="mkFtabs">
+              <button type="button" aria-pressed="true">All <span class="n">16</span></button>
+              <button type="button" aria-pressed="false">Favorites <span class="n" id="mkFavN">2</span></button>
+              <button type="button" aria-pressed="false">Gainers <span class="n">1</span></button>
+              <button type="button" aria-pressed="false">Losers <span class="n">1</span></button>
+              <button type="button" aria-pressed="false">New</button>
+            </div>
+            <div class="dd" id="ddCols">
+              <button class="dd__btn" type="button">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.4" y="3.4" width="11.2" height="9.2" rx="1.4"/><path d="M6.6 3.4v9.2M10.4 3.4v9.2"/></svg>
+                Columns <span class="cur" id="mkColCur">Overview</span>
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </button>
+              <div class="dd__pop">
+                <div class="dd__lbl">Column sets</div>
+                <button class="dd__i js-colset" type="button" data-c="overview">Overview</button>
+                <button class="dd__i js-colset" type="button" data-c="performance">Performance</button>
+                <button class="dd__i js-colset" type="button" data-c="volume">Volume &amp; range</button>
+                <div class="dd__sep"></div>
+                <div class="dd__lbl">Auto refresh</div>
+                <button class="dd__i js-refresh" type="button" data-r="10">Every 10 seconds</button>
+                <button class="dd__i js-refresh" type="button" data-r="60">Every 1 minute</button>
+                <button class="dd__i js-refresh" type="button" data-r="0">Never</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tblwrap">
+            <table class="tbl" id="mkTable">
+              <thead>
+                <tr>
+                  <th class="l" style="width:26px"><span style="position:absolute;left:-9999px">Favorite</span></th>
+                  <th class="l srt" data-k="sym" aria-sort="ascending">Pair <span class="car">▲</span></th>
+                  <th class="srt" data-k="price">Price <span class="car">▲</span></th>
+                  <th class="srt" data-k="chg">24h change <span class="car">▲</span></th>
+                  <th data-k="range">24h range</th>
+                  <th class="srt" data-k="vol">24h volume <span class="car">▲</span></th>
+                  <th data-k="tr">Trend</th>
+                  <th style="width:74px">Trade</th>
+                </tr>
+              </thead>
+              <tbody id="mkBody"></tbody>
+            </table>
+          </div>
+          <div class="tfoot">
+            <span id="mkCount">Showing <b>16</b> of <b>21</b> pairs</span>
+            <span class="sp"></span>
+            <span><b>2</b> live · <b>14</b> of the 19 unlisted pairs shown</span>
+            <span class="sp"></span>
+            <span id="mkRefreshLbl">Auto refresh · 10s</span>
+          </div>
+        </section>
+
+        <section class="card" id="mkHeatCard" hidden>
+          <div class="card__hd"><h2>Heatmap · 24h change</h2><span class="sp"></span><span class="foot-note">Tile size = 24h volume · colour = 24h change</span></div>
+          <div style="padding:11px"><div class="heat" id="mkHeat"></div></div>
+        </section>
+
+        <p class="foot-note">Trend column draws the 24h sparkline for listed pairs only. Rows marked <b>Not listed on the exchange</b> exist in the venue's symbol list but have no book on this account — no price, no range, no volume and no order entry, so the Trade button stays disabled rather than opening a screen that cannot fill.</p>
+      </div>
+
+      <!-- ================= SCANNER VIEW ================= -->
+      <div class="view" id="vScanner" hidden>
+
+        <div class="aiask">
+          <svg width="26" height="26" viewBox="0 0 16 16" fill="currentColor" style="color:var(--brand);flex:0 0 auto" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+          <div class="aiask__in">
+            <h3>Find coins by talking to CCAI</h3>
+            <p>Say what you are looking for — “uptrend dips on 1h”, “coins about to break out”, “shorts in a downtrend”. CCAI turns it into a condition, scans the market, shows the table here and explains the best ones.</p>
+          </div>
+          <button class="sbtn sbtn--brand" type="button" id="scAi" style="height:32px;flex:0 0 auto">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+            Build a scan with CCAI</button>
+        </div>
+
+        <section class="card">
+          <div class="card__hd">
+            <h2>Condition (signal rule formula)</h2>
+            <span class="sp"></span>
+            <span class="foot-note" id="scConds">0 conditions</span>
+          </div>
+          <div style="padding:11px;display:flex;flex-direction:column;gap:10px">
+            <div class="pills" id="scPills">
+              <button class="pill" type="button" data-p="up" aria-pressed="true"><span class="d d--up"></span>Uptrend pullback</button>
+              <button class="pill" type="button" data-p="brk"><span class="d d--up"></span>Breakout with volume</button>
+              <button class="pill" type="button" data-p="os"><span class="d d--up"></span>Oversold bounce</button>
+              <button class="pill" type="button" data-p="gold"><span class="d d--up"></span>EMA 20/50 golden cross</button>
+              <button class="pill" type="button" data-p="rally"><span class="d d--dn"></span>Downtrend rally to short</button>
+              <button class="pill" type="button" data-p="bd"><span class="d d--dn"></span>Breakdown</button>
+              <button class="pill" type="button" data-p="ob"><span class="d d--dn"></span>RSI overbought (&gt;70)</button>
+              <button class="pill" type="button" data-p="rsi30"><span class="d d--up"></span>RSI oversold (&lt;30)</button>
+              <button class="pill" type="button" data-p="vol"><span class="d" style="background:var(--text-tertiary)"></span>Volume spike (2×)</button>
+            </div>
+            <div class="formula">
+              <div class="txt" id="scFormula">Trend up (<code>EMA20</code> above <code>EMA50</code>) but RSI cooled below <code>45</code> — a dip inside an uptrend.</div>
+              <button class="sbtn sbtn--sm" type="button" id="scEdit">Edit formula</button>
+            </div>
+            <div class="fctl">
+              <div class="f"><label for="scTf">Timeframe</label>
+                <select id="scTf"><option selected>1h</option><option>15m</option><option>4h</option><option>1D</option></select></div>
+              <div class="f"><label for="scUni">Coins (by 24h volume)</label>
+                <select id="scUni"><option selected>All coins</option><option>Top 10</option><option>Top 50</option></select></div>
+              <div class="f"><label for="scBars">Within last bars</label>
+                <select id="scBars"><option selected>1</option><option>3</option><option>5</option></select></div>
+              <span style="flex:1 1 auto"></span>
+              <button class="sbtn sbtn--brand" type="button" id="scRun" style="height:28px">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+                Scan</button>
+            </div>
+          </div>
+          <div class="tfoot"><span id="scUniNote">Universe: all coins with a live 24h volume feed · <b>2</b> chartable on this account</span></div>
+        </section>
+
+        <section class="card">
+          <div class="card__hd">
+            <h2>Scan results</h2>
+            <span class="sp"></span>
+            <span class="foot-note" id="scMeta">not run yet</span>
+            <div class="dd" id="ddExplain">
+              <button class="dd__btn" type="button">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 7.4v3.2M8 5.6v.1"/></svg>
+                Explanation
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </button>
+              <div class="dd__pop" style="min-width:268px">
+                <div class="dd__lbl">How this scan was built</div>
+                <div class="explain" data-open="true" style="border:0">
+                  <div class="explain__bd" id="scExplain"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tblwrap" id="scTblWrap" hidden>
+            <table class="tbl">
+              <thead><tr>
+                <th class="l">Symbol</th><th>Last</th><th>RSI14</th><th>Trend (EMA20/50)</th><th>Volume ×</th><th>ATR%</th><th>20-bar range</th><th>Match</th>
+              </tr></thead>
+              <tbody id="scBody"></tbody>
+            </table>
+          </div>
+          <div class="empty2" id="scEmpty">
+            <svg width="26" height="26" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+            <span class="t">No scan has run yet</span>
+            <span class="s">Pick a condition above and press <b>Scan</b>. Only coins with a live feed can be scanned — <b>2 of 21</b> on this account, so a scan can legitimately return 0, 1 or 2 rows. It never pads the table with coins it could not read.</span>
+          </div>
+          <div class="tfoot">
+            <span class="foot-note">Context on the last closed bar: RSI14 · trend = EMA20 vs EMA50 · volume × = vs 20-bar average · ATR% = typical bar move · 20-bar range 0 = low, 100 = high. Not investment advice.</span>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- ================= RIGHT RAIL ================= -->
+    <aside class="rail">
+      <div class="sec">
+        <div class="sec__t">Market breadth <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">24h</span></div>
+        <div class="breadth">
+          <i style="width:50%;background:oklch(52% .11 175)"></i>
+          <i style="width:50%;background:oklch(56% .2 355)"></i>
+        </div>
+        <div class="brow"><span class="k">Advancing</span><span class="sp"></span><span class="v" style="color:oklch(42% .11 175)">1</span></div>
+        <div class="brow"><span class="k">Declining</span><span class="sp"></span><span class="v" style="color:oklch(45% .18 355)">1</span></div>
+        <div class="brow"><span class="k">Chartable</span><span class="sp"></span><span class="v">2 / 21</span></div>
+        <div class="brow"><span class="k">Combined 24h vol</span><span class="sp"></span><span class="v">410.66M</span></div>
+        <p class="foot-note" style="margin:0">Breadth is computed over the 2 pairs that actually have a book. With 19 unlisted symbols it cannot represent the wider market — the split is shown as a ratio, not a percentage, on purpose.</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Listed pairs <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">live</span></div>
+        <div class="wlrow"><span>BTC/USDT</span><span class="sp"></span><span class="n" style="color:oklch(45% .18 355)">64,294.00 · −5.45%</span></div>
+        <div class="wlrow"><span>ETH/USDT</span><span class="sp"></span><span class="n" style="color:oklch(42% .11 175)">3,618.96 · +6.44%</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">AI screener <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">natural language</span></div>
+        <div class="search" style="min-width:0">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+          <input id="mkAiQ" placeholder="e.g. uptrend dips on 1h" aria-label="Describe a screen">
+        </div>
+        <div class="pills" id="mkAiTpl">
+          <button class="pill" type="button">Highest volume</button>
+          <button class="pill" type="button">Gainers only</button>
+          <button class="pill" type="button">Uptrend dips on 1h</button>
+        </div>
+        <div class="explain" id="mkExplain" data-open="false">
+          <div class="explain__hd" id="mkExplainHd">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--text-tertiary)" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 7.4v3.2M8 5.6v.1"/></svg>
+            <span class="tt">Explanation</span><span class="sp"></span>
+            <span class="mono" style="font-size:10px;color:var(--text-disabled)" id="mkExplN">0</span>
+          </div>
+          <div class="explain__bd" id="mkExplBd"></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Applied filters <span class="sp"></span><button class="sbtn sbtn--sm" type="button" id="mkClearF">Clear</button></div>
+        <div id="mkFilterList" style="display:flex;flex-direction:column;gap:5px"></div>
+        <div class="pills" id="mkFilterAdd">
+          <button class="pill" type="button" data-f="live">Chartable only</button>
+          <button class="pill" type="button" data-f="up">24h change &gt; 0</button>
+          <button class="pill" type="button" data-f="vol">Volume &gt; 100M</button>
+          <button class="pill" type="button" data-f="fav">Favorites</button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Screen template <span class="sp"></span></div>
+        <div class="lay"><span class="k">Name</span><span class="sp"></span><span class="v" id="mkTplName">My live pairs</span></div>
+        <div class="lay"><span class="k">Columns</span><span class="sp"></span><span class="v" id="mkTplCols">Overview</span></div>
+        <div class="lay"><span class="k">Sort</span><span class="sp"></span><span class="v" id="mkTplSort">Pair ↑</span></div>
+        <div class="lay"><span class="k">View</span><span class="sp"></span><span class="v" id="mkTplView">Table</span></div>
+        <div class="lay"><span class="k">Autosave</span><span class="sp"></span><span class="v" id="mkTplAuto">off</span></div>
+        <p class="foot-note" style="margin:0">A saved screen stores its filters, columns, sorting and view mode together — loading one restores all four at once, and Autosave writes the change 2s after you stop editing.</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Data integrity <span class="sp"></span></div>
+        <div class="lay"><span class="k">Pairs with a book</span><span class="sp"></span><span class="v">2</span></div>
+        <div class="lay"><span class="k">Unlisted symbols</span><span class="sp"></span><span class="v">19</span></div>
+        <div class="lay"><span class="k">Prices source</span><span class="sp"></span><span class="v">venue feed</span></div>
+        <p class="foot-note" style="margin:0">Every blank cell on this page is a field the venue does not publish for that symbol. Nothing is estimated, filled or back-filled to make the table look complete.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot">
+  <span>© 2026 ChartControl AI · Crypto trading involves substantial risk. Not investment advice.</span>
+  <span class="sp"></span>
+  <span class="mode"><span class="d"></span>Live market data</span>
+  <span>·</span>
+  <span class="mode paper"><span class="d"></span>Orders: paper</span>
+  <span>·</span>
+  <a href="#/company">Business information</a>
+  <span>·</span>
+  <a href="#/terms">Terms</a>
+  <a href="#/privacy">Privacy</a>
+  <a href="#/refund">Refund policy</a>
+</footer>
+
+<div class="desk-guard">
+  <div class="desk-guard__in">
+    <svg width="46" height="22" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/><path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <h2>Please use a desktop computer</h2>
+    <p>The trading workspace needs at least 1280px of width. Open this page on a desktop browser to place and review orders.</p>
+  </div>
+</div>
+
+
+<script>
+(function(){'use strict';
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
+$$('.seg button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.parentNode; $$('button',p).forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.chip').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.parentNode; $$('button',p).forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.btab').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('.btab').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.watch__row').forEach(function(r){
+  r.addEventListener('click',function(){
+    $$('.watch__row').forEach(function(x){x.setAttribute('aria-selected','false');});
+    r.setAttribute('aria-selected','true');
+  });
+});
+$$('.rail button').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(b.getAttribute('aria-label')==='Collapse sidebar') return;
+    $$('.rail button').forEach(function(x){if(x.getAttribute('aria-label')!=='Collapse sidebar')x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.drawrail button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('.drawrail button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('#oeType button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('#oeType button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('#cpTabs button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('#cpTabs button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.cp-quick .grid button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var on=b.getAttribute('aria-pressed')==='true';
+    $$('.cp-quick .grid button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed',on?'false':'true');
+  });
+});
+
+/* theme toggle — the product ships both themes */
+var tb=$('#themeBtn');
+tb.addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',next);
+  tb.setAttribute('aria-pressed',next==='dark'?'true':'false');
+  applyTheme(next); draw();
+});
+var DARK={ '--bg-app':'oklch(14% .012 240)','--bg-surface':'oklch(17% .013 240)','--bg-panel':'oklch(20% .014 240)',
+  '--bg-elevated':'oklch(24% .014 240)','--bg-hover':'oklch(28% .014 240 / .6)','--bg-active':'oklch(32% .016 240 / .7)',
+  '--bg-input':'oklch(17% .013 240)','--bg-sunken':'oklch(19% .013 240)',
+  '--text-primary':'oklch(97% .002 240)','--text-secondary':'oklch(78% .005 240)','--text-tertiary':'oklch(66% .008 240)',
+  '--text-disabled':'oklch(38% .012 240)',
+  '--border-subtle':'oklch(28% .014 240 / .6)','--border-default':'oklch(38% .014 240 / .7)','--border-strong':'oklch(48% .014 240 / .9)',
+  '--brand':'oklch(69% .3048 328.33)','--brand-hover':'oklch(71% .260 328.33)','--brand-subtle':'oklch(67.25% .3048 328.33 / .14)',
+  '--long':'oklch(72% .14 175)','--long-600':'oklch(64% .15 175)','--short':'oklch(68% .22 355)',
+  '--ai':'oklch(72% .15 285)','--on-trade':'oklch(18% .02 220)',
+  '--chart-grid':'oklch(28% .014 240 / .5)','--chart-axis':'oklch(66% .008 240)','--chart-crosshair':'oklch(78% .005 240 / .45)',
+  '--chart-up':'oklch(72% .14 175)','--chart-dn':'oklch(68% .22 355)',
+  '--chart-ma1':'oklch(78% .14 75)','--chart-ma2':'oklch(76% .13 285)','--chart-ma3':'oklch(74% .11 230)',
+  '--chart-vol-up':'oklch(72% .14 175 / .5)','--chart-vol-dn':'oklch(68% .22 355 / .5)',
+  '--shadow-1':'0 1px 2px rgba(0,0,0,.4)','--shadow-2':'0 4px 12px rgba(0,0,0,.45)','--shadow-3':'0 12px 32px rgba(0,0,0,.55)'};
+var LIGHT={};
+function applyTheme(mode){
+  var r=document.documentElement, set=mode==='dark'?DARK:LIGHT;
+  if(mode==='light'){Object.keys(DARK).forEach(function(k){r.style.removeProperty(k);});return;}
+  Object.keys(set).forEach(function(k){r.style.setProperty(k,set[k]);});
+}
+
+/* ===================== data (values observed on the real Markets page) ===================== */
+var PAIRS=[
+ {sym:'BTC/USDT',live:true, price:64294.00,chg:-5.45,lo:63189.6,hi:65133.7,vol:408450000,fav:true, up:false},
+ {sym:'ETH/USDT',live:true, price:3618.96, chg:+6.44,lo:null,   hi:null,   vol:22100000, fav:true, up:true},
+ {sym:'SOL/USDT',live:false,fav:false},{sym:'BNB/USDT',live:false,fav:false},
+ {sym:'XRP/USDT',live:false,fav:false},{sym:'DOGE/USDT',live:false,fav:false},
+ {sym:'AVAX/USDT',live:false,fav:false},{sym:'ADA/USDT',live:false,fav:false},
+ {sym:'LINK/USDT',live:false,fav:false},{sym:'MATIC/USDT',live:false,fav:false},
+ {sym:'NEAR/USDT',live:false,fav:false},{sym:'ARB/USDT',live:false,fav:false},
+ {sym:'INJ/USDT',live:false,fav:false},{sym:'LTC/USDT',live:false,fav:false},
+ {sym:'OP/USDT',live:false,fav:false},{sym:'SUI/USDT',live:false,fav:false}
+];
+var COLSETS={overview:['price','chg','range','vol','tr'],performance:['chg','tr'],volume:['vol','range']};
+var state={sort:{k:'sym',dir:1},colset:'overview',tab:'all',q:'',fav:false,
+  filters:{live:false,up:false,vol:false,fav:false},view:'table',refresh:10,auto:false,
+  tpl:'My live pairs',hist:[],hi:-1,scanned:false,cond:'up',ai:''};
+var COND={
+ up:{txt:'Trend up (<code>EMA20</code> above <code>EMA50</code>) but RSI cooled below <code>45</code> — a dip inside an uptrend.',
+     why:['EMA20 above EMA50 sets the regime','RSI14 below 45 on the last closed bar','close still above EMA20'],
+     expl:[['trend = EMA20 vs EMA50','EMA20 is above EMA50 on the 1h — the regime filter passes for an uptrend.'],
+           ['rsi14 < 45','RSI cooled without breaking 40, which is the pullback this condition is looking for.'],
+           ['volume × vs 20-bar mean','Used as context only — this condition does not require a volume expansion.']]},
+ brk:{txt:'<code>close</code> breaks the highest high of the last <code>20</code> bars with <code>volume</code> above <code>2×</code> the 20-bar average.',
+     why:['close > highest high(20)','volume × ≥ 2.0','not already overbought'],
+     expl:[['close > highest high(20)','A new 20-bar extreme is required — not a wick, the close.'],
+           ['volume × ≥ 2.0','Expansion confirms participation rather than a thin drift.'],
+           ['rsi14 < 70','Excluded so the scan does not return a breakout that is already extended.']]},
+ os:{txt:'<code>rsi14</code> below <code>30</code> then back above it — a bounce attempt.',
+     why:['rsi14 crossed back above 30','price above the prior bar low'],
+     expl:[['rsi14 crossed back above 30','The condition fires on the recovery, not on the oversold reading itself.'],
+           ['price above prior bar low','Filters out a bar that is still making lower lows.']]},
+ gold:{txt:'<code>EMA20</code> crossed above <code>EMA50</code> within the window.',
+     why:['EMA20 > EMA50 now','EMA20 ≤ EMA50 before the window'],
+     expl:[['EMA20 > EMA50 now','Current state of the two averages on the last closed bar.'],
+           ['cross inside the window','The pair had to be below before the window, so a long-standing uptrend does not match.']]},
+ rally:{txt:'Trend down (<code>EMA20</code> below <code>EMA50</code>) with <code>rsi14</code> above <code>55</code> — a rally into a downtrend.',
+     why:['EMA20 below EMA50','rsi14 above 55','close below EMA50'],
+     expl:[['EMA20 below EMA50','Regime filter for a downtrend.'],
+           ['rsi14 above 55','The bounce being scanned for.'],
+           ['close below EMA50','Keeps it a rally inside the trend, not a trend change.']]},
+ bd:{txt:'<code>close</code> breaks the lowest low of the last <code>20</code> bars with <code>volume</code> above <code>1.5×</code>.',
+     why:['close < lowest low(20)','volume × ≥ 1.5'],
+     expl:[['close < lowest low(20)','New 20-bar low on the close.'],
+           ['volume × ≥ 1.5','Participation on the break.']]},
+ ob:{txt:'<code>rsi14</code> above <code>70</code> — overbought, listed for context and short candidates.',
+     why:['rsi14 > 70'],
+     expl:[['rsi14 > 70','A single-condition scan. Shown so you can see how few rows survive on a 2-pair universe.']]},
+ rsi30:{txt:'<code>rsi14</code> below <code>30</code> — oversold.',
+     why:['rsi14 < 30'],
+     expl:[['rsi14 < 30','A single-condition scan. A 0-row result here is normal, not an error.']]},
+ vol:{txt:'<code>volume</code> above <code>2×</code> the 20-bar average.',
+     why:['volume × ≥ 2.0'],
+     expl:[['volume × ≥ 2.0','Compared against the mean of the previous 20 bars on the last closed candle.']]}
+};
+/* per-symbol indicator readings — only the 2 pairs with a live feed can be scanned */
+var IND={
+ 'BTC/USDT':{last:64294.00,rsi:46.2,emaFast:64112.4,emaSlow:63780.9,volx:1.42,atr:0.80,rng:22},
+ 'ETH/USDT':{last:3618.96, rsi:51.8,emaFast:3588.1, emaSlow:3601.7, volx:0.88,atr:1.10,rng:64}
+};
+function match(sym,c){
+ var d=IND[sym]; if(!d)return false;
+ var up=d.emaFast>d.emaSlow;
+ if(c==='up')return up&&d.rsi<45;
+ if(c==='brk')return d.volx>=2.0;
+ if(c==='os')return d.rsi>30&&d.rsi<42;
+ if(c==='gold')return up;
+ if(c==='rally')return !up&&d.rsi>55;
+ if(c==='bd')return !up&&d.volx>=1.5;
+ if(c==='ob')return d.rsi>70;
+ if(c==='rsi30')return d.rsi<30;
+ if(c==='vol')return d.volx>=2.0;
+ return false;
+}
+/* deterministic sparkline data */
+function spark(seed,n,up){
+ var a=[],x=seed,v=seed*0.1;
+ for(var i=0;i<n;i++){x=x*1664525+1013904223;v+=(((x>>>16)%1000)/1000-0.5)*(seed*0.012);a.push(v);}
+ if(up&&a[n-1]<a[0])a.reverse(); if(!up&&a[n-1]>a[0])a.reverse();
+ return a;
+}
+function fmt(v,d){return v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function sg(v){return (v>=0?'+':'−')+Math.abs(v).toFixed(2)+'%';}
+
+/* ===================== render table ===================== */
+function rows(){
+ var r=PAIRS.slice();
+ var f=state.filters;
+ if(state.q){var q=state.q.toLowerCase();r=r.filter(function(p){return p.sym.toLowerCase().indexOf(q)>-1;});}
+ if(state.tab==='fav'||f.fav)r=r.filter(function(p){return p.fav;});
+ if(state.tab==='gain')r=r.filter(function(p){return p.live&&p.chg>0;});
+ if(state.tab==='los')r=r.filter(function(p){return p.live&&p.chg<0;});
+ if(state.tab==='new')r=r.filter(function(p){return p.live;});
+ if(f.live)r=r.filter(function(p){return p.live;});
+ if(f.up)r=r.filter(function(p){return p.live&&p.chg>0;});
+ if(f.vol)r=r.filter(function(p){return p.live&&p.vol>100000000;});
+ var k=state.sort.k,d=state.sort.dir;
+ r.sort(function(a,b){
+  var av,bv;
+  if(k==='sym'){av=a.sym;bv=b.sym;return av<bv?-d:av>bv?d:0;}
+  if(k==='tr'){av=(a.live?a.vol:0);bv=(b.live?b.vol:0);}
+  else{av=a[k]==null?-1e18:a[k];bv=b[k]==null?-1e18:b[k];}
+  return (av-bv)*d;});
+ return r;
+}
+var SPARKS={};
+function drawSpk(cv,sym,up){
+ var ctx=cv.getContext('2d'),dpr=Math.min(2,window.devicePixelRatio||1);
+ var W=cv.clientWidth||82,H=cv.clientHeight||24;
+ cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+ if(!SPARKS[sym])SPARKS[sym]=spark(sym.length*97+13,40,up);
+ var a=SPARKS[sym],lo=Math.min.apply(null,a),hi=Math.max.apply(null,a);if(hi-lo<1e-9){hi+=1;lo-=1;}
+ var col=up?'oklch(52% .11 175)':'oklch(56% .2 355)';
+ ctx.beginPath();
+ for(var i=0;i<a.length;i++){var x=1+(i/(a.length-1))*(W-2),y=2+(hi-a[i])/(hi-lo)*(H-4);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+ ctx.strokeStyle=col;ctx.lineWidth=1.4;ctx.lineJoin='round';ctx.stroke();
+}
+function render(){
+ var body=document.getElementById('mkBody'),r=rows(),cs=COLSETS[state.colset];
+ document.querySelectorAll('#mkTable thead th[data-k]').forEach(function(th){
+  th.style.display=(th.dataset.k==='sym'||cs.indexOf(th.dataset.k)>-1)?'':'none';
+  if(th.dataset.k==='sym')return;
+  if(th.dataset.k===state.sort.k)th.setAttribute('aria-sort',state.sort.dir>0?'ascending':'descending');
+  else th.removeAttribute('aria-sort');});
+ body.innerHTML=r.map(function(p){
+  var cells='';
+  if(cs.indexOf('price')>-1)cells+='<td>'+(p.live?'<span class="num">'+fmt(p.price,2)+'</span>':'<span class="dash">—</span>')+'</td>';
+  if(cs.indexOf('chg')>-1)cells+='<td>'+(p.live?'<span class="num '+(p.chg>0?'up':'dn')+'">'+(p.chg>0?'▲ ':'▼ ')+Math.abs(p.chg).toFixed(2)+'%</span>':'<span class="dash">—</span>')+'</td>';
+  if(cs.indexOf('range')>-1)cells+='<td>'+(p.lo!=null?'<span class="rng"><span class="lo">'+fmt(p.lo,1)+'</span> – <span class="hi">'+fmt(p.hi,1)+'</span></span>':'<span class="dash">—</span>')+'</td>';
+  if(cs.indexOf('vol')>-1)cells+='<td>'+(p.live?'<span class="num">'+(p.vol/1e6).toFixed(2)+'M</span>':'<span class="dash">—</span>')+'</td>';
+  if(cs.indexOf('tr')>-1)cells+='<td>'+(p.live?'<canvas class="spk" data-sym="'+p.sym+'" data-up="'+p.up+'"></canvas>':'<span class="dash">—</span>')+'</td>';
+  return '<tr data-dead="'+(p.live?'false':'true')+'">'
+   +'<td class="l"><button class="fav js-fav" type="button" data-sym="'+p.sym+'" aria-pressed="'+p.fav+'" aria-label="Favorite '+p.sym+'">'
+   +'<svg width="12" height="12" viewBox="0 0 16 16" fill="'+(p.fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.5"><path d="M8 1.9 9.7 6l4.4.3-3.3 2.9 1 4.3L8 11.2 4.2 13.5l1-4.3L1.9 6.3 6.3 6z"/></svg></button></td>'
+   +'<td class="l"><span class="pairc"><span class="sym">'+p.sym+'</span>'+(p.live?'<span class="tagp">Perp</span>':'')
+   +(!p.live?'<span class="dead"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="5.6"/><path d="M5.6 5.6l4.8 4.8"/></svg>Not listed on the exchange</span>':'')
+   +'</span></td>'+cells
+   +'<td><button class="btnTrade" type="button" '+(p.live?'':'disabled')+'>Trade</button></td></tr>';}).join('');
+ document.querySelectorAll('#mkBody canvas.spk').forEach(function(cv){drawSpk(cv,cv.dataset.sym,cv.dataset.up==='true');});
+ document.getElementById('mkCount').innerHTML='Showing <b>'+r.length+'</b> of <b>21</b> pairs';
+ document.getElementById('mkFavN').textContent=PAIRS.filter(function(p){return p.fav;}).length;
+ document.getElementById('mkTplCols').textContent=({overview:'Overview',performance:'Performance',volume:'Volume & range'})[state.colset];
+ document.getElementById('mkColCur').textContent=({overview:'Overview',performance:'Performance',volume:'Volume & range'})[state.colset];
+ document.getElementById('mkTplSort').textContent=({sym:'Pair',price:'Price',chg:'24h change',vol:'Volume',range:'Range',tr:'Trend'}[state.sort.k]||state.sort.k)+' '+(state.sort.dir>0?'↑':'↓');
+ document.getElementById('mkTplView').textContent=state.view==='table'?'Table':'Heatmap';
+ document.getElementById('mkTplName').textContent=state.tpl;
+ document.getElementById('mkTplAuto').textContent=state.auto?'on':'off';
+ document.getElementById('mkAutoK').textContent=state.auto?'on':'off';
+ document.getElementById('mkFilterN').textContent=Object.keys(state.filters).filter(function(k){return state.filters[k];}).length;
+ document.getElementById('mkRefreshLbl').textContent=state.refresh?('Auto refresh · '+state.refresh+'s'):'Auto refresh · off';
+ document.getElementById('mkView').querySelectorAll('button').forEach(function(b,i){b.setAttribute('aria-pressed',(i===0)===(state.view==='table')?'true':'false');});
+ document.getElementById('mkHeatCard').hidden=state.view!=='heat';
+ document.getElementById('mkTable').parentNode.parentNode.hidden=state.view!=='table';
+ wire();
+}
+function wire(){
+ document.querySelectorAll('.js-fav').forEach(function(b){b.addEventListener('click',function(){
+  var s=b.dataset.sym,p=PAIRS.filter(function(x){return x.sym===s;})[0];p.fav=!p.fav;
+  push();render();});});
+}
+
+/* ===================== heatmap ===================== */
+function renderHeat(){
+ var host=document.getElementById('mkHeat');
+ var r=PAIRS.filter(function(p){return p.live;});
+ host.innerHTML=r.map(function(p){
+  var size=p.vol>100000000?2:1;
+  var bg=p.chg>0?'color-mix(in oklab,oklch(52% .11 175) 16%,var(--bg-panel))':'color-mix(in oklab,oklch(56% .2 355) 16%,var(--bg-panel))';
+  return '<div class="heatc" style="background:'+bg+';grid-column:span '+size+'">'
+   +'<span class="s">'+p.sym+'</span>'
+   +'<span class="p" style="color:'+(p.chg>0?'oklch(42% .11 175)':'oklch(45% .18 355)')+'">'+(p.chg>0?'▲ ':'▼ ')+Math.abs(p.chg).toFixed(2)+'%</span>'
+   +'<span class="r">'+fmt(p.price,2)+' · '+(p.vol/1e6).toFixed(2)+'M</span></div>';}).join('')
+ +'<div class="heatc" style="grid-column:span 2;background:repeating-linear-gradient(-45deg,color-mix(in oklab,var(--warning) 7%,transparent) 0 1px,transparent 1px 8px)">'
+ +'<span class="s" style="color:var(--text-tertiary)">19 unlisted symbols</span>'
+ +'<span class="r">no book — cannot be tiled</span></div>';
+}
+
+/* ===================== scanner ===================== */
+function renderScanner(){
+ var c=COND[state.cond];
+ document.getElementById('scFormula').innerHTML=c.txt;
+ document.getElementById('scConds').textContent=c.why.length+' conditions';
+ document.getElementById('scExplain').innerHTML=c.expl.map(function(e){
+  return '<div class="explrow"><span class="q">'+e[0]+'</span><span class="a">'+e[1]+'</span></div>';}).join('');
+ document.getElementById('mkExplBd').innerHTML=c.expl.map(function(e){
+  return '<div class="explrow"><span class="q">'+e[0]+'</span><span class="a">'+e[1]+'</span></div>';}).join('');
+ document.getElementById('mkExplN').textContent=String(c.expl.length);
+ document.getElementById('scMeta').textContent=state.scanned?('last closed bar · '+document.getElementById('scTf').value):'not run yet';
+ if(!state.scanned){document.getElementById('scTblWrap').hidden=true;document.getElementById('scEmpty').hidden=false;return;}
+ document.getElementById('scEmpty').hidden=true;document.getElementById('scTblWrap').hidden=false;
+ var hits=[];
+ Object.keys(IND).forEach(function(s){
+  var d=IND[s],ok=match(s,state.cond),up=d.emaFast>d.emaSlow;
+  hits.push('<tr data-dead="'+(ok?'false':'true')+'"><td class="l"><span class="sym">'+s+'</span></td>'
+   +'<td><span class="num">'+fmt(d.last,2)+'</span></td>'
+   +'<td><span class="num">'+d.rsi.toFixed(1)+'</span></td>'
+   +'<td><span class="num" style="color:'+(up?'oklch(42% .11 175)':'oklch(45% .18 355)')+'">'+(up?'EMA20 > EMA50':'EMA20 < EMA50')+'</span></td>'
+   +'<td><span class="num">'+d.volx.toFixed(2)+'×</span></td>'
+   +'<td><span class="num">'+d.atr.toFixed(2)+'%</span></td>'
+   +'<td><span class="bar2"><i style="width:'+d.rng+'%"></i></span> <span class="mono" style="font-size:10px">'+d.rng+'</span></td>'
+   +'<td><span class="mtch '+(ok?'mtch--yes':'mtch--no')+'"><span class="d"></span>'+(ok?'Match':'No')+'</span></td></tr>');});
+ document.getElementById('scBody').innerHTML=hits.join('');
+}
+function runScan(){
+ state.scanned=true;renderScanner();
+ var n=Object.keys(IND).filter(function(s){return match(s,state.cond);}).length;
+ document.getElementById('scMeta').textContent='last closed bar · '+document.getElementById('scTf').value+' · '+n+' match'+(n===1?'':'es')+' of 2 chartable';
+}
+/* ===================== history / autosave ===================== */
+function snap(){return JSON.stringify({s:state.sort,c:state.colset,t:state.tab,q:state.q,f:state.filters,v:state.view,r:state.refresh,tp:state.tpl});}
+function push(){state.hist=state.hist.slice(0,state.hi+1);state.hist.push(snap());state.hi=state.hist.length-1;if(state.hist.length>100)state.hist.shift();
+ if(state.auto){clearTimeout(window.__as);window.__as=setTimeout(function(){
+  document.getElementById('mkRefreshLbl').textContent='Autosaved · '+new Date().toTimeString().slice(0,8);},2000);}}
+function undo(){if(state.hi<=0)return;state.hi--;apply(state.hist[state.hi]);}
+function redo(){if(state.hi>=state.hist.length-1)return;state.hi++;apply(state.hist[state.hi]);}
+function apply(s){var o=JSON.parse(s);state.sort=o.s;state.colset=o.c;state.tab=o.t;state.q=o.q;state.filters=o.f;state.view=o.v;state.refresh=o.r;state.tpl=o.tp;
+ document.getElementById('mkSearch').value=state.q;renderFilters();render();}
+
+/* ===================== filters rail ===================== */
+var FNAME={live:'Chartable only',up:'24h change > 0',vol:'Volume > 100M',fav:'Favorites'};
+function renderFilters(){
+ var host=document.getElementById('mkFilterList'),on=Object.keys(state.filters).filter(function(k){return state.filters[k];});
+ host.innerHTML=on.length?on.map(function(k){
+  return '<div class="lay"><span class="k">'+FNAME[k]+'</span><span class="sp"></span>'
+   +'<button class="sbtn sbtn--sm js-rmf" type="button" data-f="'+k+'" aria-label="Remove filter">Remove</button></div>';}).join('')
+  :'<p class="foot-note" style="margin:0">No filters applied — the table shows every symbol the venue lists.</p>';
+ host.querySelectorAll('.js-rmf').forEach(function(b){b.addEventListener('click',function(){
+  state.filters[b.dataset.f]=false;push();renderFilters();render();});});
+}
+/* ===================== boot ===================== */
+document.querySelectorAll('#mkRoutes button').forEach(function(b,i){b.addEventListener('click',function(){
+ document.querySelectorAll('#mkRoutes button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+ b.setAttribute('aria-pressed','true');
+ document.getElementById('vMarkets').hidden=(i!==0);document.getElementById('vScanner').hidden=(i===0);
+ document.getElementById('mkTitle').textContent=i===0?'Markets':'Market scanner';
+ document.getElementById('mkCrumb').textContent=i===0?'Markets':'Market scanner';
+ document.getElementById('mkSub').innerHTML=i===0
+  ?'2 of 21 pairs live · Perpetual · USDT-margined · <span class="warn">19 not listed</span>'
+  :'Run a signal condition across the top coins by volume and see where it is true right now.';
+ renderScanner();});});
+document.querySelectorAll('#mkView button').forEach(function(b,i){b.addEventListener('click',function(){
+ state.view=i===0?'table':'heat';push();if(state.view==='heat')renderHeat();render();});});
+document.querySelectorAll('#mkTable thead th.srt').forEach(function(th){th.addEventListener('click',function(){
+ if(state.sort.k===th.dataset.k){state.sort.dir*=-1;}else{state.sort.k=th.dataset.k;state.sort.dir=(th.dataset.k==='sym'?1:-1);}
+ push();render();});});
+document.querySelectorAll('#mkFtabs button').forEach(function(b,i){b.addEventListener('click',function(){
+ document.querySelectorAll('#mkFtabs button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+ b.setAttribute('aria-pressed','true');
+ state.tab=['all','fav','gain','los','new'][i];push();render();});});
+document.getElementById('mkSearch').addEventListener('input',function(){state.q=this.value;render();});
+document.querySelectorAll('.js-colset').forEach(function(b){b.addEventListener('click',function(){
+ state.colset=b.dataset.c;push();render();closeDD();});});
+document.querySelectorAll('.js-refresh').forEach(function(b){b.addEventListener('click',function(){
+ state.refresh=parseInt(b.dataset.r,10);push();render();closeDD();});});
+document.querySelectorAll('.js-screen').forEach(function(b){b.addEventListener('click',function(){
+ var s=b.dataset.s;
+ state.tpl=b.textContent.replace(/\s+\d+$/,'').trim();
+ if(s==='live'){state.filters={live:true,up:false,vol:false,fav:false};state.tab='all';state.colset='overview';state.sort={k:'sym',dir:1};}
+ if(s==='gain'){state.filters={live:false,up:true,vol:false,fav:false};state.tab='all';state.colset='performance';state.sort={k:'chg',dir:-1};}
+ if(s==='fav'){state.filters={live:false,up:false,vol:false,fav:true};state.tab='all';state.colset='overview';}
+ if(s==='all'){state.filters={live:false,up:false,vol:false,fav:false};state.tab='all';state.colset='overview';}
+ if(s==='dead'){state.filters={live:false,up:false,vol:false,fav:false};state.tab='all';state.colset='overview';state.sort={k:'sym',dir:1};}
+ document.getElementById('ddCur').textContent=state.tpl;
+ document.getElementById('mkTplName').textContent=state.tpl;
+ push();renderFilters();render();closeDD();});});
+document.getElementById('mkSaveScreen').addEventListener('click',function(){
+ document.getElementById('ddCur').textContent='Saved · '+state.tpl;
+ document.getElementById('mkRefreshLbl').textContent='Screen saved — filters, columns, sorting and view';closeDD();});
+document.getElementById('mkCopyScreen').addEventListener('click',function(){
+ state.tpl=state.tpl+' copy';document.getElementById('ddCur').textContent=state.tpl;
+ document.getElementById('mkTplName').textContent=state.tpl;push();closeDD();});
+document.getElementById('mkExport').addEventListener('click',function(){
+ var r=rows(),cs=COLSETS[state.colset];
+ var lines=['symbol,pair_type,listed,price,change_24h,low_24h,high_24h,volume_24h'];
+ r.forEach(function(p){lines.push([p.sym,'perp',p.live?'yes':'no',p.live?p.price:'',p.live?p.chg:'',p.lo||'',p.hi||'',p.live?p.vol:''].join(','));});
+ var blob=new Blob([lines.join('\n')],{type:'text/csv'});
+ var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='screen-'+state.tpl.replace(/\s+/g,'-')+'.csv';a.click();
+ document.getElementById('mkRefreshLbl').textContent='Exported '+r.length+' rows · '+cs.length+' value columns';closeDD();});
+document.getElementById('mkAuto').addEventListener('click',function(){
+ state.auto=!state.auto;this.setAttribute('aria-pressed',String(state.auto));push();render();closeDD();});
+document.getElementById('mkFilters').addEventListener('click',function(){
+ document.getElementById('mkFilterList').scrollIntoView({block:'nearest',behavior:'smooth'});});
+document.getElementById('mkClearF').addEventListener('click',function(){
+ state.filters={live:false,up:false,vol:false,fav:false};push();renderFilters();render();});
+document.querySelectorAll('#mkFilterAdd .pill').forEach(function(b){b.addEventListener('click',function(){
+ var k=b.dataset.f;state.filters[k]=!state.filters[k];push();renderFilters();render();});});
+document.getElementById('mkUndo').addEventListener('click',undo);
+document.getElementById('mkRedo').addEventListener('click',redo);
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();}
+ if((e.ctrlKey||e.metaKey)&&e.key==='y'){e.preventDefault();redo();}});
+document.querySelectorAll('#scPills .pill').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('#scPills .pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+ b.setAttribute('aria-pressed','true');state.cond=b.dataset.p;state.scanned=false;
+ document.getElementById('scTblWrap').hidden=true;document.getElementById('scEmpty').hidden=false;
+ renderScanner();});});
+document.getElementById('scRun').addEventListener('click',runScan);
+document.getElementById('scEdit').addEventListener('click',function(){
+ document.getElementById('mkFilterList').scrollIntoView({block:'nearest'});});
+document.getElementById('scAi').addEventListener('click',function(){
+ document.querySelectorAll('#mkRoutes button')[1].click();
+ document.getElementById('mkExplain').setAttribute('data-open','true');
+ document.getElementById('mkAiQ').value='uptrend dips on 1h';applyAi('uptrend dips on 1h');});
+document.getElementById('mkExplainHd').addEventListener('click',function(){
+ var e=document.getElementById('mkExplain');e.setAttribute('data-open',e.getAttribute('data-open')==='true'?'false':'true');});
+function applyAi(q){
+ var t=(q||'').toLowerCase(),out=[];
+ if(t.indexOf('uptrend')>-1||t.indexOf('dip')>-1){out.push(['trend = EMA20 vs EMA50','Mapped “uptrend” to the regime filter EMA20 above EMA50 on the 1h.']);
+  out.push(['rsi14 < 45','Mapped “dip” to RSI cooled below 45 without breaking 40.']);state.cond='up';}
+ if(t.indexOf('volume')>-1||t.indexOf('highest')>-1){out.push(['sort = volume_24h desc','Mapped “highest volume” to a descending sort on the 24h volume column.']);
+  out.push(['columns = Volume & range','Added the volume column set because the question was about volume.']);state.colset='volume';state.sort={k:'vol',dir:-1};}
+ if(t.indexOf('gainer')>-1){out.push(['24h change > 0','Mapped “gainers” to a positive 24h change filter.']);state.filters.up=true;state.colset='performance';}
+ if(!out.length){out.push(['no filter mapped','Nothing in that sentence matched a filter. Name a metric (RSI, EMA, volume, 24h change) or a market and try again.']);}
+ document.getElementById('mkExplBd').innerHTML=out.map(function(e){
+  return '<div class="explrow"><span class="q">'+e[0]+'</span><span class="a">'+e[1]+'</span></div>';}).join('');
+ document.getElementById('mkExplN').textContent=String(out.length);
+ document.getElementById('mkExplain').setAttribute('data-open','true');
+ document.getElementById('scPills').querySelectorAll('.pill').forEach(function(x){
+  x.setAttribute('aria-pressed',x.dataset.p===state.cond?'true':'false');});
+ renderScanner();renderFilters();render();
+}
+document.getElementById('mkAiQ').addEventListener('keydown',function(e){if(e.key==='Enter'){applyAi(this.value);}});
+document.querySelectorAll('#mkAiTpl .pill').forEach(function(b){b.addEventListener('click',function(){
+ document.getElementById('mkAiQ').value=b.textContent.trim();applyAi(b.textContent);});});
+function closeDD(){document.querySelectorAll('.dd').forEach(function(d){d.setAttribute('data-open','false');});}
+document.querySelectorAll('.dd__btn').forEach(function(b){b.addEventListener('click',function(e){
+ e.stopPropagation();var d=b.closest('.dd'),o=d.getAttribute('data-open')==='true';closeDD();
+ d.setAttribute('data-open',o?'false':'true');});});
+document.addEventListener('click',closeDD);
+/* boot */
+push();renderFilters();renderHeat();renderScanner();render();
+setInterval(function(){
+ if(state.refresh>0&&!document.hidden){
+  var l=document.getElementById('mkRefreshLbl');
+  if(state.view==='heat')renderHeat();
+  l.textContent='Refreshed · '+new Date().toTimeString().slice(0,8);}
+},state.refresh*1000);
+
+})();
+</script>
+</body>
+</html>

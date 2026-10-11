@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-brand="chartcontrol" data-density="comfortable" data-longshort="teal-magenta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChartControl AI — Strategy library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  /* neutral scale — hue 240 */
+  --n-950:oklch(14% .012 240); --n-925:oklch(17% .013 240); --n-900:oklch(20% .014 240);
+  --n-850:oklch(24% .014 240); --n-800:oklch(28% .013 240); --n-700:oklch(38% .012 240);
+  --n-600:oklch(48% .010 240); --n-500:oklch(66% .008 240); --n-400:oklch(68% .006 240);
+  --n-300:oklch(78% .005 240); --n-200:oklch(86% .004 240); --n-100:oklch(92% .003 240);
+  --n-050:oklch(97% .002 240); --n-000:oklch(100% 0 0);
+
+  /* brand — 328.33deg */
+  --brand-300:oklch(75% .200 328.33); --brand-400:oklch(71% .260 328.33);
+  --brand-500:oklch(69% .3048 328.33); --brand-600:oklch(56% .240 328.33);
+  --brand-700:oklch(46% .190 328.33);
+
+  /* surfaces (light theme — the product's default) */
+  --bg-app:oklch(98% .003 240);
+  --bg-surface:oklch(100% 0 0);
+  --bg-panel:oklch(99% .002 240);
+  --bg-elevated:oklch(100% 0 0);
+  --bg-hover:oklch(94% .006 240);
+  --bg-active:oklch(90% .008 240);
+  --bg-input:oklch(100% 0 0);
+  --bg-sunken:oklch(96.5% .004 240);
+
+  --text-primary:oklch(20% .014 240);
+  --text-secondary:oklch(38% .014 240);
+  --text-tertiary:oklch(48% .012 240);
+  --text-disabled:oklch(72% .008 240);
+  --text-inverse:oklch(98% .003 240);
+
+  --border-subtle:oklch(90% .006 240);
+  --border-default:oklch(82% .008 240);
+  --border-strong:oklch(68% .010 240);
+
+  /* semantic */
+  --brand:oklch(48% .190 328.33);
+  --brand-hover:oklch(40% .190 328.33);
+  --brand-subtle:oklch(48% .190 328.33 / .12);
+  --long:oklch(52.1% .099 175);
+  --long-600:oklch(44% .090 175);
+  --short:oklch(56.1% .200 355);
+  --ai:oklch(55.1% .190 285);
+  --success:oklch(52.1% .150 145);
+  --warning:oklch(54.1% .115 75);
+  --danger:oklch(64% .20 25);
+  --on-trade:rgb(10,14,20);
+
+  /* chart */
+  --chart-grid:oklch(88% .006 240 / .7);
+  --chart-axis:oklch(48% .012 240);
+  --chart-crosshair:oklch(38% .014 240 / .5);
+  --chart-up:oklch(52.1% .099 175);
+  --chart-dn:oklch(56.1% .200 355);
+  --chart-ma1:oklch(54.1% .115 75);
+  --chart-ma2:oklch(55.1% .190 285);
+  --chart-ma3:oklch(52.8% .106 230);
+  --chart-vol-up:oklch(39.3% .049 175 / .6);
+  --chart-vol-dn:oklch(42.7% .106 355 / .6);
+
+  --shadow-1:0 1px 2px rgba(15,20,28,.06);
+  --shadow-2:0 4px 12px rgba(15,20,28,.08);
+  --shadow-3:0 12px 32px rgba(15,20,28,.14);
+
+  /* type */
+  --font-ui:'Pretendard Variable',pretendard,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'IBM Plex Sans',var(--font-ui);
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+
+  --r-sm:3px; --r-md:4px; --r-lg:6px; --r-xl:8px;
+  --header-h:48px;
+  --rail-w:44px; --watch-w:226px; --order-w:262px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  height:100vh;overflow:hidden;display:flex;flex-direction:column;
+  background:var(--bg-app);color:var(--text-primary);
+  font-family:var(--font-ui);font-size:13px;line-height:1.45;
+  font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+::selection{background:var(--brand-subtle)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:1px;border-radius:2px}
+
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-feature-settings:"zero" 1}
+.up{color:var(--long)} .dn{color:var(--short)}
+.eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:.44px;text-transform:uppercase;
+  color:var(--text-tertiary);
+}
+
+/* ---------- scrollbars: thin, quiet ---------- */
+.scroll{overflow:auto;scrollbar-width:thin;scrollbar-color:var(--border-default) transparent}
+.scroll::-webkit-scrollbar{width:9px;height:9px}
+.scroll::-webkit-scrollbar-thumb{background:var(--border-default);border-radius:9px;border:2px solid transparent;background-clip:content-box}
+.scroll::-webkit-scrollbar-thumb:hover{background:var(--border-strong);background-clip:content-box}
+.scroll::-webkit-scrollbar-track{background:transparent}
+
+/* ==========================================================================
+   Header — 48px, pure white, hairline bottom border
+   ========================================================================== */
+.hdr{
+  height:var(--header-h);flex:0 0 var(--header-h);
+  display:flex;align-items:center;gap:8px;
+  padding:0 16px 0 12px;
+  background:var(--bg-surface);border-bottom:1px solid var(--border-subtle);
+  position:relative;z-index:40;
+}
+.brand{display:flex;align-items:center;gap:9px;padding-right:20px;height:47px;
+  border-right:1px solid var(--border-subtle);flex:0 0 auto}
+.brand svg{display:block;flex:0 0 auto}
+.brand__word{
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  letter-spacing:.26px;color:var(--text-primary);white-space:nowrap;
+}
+.seg{
+  display:flex;gap:2px;padding:2px;border:1px solid var(--border-subtle);
+  border-radius:var(--r-md);background:var(--bg-surface);flex:0 0 auto;
+}
+.seg button{
+  height:26px;padding:0 12px;border-radius:var(--r-sm);border:1px solid transparent;
+  font-size:12.5px;font-weight:500;color:var(--text-secondary);
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .12s,color .12s;
+}
+.seg button:hover{background:var(--bg-hover);color:var(--text-primary)}
+.seg button[aria-pressed="true"]{
+  background:var(--bg-elevated);border-color:var(--border-subtle);
+  color:var(--text-primary);font-weight:600;box-shadow:var(--shadow-1);
+}
+.hdr__links{display:flex;align-items:center;gap:2px;margin-left:4px;flex:0 1 auto;min-width:0;overflow:hidden}
+.hdr__links a{
+  display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 9px;border-radius:var(--r-md);
+  font-size:12.5px;color:var(--text-secondary);text-decoration:none;white-space:nowrap;transition:background .12s,color .12s;
+}
+.hdr__links a:hover{background:var(--bg-hover);color:var(--text-primary)}
+.hdr__links svg{opacity:.62;flex:0 0 auto}
+.hdr__links a:hover svg{opacity:.9}
+.hdr__spacer{flex:1 1 auto;min-width:8px}
+.hdr__tools{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.iconbtn{
+  width:28px;height:28px;border-radius:var(--r-md);display:grid;place-items:center;
+  color:var(--text-secondary);transition:background .12s,color .12s;position:relative;
+}
+.iconbtn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.iconbtn[aria-pressed="true"]{background:var(--bg-active);color:var(--text-primary)}
+.iconbtn .dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;
+  background:var(--brand);box-shadow:0 0 0 2px var(--bg-surface)}
+.langbtn{
+  height:28px;padding:0 8px;border-radius:var(--r-md);font-size:12.5px;font-weight:500;
+  color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px;
+}
+.langbtn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.avatar{
+  width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700;margin-left:4px;
+  font-family:var(--font-display);letter-spacing:.3px;flex:0 0 auto;
+}
+
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);
+  display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;
+}
+.panel__hd{
+  flex:0 0 auto;height:30px;display:flex;align-items:center;gap:8px;padding:0 10px;
+  border-bottom:1px solid var(--border-subtle);background:var(--bg-panel);
+}
+.panel__hd .ttl{font-size:11.5px;font-weight:600;letter-spacing:.2px;color:var(--text-secondary);white-space:nowrap}
+.panel__hd .sp{flex:1 1 auto}
+.panel__bd{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+
+.foot{
+  flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:4px 12px;
+  font-size:10.5px;color:var(--text-tertiary);background:var(--bg-surface);
+  border-top:1px solid var(--border-subtle);
+}
+.foot .sp{flex:1 1 auto}
+.foot a{color:var(--text-tertiary);text-decoration:none}
+.foot a:hover{color:var(--text-secondary);text-decoration:underline;text-underline-offset:2px}
+.foot .mode{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.foot .mode .d{width:6px;height:6px;border-radius:50%;background:var(--long)}
+.foot .mode.paper .d{background:var(--warning)}
+
+.fab{
+  position:absolute;right:14px;bottom:14px;z-index:6;width:44px;height:44px;border-radius:50%;
+  background:var(--brand);color:#fff;display:grid;place-items:center;
+  box-shadow:0 6px 20px color-mix(in oklab,var(--brand) 40%,transparent),var(--shadow-2);
+  transition:transform .16s,box-shadow .16s;
+}
+.fab:hover{transform:scale(1.05);box-shadow:0 8px 26px color-mix(in oklab,var(--brand) 52%,transparent),var(--shadow-3)}
+.fab[aria-expanded="true"]{transform:scale(.92);opacity:.35}
+.copilot{
+  position:fixed;right:18px;bottom:76px;z-index:59;width:404px;max-height:min(760px,calc(100vh - 150px));
+  background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-3);display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(14px) scale(.985);opacity:0;pointer-events:none;transition:transform .18s cubic-bezier(.2,.8,.3,1),opacity .16s;
+}
+.copilot[data-open="true"]{transform:none;opacity:1;pointer-events:auto}
+.copilot__hd{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:10px 11px;border-bottom:1px solid var(--border-subtle)}
+.copilot__hd .ttl{font-family:var(--font-display);font-weight:700;font-size:13.5px;letter-spacing:.1px}
+.copilot__hd .sp{flex:1 1 auto}
+.copilot__tabs{flex:0 0 auto;display:flex;gap:2px;padding:8px 10px;border-bottom:1px solid var(--border-subtle);overflow-x:auto}
+.copilot__tabs button{
+  height:27px;padding:0 10px;border-radius:var(--r-md);font-size:11.5px;font-weight:500;
+  color:var(--text-tertiary);border:1px solid var(--border-subtle);background:var(--bg-surface);
+  white-space:nowrap;transition:.12s;
+}
+.copilot__tabs button:hover{background:var(--bg-hover);color:var(--text-primary)}
+.copilot__tabs button[aria-pressed="true"]{background:var(--brand-subtle);color:var(--brand);
+  border-color:color-mix(in oklab,var(--brand) 26%,transparent);font-weight:600}
+.copilot__bd{flex:1 1 auto;min-height:0;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:10px}
+.cp-status{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cp-chip{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 8px;border-radius:11px;
+  font-size:10.5px;font-weight:700;letter-spacing:.3px;background:var(--bg-sunken);
+  color:var(--text-tertiary);border:1px solid var(--border-subtle)}
+.cp-chip--beta{background:color-mix(in oklab,var(--warning) 16%,transparent);color:oklch(42% .115 75);border-color:transparent}
+.cp-chip--off{background:var(--bg-sunken);color:var(--text-tertiary)}
+.cp-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11px;color:var(--text-tertiary)}
+.cp-tools .t{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 7px;border-radius:var(--r-sm);
+  background:var(--bg-sunken);border:1px solid var(--border-subtle);font-family:var(--font-mono);font-size:10.5px}
+.cp-tools .disc{background:color-mix(in oklab,var(--warning) 12%,transparent);border-color:transparent;
+  color:oklch(42% .115 75);font-family:var(--font-ui);font-weight:500}
+.bub{padding:9px 11px;border-radius:var(--r-md);font-size:12.5px;line-height:1.55}
+.bub--sys{background:var(--bg-sunken);color:var(--text-secondary);font-family:var(--font-mono);font-size:11.5px}
+.bub--sys b{font-weight:600;color:var(--text-primary)}
+.bub--ai{border:1px solid var(--border-subtle);background:var(--bg-surface);color:var(--text-secondary)}
+.bub--ai b{color:var(--text-primary);font-weight:600}
+.bub__who{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.bub__who .av{width:18px;height:18px;border-radius:var(--r-sm);background:var(--ai);color:#fff;
+  display:grid;place-items:center;font-size:9px;font-weight:700;font-family:var(--font-display)}
+.bub__who .nm{font-size:11.5px;font-weight:600;color:var(--text-secondary)}
+.bub__who .ts{font-size:10.5px;color:var(--text-disabled);font-family:var(--font-mono);margin-left:auto}
+.cp-quick{display:flex;flex-direction:column;gap:6px}
+.cp-quick .hd{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--brand)}
+.cp-quick .grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.cp-quick .grid button{
+  text-align:left;padding:7px 9px;border:1px solid var(--border-subtle);border-radius:var(--r-md);
+  background:var(--bg-surface);font-size:11.5px;font-weight:500;color:var(--text-secondary);
+  display:flex;align-items:center;gap:7px;transition:.12s;
+}
+.cp-quick .grid button:hover{background:var(--bg-hover);border-color:var(--border-default);color:var(--text-primary)}
+.cp-quick .grid button .n{font-size:9.5px;font-weight:700;color:var(--text-disabled);font-family:var(--font-mono)}
+.cp-quick .grid button[aria-pressed="true"]{background:var(--brand-subtle);border-color:color-mix(in oklab,var(--brand) 26%,transparent);color:var(--brand)}
+.cp-foot{flex:0 0 auto;border-top:1px solid var(--border-subtle);padding:9px 10px;display:flex;flex-direction:column;gap:7px}
+.cp-cost{font-size:10.5px;color:var(--text-tertiary);display:flex;align-items:center;gap:6px}
+.cp-cost b{font-family:var(--font-mono);font-weight:600;color:var(--text-secondary)}
+.cp-input{display:flex;align-items:center;gap:8px}
+.cp-input .box{
+  flex:1 1 auto;height:38px;display:flex;align-items:center;padding:0 11px;
+  background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);transition:.12s;
+}
+.cp-input .box:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-subtle)}
+.cp-input input{border:0;outline:0;background:none;width:100%;font-size:12.5px}
+.cp-input input::placeholder{color:var(--text-disabled)}
+.cp-input .send{width:38px;height:38px;border-radius:var(--r-md);background:var(--brand);color:#fff;
+  display:grid;place-items:center;transition:.12s;flex:0 0 auto}
+.cp-input .send:hover{background:var(--brand-hover)}
+.cp-layers{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.3px;
+  text-transform:uppercase;color:var(--text-tertiary)}
+.cp-layers .sp{flex:1 1 auto}
+
+.desk-guard{display:none}
+@media (max-width:1279px){
+  .desk-guard{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    background:var(--bg-app);padding:32px;text-align:center;
+  }
+  .desk-guard__in{max-width:420px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .desk-guard h2{margin:0;font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.2px}
+  .desk-guard p{margin:0;font-size:12.5px;color:var(--text-tertiary);line-height:1.6}
+}
+
+.page{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.page__hd{flex:0 0 auto;padding:13px 18px 11px;background:var(--bg-surface);border-bottom:1px solid var(--border-subtle)}
+.crumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-tertiary);margin-bottom:6px}
+.crumb a{color:var(--text-tertiary);text-decoration:none}.crumb a:hover{color:var(--brand)}
+.page__hd h1{margin:0;font-family:var(--font-display);font-size:23px;font-weight:700;letter-spacing:-.3px;line-height:1.2}
+.page__hd .sub{margin:4px 0 0;font-size:12.5px;color:var(--text-tertiary);max-width:840px;line-height:1.5}
+.bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 18px;border-bottom:1px solid var(--border-subtle);background:var(--bg-panel);flex-wrap:wrap}
+.bar__lbl{font-size:10.5px;font-weight:500;letter-spacing:.4px;text-transform:uppercase;color:var(--text-tertiary)}
+.symin{display:flex;align-items:center;height:29px;padding:0 10px;gap:7px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);transition:.12s}
+.symin:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-subtle)}
+.symin input{border:0;outline:0;background:none;width:78px;font-family:var(--font-mono);font-size:12.5px;font-weight:600;text-transform:uppercase}
+.live{display:inline-flex;align-items:center;gap:5px;height:19px;padding:0 7px;border-radius:10px;background:color-mix(in oklab,var(--long) 14%,transparent);color:oklch(44% .09 175);font-size:9.5px;font-weight:700;letter-spacing:.4px}
+.live .d{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.bar__note{font-size:11.5px;color:var(--text-tertiary)}.bar__note b{font-family:var(--font-mono);font-weight:600;color:var(--text-secondary)}
+.bar .sp{flex:1 1 auto}
+.sel{height:29px;padding:0 26px 0 9px;border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-surface);
+  font-size:11.5px;font-weight:500;color:var(--text-secondary);appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 16 16' fill='%236b7480'><path d='M3.5 6h9L8 11.5Z'/></svg>");
+  background-repeat:no-repeat;background-position:right 8px center}
+.sel:hover{border-color:var(--border-strong);color:var(--text-primary)}
+.body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:13px 18px 20px;background:var(--bg-app)}
+.sbtn{height:29px;padding:0 11px;border:1px solid var(--border-default);border-radius:var(--r-md);background:var(--bg-surface);
+  font-size:11.5px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;transition:.12s}
+.sbtn:hover{border-color:var(--border-strong);color:var(--text-primary);background:var(--bg-hover)}
+.sbtn--brand{background:var(--brand);border-color:var(--brand);color:#fff}
+.sbtn--brand:hover{background:var(--brand-hover);border-color:var(--brand-hover);color:#fff}
+.sbtn--sm{height:25px;padding:0 9px;font-size:11px}
+.sbtn--ghost{background:transparent;border-color:transparent;color:var(--text-tertiary)}
+.sbtn--ghost:hover{background:var(--bg-hover);color:var(--text-primary);border-color:transparent}
+.card{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden}
+.card__hd{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--border-subtle)}
+.card__hd h2{margin:0;font-family:var(--font-display);font-size:13.5px;font-weight:600;letter-spacing:-.1px}
+.card__hd .sp{flex:1 1 auto}
+.card__bd{padding:12px 13px 13px;display:flex;flex-direction:column;gap:10px}
+.mut{color:var(--text-tertiary);font-weight:400}
+.spk{display:block;width:100%;height:24px}
+
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(316px,1fr));gap:11px;align-content:start}
+.scard{display:flex;flex-direction:column;gap:8px;padding:12px;background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);transition:border-color .14s,box-shadow .14s,transform .14s}
+.scard:hover{border-color:var(--border-default);box-shadow:var(--shadow-2);transform:translateY(-1px)}
+.scard__hd{display:flex;align-items:flex-start;gap:8px}
+.scard__hd h3{margin:0;font-family:var(--font-display);font-size:13.5px;font-weight:600;letter-spacing:-.1px;line-height:1.3;flex:1 1 auto}
+.dir{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 7px;border-radius:10px;font-family:var(--font-mono);font-size:9.5px;font-weight:700;letter-spacing:.3px;white-space:nowrap;flex:0 0 auto}
+.dir--long{background:color-mix(in oklab,var(--long) 15%,transparent);color:oklch(42% .09 175)}
+.dir--short{background:color-mix(in oklab,var(--short) 14%,transparent);color:var(--short)}
+.dir .tri{width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent}
+.dir--long .tri{border-bottom:6px solid currentColor}.dir--short .tri{border-top:6px solid currentColor}
+.scard__desc{margin:0;font-size:11.5px;line-height:1.5;color:var(--text-secondary)}
+.cond{display:block;padding:6px 8px;border-radius:var(--r-md);background:var(--bg-sunken);border:1px solid var(--border-subtle);font-family:var(--font-mono);font-size:10px;line-height:1.5;color:var(--text-secondary);overflow-wrap:anywhere}
+.mstrip{display:flex;flex-direction:column;gap:5px;padding:7px 8px;border-radius:var(--r-md);border:1px solid var(--border-subtle);background:var(--bg-panel)}
+.mstrip__nums{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mcell .k{font-size:9px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--text-disabled)}
+.mcell .v{font-family:var(--font-mono);font-size:11.5px;font-weight:600}
+.scard__ft{display:flex;gap:5px;margin-top:auto;padding-top:1px}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="brand">
+    <svg width="46" height="22" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/>
+        <path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <circle cx="4.4" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <circle cx="25.6" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <span class="brand__word">ChartControl AI</span>
+  </div>
+
+  <div class="seg" role="group" aria-label="Account mode">
+    <button type="button" aria-pressed="false">Spot</button>
+    <button type="button" aria-pressed="true">Futures</button>
+    <button type="button" aria-pressed="false">Paper</button>
+  </div>
+
+  <div class="seg" role="group" aria-label="Exchange">
+    <button type="button" aria-pressed="true">KuCoin</button>
+    <button type="button" aria-pressed="false">Bybit</button>
+    <button type="button" aria-pressed="false">Bitget</button>
+  </div>
+
+  <nav class="hdr__links" aria-label="Community">
+    <a href="#/help"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.2 2.5h9.6a1.2 1.2 0 0 1 1.2 1.2v6.6a1.2 1.2 0 0 1-1.2 1.2H7.6L4.4 14v-2.5H3.2A1.2 1.2 0 0 1 2 10.3V3.7a1.2 1.2 0 0 1 1.2-1.2Z"/></svg>YouTube</a>
+    <a href="#/help"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M14 2.6 12.1 13c-.1.6-.5.8-1 .5l-2.8-2-1.4 1.3c-.2.2-.3.3-.6.3l.2-2.8 5.1-4.6c.2-.2 0-.3-.3-.1L5.3 9.4 2.5 8.5c-.6-.2-.6-.6.1-.9l10.6-4.1c.5-.2.9.1.8 1.1Z"/></svg>Telegram</a>
+    <a href="#/points"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.7 5.6l4.7.3-3.6 3 1.1 4.6L8 11.2 4.1 13.5l1.1-4.6-3.6-3 4.7-.3Z"/></svg>KuCoin campaign</a>
+    <a href="#/referral"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.6a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 7.6c3 0 5.4 1.7 5.4 3.8v1.4H2.6V13c0-2.1 2.4-3.8 5.4-3.8Z"/></svg>Join KuCoin</a>
+  </nav>
+
+  <div class="hdr__spacer"></div>
+
+  <div class="hdr__tools">
+    <button class="iconbtn" type="button" aria-label="Notifications"><span class="dot"></span>
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 6.5a4 4 0 1 1 8 0v3l1 1.6H3l1-1.6v-3Z"/><path d="M6.4 12.6a1.7 1.7 0 0 0 3.2 0"/></svg></button>
+    <button class="iconbtn" type="button" id="themeBtn" aria-label="Toggle theme" aria-pressed="false">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="3.1"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M13 3l-1.1 1.1M4.1 11.9 3 13"/></svg></button>
+    <button class="iconbtn" type="button" id="fsBtn" aria-label="Toggle fullscreen">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></button>
+    <button class="langbtn" type="button">EN
+      <svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.5 6h9L8 11.5Z"/></svg></button>
+    <button class="avatar" type="button" aria-label="Signed in as super_1791709600000@example.com — click to sign out">SU</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="page__hd">
+    <nav class="crumb"><a href="#/trade">Home</a><span class="sep">/</span><span>Strategy library</span></nav>
+    <h1>Strategy library</h1>
+    <p class="sub">Ready-made rules — backtest any coin, show the signals on your chart, or start from them. Every card is scored on the same 500-candle sample so you can compare before you open one.</p>
+  </div>
+  <div class="bar">
+    <span class="bar__lbl">Symbol</span>
+    <span class="symin"><input value="BTCUSDT" aria-label="Symbol"><span class="live"><span class="d"></span>LIVE</span></span>
+    <div class="seg" role="group" aria-label="Direction" id="dirseg" style="padding:2px">
+      <button type="button" aria-pressed="true">All</button>
+      <button type="button" aria-pressed="false"><span style="color:var(--long);font-size:9px">▲</span> Long</button>
+      <button type="button" aria-pressed="false"><span style="color:var(--short);font-size:9px">▼</span> Short</button>
+    </div>
+    <div class="seg" role="group" aria-label="Timeframe" id="tfseg" style="padding:2px">
+      <button type="button" aria-pressed="true">Any</button>
+      <button type="button" aria-pressed="false">15m</button>
+      <button type="button" aria-pressed="false">1h</button>
+      <button type="button" aria-pressed="false">4h</button>
+    </div>
+    <span class="sp"></span>
+    <span class="bar__lbl">Sort</span>
+    <select class="sel" id="sortsel" aria-label="Sort strategies">
+      <option value="net">Best net return</option>
+      <option value="mdd">Lowest drawdown</option>
+      <option value="pf">Best profit factor</option>
+      <option value="sharpe">Best Sharpe</option>
+      <option value="trades">Most trades</option>
+    </select>
+    <span class="bar__note" id="cnt">15 rules</span>
+  </div>
+  <div class="body">
+    <p class="bar__note" style="margin:0 0 10px;display:flex;gap:7px;align-items:flex-start;line-height:1.5">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="flex:0 0 auto;margin-top:2px" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 5.2v.1M8 7.6v3.2"/></svg>
+      <span>Sample run on one 500-candle series, fees 0.06% per side. Rule families are approximated for comparison — open a card and backtest it on real data before you start it.</span>
+    </p>
+    <div class="grid3" id="grid"><article class="scard" data-dir="long" data-tf="1h" data-i="0">
+  <div class="scard__hd"><h3>Uptrend pullback</h3><span class="dir dir--long"><span class="tri"></span>LONG · 1h</span></div>
+  <p class="scard__desc">EMA20 above EMA50 and RSI turns back up through 40 — buys the dip inside a rising trend.</p>
+  <code class="cond">EMA(close,20) &gt; EMA(close,50) AND CROSS_ABOVE(RSI(close,14), 40)</code>
+  <div class="mstrip" data-m="0"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="1h" data-i="1">
+  <div class="scard__hd"><h3>Downtrend rally short</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 1h</span></div>
+  <p class="scard__desc">EMA20 below EMA50 and RSI turns back down through 60 — sells the bounce inside a falling trend.</p>
+  <code class="cond">EMA(close,20) &lt; EMA(close,50) AND CROSS_BELOW(RSI(close,14), 60)</code>
+  <div class="mstrip" data-m="1"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="1h" data-i="2">
+  <div class="scard__hd"><h3>20-bar breakout</h3><span class="dir dir--long"><span class="tri"></span>LONG · 1h</span></div>
+  <p class="scard__desc">Close breaks the 20-candle high with 1.5× normal volume.</p>
+  <code class="cond">CROSS_ABOVE(close, REF(HHV(high,20),1)) AND volume &gt; SMA(volume,20) * 1.5</code>
+  <div class="mstrip" data-m="2"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="1h" data-i="3">
+  <div class="scard__hd"><h3>20-bar breakdown</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 1h</span></div>
+  <p class="scard__desc">Close breaks the 20-candle low with 1.5× normal volume.</p>
+  <code class="cond">CROSS_BELOW(close, REF(LLV(low,20),1)) AND volume &gt; SMA(volume,20) * 1.5</code>
+  <div class="mstrip" data-m="3"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="4h" data-i="4">
+  <div class="scard__hd"><h3>Golden cross</h3><span class="dir dir--long"><span class="tri"></span>LONG · 4h</span></div>
+  <p class="scard__desc">EMA20 crosses above EMA50 on 4h; exits on the opposite cross.</p>
+  <code class="cond">CROSS_ABOVE(EMA(close,20), EMA(close,50)) → exit: CROSS_BELOW(EMA(close,20), EMA(close,50))</code>
+  <div class="mstrip" data-m="4"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="4h" data-i="5">
+  <div class="scard__hd"><h3>Death cross</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 4h</span></div>
+  <p class="scard__desc">EMA20 crosses below EMA50 on 4h; exits on the opposite cross.</p>
+  <code class="cond">CROSS_BELOW(EMA(close,20), EMA(close,50)) → exit: CROSS_ABOVE(EMA(close,20), EMA(close,50))</code>
+  <div class="mstrip" data-m="5"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="1h" data-i="6">
+  <div class="scard__hd"><h3>RSI oversold bounce</h3><span class="dir dir--long"><span class="tri"></span>LONG · 1h</span></div>
+  <p class="scard__desc">RSI(14) climbs back above 30.</p>
+  <code class="cond">CROSS_ABOVE(RSI(close,14), 30)</code>
+  <div class="mstrip" data-m="6"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="1h" data-i="7">
+  <div class="scard__hd"><h3>RSI overbought fade</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 1h</span></div>
+  <p class="scard__desc">RSI(14) falls back below 70.</p>
+  <code class="cond">CROSS_BELOW(RSI(close,14), 70)</code>
+  <div class="mstrip" data-m="7"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="1h" data-i="8">
+  <div class="scard__hd"><h3>MACD cross with trend</h3><span class="dir dir--long"><span class="tri"></span>LONG · 1h</span></div>
+  <p class="scard__desc">MACD line crosses above signal while price is above EMA50.</p>
+  <code class="cond">CROSS_ABOVE(MAC_DIF(12,26), MAC_DEA(12,26,9)) AND close &gt; EMA(close,50)</code>
+  <div class="mstrip" data-m="8"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="1h" data-i="9">
+  <div class="scard__hd"><h3>MACD cross down with trend</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 1h</span></div>
+  <p class="scard__desc">MACD line crosses below signal while price is below EMA50.</p>
+  <code class="cond">CROSS_BELOW(MAC_DIF(12,26), MAC_DEA(12,26,9)) AND close &lt; EMA(close,50)</code>
+  <div class="mstrip" data-m="9"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="15m" data-i="10">
+  <div class="scard__hd"><h3>Bollinger lower-band rebound</h3><span class="dir dir--long"><span class="tri"></span>LONG · 15m</span></div>
+  <p class="scard__desc">Price closes back above the lower Bollinger band (20, 2σ) on 15m.</p>
+  <code class="cond">CROSS_ABOVE(close, SMA(close,20) - STDDEV(close,20) * 2)</code>
+  <div class="mstrip" data-m="10"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="15m" data-i="11">
+  <div class="scard__hd"><h3>Bollinger upper-band fade</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 15m</span></div>
+  <p class="scard__desc">Price closes back below the upper Bollinger band (20, 2σ) on 15m.</p>
+  <code class="cond">CROSS_BELOW(close, SMA(close,20) + STDDEV(close,20) * 2)</code>
+  <div class="mstrip" data-m="11"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="15m" data-i="12">
+  <div class="scard__hd"><h3>Volume spike momentum</h3><span class="dir dir--long"><span class="tri"></span>LONG · 15m</span></div>
+  <p class="scard__desc">Volume prints 2× its 20-bar average while price closes above EMA20.</p>
+  <code class="cond">volume &gt; SMA(volume,20) * 2 AND close &gt; EMA(close,20)</code>
+  <div class="mstrip" data-m="12"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="long" data-tf="1h" data-i="13">
+  <div class="scard__hd"><h3>RSI bullish divergence</h3><span class="dir dir--long"><span class="tri"></span>LONG · 1h</span></div>
+  <p class="scard__desc">Price makes a lower low while RSI makes a higher low — momentum turning up.</p>
+  <code class="cond">LOW(0) &lt; REF(LLV(low,10),1) AND RSI(close,14) &gt; REF(RSI(close,14),5)</code>
+  <div class="mstrip" data-m="13"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article><article class="scard" data-dir="short" data-tf="1h" data-i="14">
+  <div class="scard__hd"><h3>RSI bearish divergence</h3><span class="dir dir--short"><span class="tri"></span>SHORT · 1h</span></div>
+  <p class="scard__desc">Price makes a higher high while RSI makes a lower high — momentum turning down.</p>
+  <code class="cond">HIGH(0) &gt; REF(HHV(high,10),1) AND RSI(close,14) &lt; REF(RSI(close,14),5)</code>
+  <div class="mstrip" data-m="14"></div>
+  <div class="scard__ft">
+    <button class="sbtn" type="button">Backtest</button>
+    <button class="sbtn" type="button">Show on chart</button>
+    <button class="sbtn sbtn--brand" type="button">Auto-trade this</button>
+  </div>
+</article></div>
+  </div>
+</main>
+<button class="fab" type="button" id="fab" aria-expanded="false" aria-controls="copilot" aria-label="Open AI copilot">
+  <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+</button>
+<!-- ============================ AI COPILOT ============================ -->
+
+
+<aside class="copilot" id="copilot" data-open="false" role="dialog" aria-label="AI copilot" aria-modal="false">
+  <div class="copilot__hd">
+    <svg width="30" height="15" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/><path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <circle cx="4.4" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <circle cx="25.6" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <span class="ttl">ChartControl AI</span>
+    <span class="sp"></span>
+    <button class="iconbtn" type="button" aria-label="Clear conversation">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3.4 3.4h9.2l-.9 9.2H4.3Z"/><path d="M6.2 3.4V2h3.6v1.4"/></svg></button>
+    <button class="iconbtn" type="button" id="cpClose" aria-label="Close copilot">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button>
+  </div>
+
+  <div class="copilot__tabs" role="group" aria-label="Copilot mode" id="cpTabs">
+    <button type="button" aria-pressed="true">AI Chart Analysis</button>
+    <button type="button" aria-pressed="false">My AI Strategies</button>
+    <button type="button" aria-pressed="false">Position Review</button>
+    <button type="button" aria-pressed="false">Market Scanner</button>
+  </div>
+
+  <div class="copilot__bd scroll">
+    <div class="cp-status">
+      <span class="cp-chip cp-chip--beta">BETA</span>
+      <span class="cp-chip" style="background:color-mix(in oklab,var(--long) 14%,transparent);color:oklch(44% .09 175);border-color:transparent">
+        <span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>MODEL CONNECTED</span>
+    </div>
+    <div class="cp-tools">
+      <span class="t"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3.6h10v8.8H3z"/><path d="M5.4 8h5.2"/></svg>Saved 0</span>
+      <span class="t"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 4.6V8l2.4 1.6"/></svg>History</span>
+      <span class="t">Indicators MA · VOL</span>
+      <span class="t disc">Analysis tool — not financial advice</span>
+    </div>
+
+    <div class="bub bub--sys">Copilot ready. Symbol: <b>BTC/USDT</b> · TF: <b>15m</b> · Last: <b>64,294.0</b> · Data as of 18:04:11. Ask for trend lines, S/R, entry/SL/TP, R/R.</div>
+
+    <div class="bub bub--ai">
+      <div class="bub__who">
+        <span class="av">AI</span><span class="nm">Analyst</span><span class="ts">18:04:11</span>
+      </div>
+      Retracement inside an uptrend. Price is holding above the 24h low and the 20-EMA has turned up on the 15m. I marked <b>entry 64,294.0</b>, <b>invalidation 63,180.0</b> and <b>target 65,980.0</b> — R/R <b>1.51</b>. What would prove it wrong: a 15m close below 63,180.0.
+      <div class="bub__who" style="margin:9px 0 0"><span class="ts" style="margin-left:0">Drawn on chart — 3 levels, 1 zone</span></div>
+    </div>
+
+    <div class="cp-quick">
+      <span class="hd">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M9.4 1.4 3.2 9h3.6l-.8 5.6L12.8 7H9.2Z"/></svg>Quick actions</span>
+      <div class="grid">
+        <button type="button"><span class="n">01</span>Analyze this chart</button>
+        <button type="button"><span class="n">02</span>Entry scenario</button>
+        <button type="button"><span class="n">03</span>Find support / resistance</button>
+        <button type="button"><span class="n">04</span>Draw ascending trendline</button>
+        <button type="button" style="grid-column:1/-1"><span class="n">05</span>R/R calculator</button>
+      </div>
+    </div>
+
+    <div class="bub bub--ai" style="background:var(--bg-sunken);border-color:var(--border-subtle)">
+      <b style="display:block;margin-bottom:3px">AI Chart Analysis</b>
+      Reads the BTC/USDT 15m chart for you — trend, key levels and momentum — and explains it in plain words. Ask anything about this chart, or pick a question below.
+      <b style="display:block;margin:7px 0 3px">You get</b>
+      levels and an entry · stop · target scenario drawn on your chart, plus the reasons and what would prove it wrong.
+    </div>
+  </div>
+
+  <div class="cp-foot">
+    <div class="cp-cost">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="5.8"/><path d="M8 4.6V8l2.4 1.6"/></svg>
+      Choosing a feature is free. Points are used only when you send a question — <b>300</b> per question, half if nothing is drawn.
+    </div>
+    <div class="cp-input">
+      <span class="box"><input placeholder="Enter a command… (e.g. draw trendline / draft my setup / find S/R)" aria-label="Message the copilot"></span>
+      <button class="send" type="button" aria-label="Send">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.6 8 14.4 2.4 9.2 14.4 7.6 9.4Z"/></svg></button>
+    </div>
+    <div class="cp-layers">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2 14.4 5.4 8 8.8 1.6 5.4Z"/><path d="M1.6 8.6 8 12l6.4-3.4"/></svg>
+      My analysis layers
+      <span class="sp"></span>
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 6h8L8 11Z"/></svg>
+    </div>
+  </div>
+</aside>
+
+<footer class="foot">
+  <span>© 2026 ChartControl AI · Crypto trading involves substantial risk. Not investment advice.</span>
+  <span class="sp"></span>
+  <span class="mode"><span class="d"></span>Live market data</span>
+  <span>·</span>
+  <span class="mode paper"><span class="d"></span>Orders: paper</span>
+  <span>·</span>
+  <a href="#/company">Business information</a>
+  <span>·</span>
+  <a href="#/terms">Terms</a>
+  <a href="#/privacy">Privacy</a>
+  <a href="#/refund">Refund policy</a>
+</footer>
+
+<div class="desk-guard">
+  <div class="desk-guard__in">
+    <svg width="46" height="22" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/><path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <h2>Please use a desktop computer</h2>
+    <p>The trading workspace needs at least 1280px of width. Open this page on a desktop browser to place and review orders.</p>
+  </div>
+</div>
+
+
+<script>
+(function(){'use strict';
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
+$$('.seg button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.parentNode; $$('button',p).forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.chip').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.parentNode; $$('button',p).forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.btab').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('.btab').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.watch__row').forEach(function(r){
+  r.addEventListener('click',function(){
+    $$('.watch__row').forEach(function(x){x.setAttribute('aria-selected','false');});
+    r.setAttribute('aria-selected','true');
+  });
+});
+$$('.rail button').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(b.getAttribute('aria-label')==='Collapse sidebar') return;
+    $$('.rail button').forEach(function(x){if(x.getAttribute('aria-label')!=='Collapse sidebar')x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.drawrail button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('.drawrail button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('#oeType button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('#oeType button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('#cpTabs button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('#cpTabs button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.cp-quick .grid button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var on=b.getAttribute('aria-pressed')==='true';
+    $$('.cp-quick .grid button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed',on?'false':'true');
+  });
+});
+
+var fab=$('#fab'), cp=$('#copilot');
+function setCp(open){
+  cp.setAttribute('data-open',open?'true':'false');
+  fab.setAttribute('aria-expanded',open?'true':'false');
+}
+fab.addEventListener('click',function(){setCp(cp.getAttribute('data-open')!=='true');});
+$('#cpClose').addEventListener('click',function(){setCp(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')setCp(false);});
+
+/* theme toggle — the product ships both themes */
+var tb=$('#themeBtn');
+tb.addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',next);
+  tb.setAttribute('aria-pressed',next==='dark'?'true':'false');
+  applyTheme(next); draw();
+});
+var DARK={ '--bg-app':'oklch(14% .012 240)','--bg-surface':'oklch(17% .013 240)','--bg-panel':'oklch(20% .014 240)',
+  '--bg-elevated':'oklch(24% .014 240)','--bg-hover':'oklch(28% .014 240 / .6)','--bg-active':'oklch(32% .016 240 / .7)',
+  '--bg-input':'oklch(17% .013 240)','--bg-sunken':'oklch(19% .013 240)',
+  '--text-primary':'oklch(97% .002 240)','--text-secondary':'oklch(78% .005 240)','--text-tertiary':'oklch(66% .008 240)',
+  '--text-disabled':'oklch(38% .012 240)',
+  '--border-subtle':'oklch(28% .014 240 / .6)','--border-default':'oklch(38% .014 240 / .7)','--border-strong':'oklch(48% .014 240 / .9)',
+  '--brand':'oklch(69% .3048 328.33)','--brand-hover':'oklch(71% .260 328.33)','--brand-subtle':'oklch(67.25% .3048 328.33 / .14)',
+  '--long':'oklch(72% .14 175)','--long-600':'oklch(64% .15 175)','--short':'oklch(68% .22 355)',
+  '--ai':'oklch(72% .15 285)','--on-trade':'oklch(18% .02 220)',
+  '--chart-grid':'oklch(28% .014 240 / .5)','--chart-axis':'oklch(66% .008 240)','--chart-crosshair':'oklch(78% .005 240 / .45)',
+  '--chart-up':'oklch(72% .14 175)','--chart-dn':'oklch(68% .22 355)',
+  '--chart-ma1':'oklch(78% .14 75)','--chart-ma2':'oklch(76% .13 285)','--chart-ma3':'oklch(74% .11 230)',
+  '--chart-vol-up':'oklch(72% .14 175 / .5)','--chart-vol-dn':'oklch(68% .22 355 / .5)',
+  '--shadow-1':'0 1px 2px rgba(0,0,0,.4)','--shadow-2':'0 4px 12px rgba(0,0,0,.45)','--shadow-3':'0 12px 32px rgba(0,0,0,.55)'};
+var LIGHT={};
+function applyTheme(mode){
+  var r=document.documentElement, set=mode==='dark'?DARK:LIGHT;
+  if(mode==='light'){Object.keys(DARK).forEach(function(k){r.style.removeProperty(k);});return;}
+  Object.keys(set).forEach(function(k){r.style.setProperty(k,set[k]);});
+}
+
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+var N=500, KEYS=[[0,62800],[60,64200],[140,61500],[220,66000],[300,63200],[380,64800],[440,62100],[499,64294]];
+var PX=(function(){var r=mulberry(20261011),a=[],v=0;
+  for(var i=0;i<N;i++){var kk=KEYS[KEYS.length-1][1];
+    for(var j=0;j<KEYS.length-1;j++){if(i>=KEYS[j][0]&&i<=KEYS[j+1][0]){var u=(i-KEYS[j][0])/(KEYS[j+1][0]-KEYS[j][0]);u=u*u*(3-2*u);kk=KEYS[j][1]+(KEYS[j+1][1]-KEYS[j][1])*u;}}
+    v=(i===0)?kk:v*0.72+kk*0.28+(r()-0.5)*260; a.push(v);} return a;})();
+function SMA(a,p){var o=[],s=0;for(var i=0;i<a.length;i++){s+=a[i];if(i>=p)s-=a[i-p];o.push(i>=p-1?s/p:null);}return o;}
+function EMA(a,p){var k=2/(p+1),o=[],e=null;for(var i=0;i<a.length;i++){e=(e==null)?a[i]:a[i]*k+e*(1-k);o.push(e);}return o;}
+function RSI(a,p){var o=new Array(a.length).fill(null),g=0,l=0;
+  for(var i=1;i<a.length;i++){var d=a[i]-a[i-1],up=Math.max(d,0),dn=Math.max(-d,0);
+    if(i<=p){g+=up/p;l+=dn/p;if(i===p)o[i]=l?100-100/(1+g/l):100;}
+    else{g=(g*(p-1)+up)/p;l=(l*(p-1)+dn)/p;o[i]=l?100-100/(1+g/l):100;}}return o;}
+function SD(a,p){var o=[];for(var i=0;i<a.length;i++){if(i<p-1){o.push(null);continue;}
+  var s=0;for(var j=i-p+1;j<=i;j++)s+=a[j];var m=s/p,sd=0;for(var j2=i-p+1;j2<=i;j2++)sd+=(a[j2]-m)*(a[j2]-m);o.push(Math.sqrt(sd/p));}return o;}
+var E20=EMA(PX,20),E50=EMA(PX,50),R14=RSI(PX,14),S20=SMA(PX,20),D20=SD(PX,20),V20=SMA(PX.map(function(x,i){return Math.abs(x-PX[Math.max(0,i-1)])*7+120;}),20);
+var MACD=(function(){var a=EMA(PX,12),b=EMA(PX,26),d=a.map(function(v,i){return v-b[i];});return {d:d,s:EMA(d,9)};})();
+function HH(a,p,i){var m=-1e9;for(var j=Math.max(0,i-p+1);j<=i;j++)m=Math.max(m,a[j]);return m;}
+function LL(a,p,i){var m=1e9;for(var j=Math.max(0,i-p+1);j<=i;j++)m=Math.min(m,a[j]);return m;}
+function crossUp(a,i,lv){return a[i-1]!=null&&a[i]!=null&&a[i-1]<=lv&&a[i]>lv;}
+function crossDn(a,i,lv){return a[i-1]!=null&&a[i]!=null&&a[i-1]>=lv&&a[i]<lv;}
+var RULES={
+  rsi40up:function(i){return crossUp(R14,i,40)&&E20[i]>E50[i];},
+  rsi60dn:function(i){return crossDn(R14,i,60)&&E20[i]<E50[i];},
+  brkUp:function(i){return PX[i]>HH(PX,20,i-1);},
+  brkDn:function(i){return PX[i]<LL(PX,20,i-1);},
+  emaUp:function(i){return E20[i-1]<=E50[i-1]&&E20[i]>E50[i];},
+  emaDn:function(i){return E20[i-1]>=E50[i-1]&&E20[i]<E50[i];},
+  rsi30up:function(i){return crossUp(R14,i,30);},
+  rsi70dn:function(i){return crossDn(R14,i,70);},
+  macdUp:function(i){return MACD.d[i-1]<=MACD.s[i-1]&&MACD.d[i]>MACD.s[i]&&PX[i]>E50[i];},
+  macdDn:function(i){return MACD.d[i-1]>=MACD.s[i-1]&&MACD.d[i]<MACD.s[i]&&PX[i]<E50[i];},
+  bbUp:function(i){return S20[i-1]!=null&&PX[i-1]<S20[i-1]-2*D20[i-1]&&PX[i]>S20[i]-2*D20[i];},
+  bbDn:function(i){return S20[i-1]!=null&&PX[i-1]>S20[i-1]+2*D20[i-1]&&PX[i]<S20[i]+2*D20[i];},
+  volUp:function(i){return V20[i]&&Math.abs(PX[i]-PX[i-1])>V20[i]*0.9&&PX[i]>E20[i];},
+  divUp:function(i){return PX[i]<LL(PX,10,i-1)&&R14[i]>R14[i-5];},
+  divDn:function(i){return PX[i]>HH(PX,10,i-1)&&R14[i]<R14[i-5];}
+};
+/* Honest backtest: mark-to-market equity, realised trades for the ratios. */
+function runBT(key,dir,stopPct,rw){
+  var stop=stopPct/100, tp=stop*rw, eq=100, pos=null, closed=0, wins=0, losses=0, gp=0, gl=0, fees=0;
+  var curve=[], peak=100, mdd=0, rs=[], rule=RULES[key];
+  for(var i=21;i<N;i++){
+    var ch=null;
+    if(pos){
+      ch=(dir>0)?PX[i]/pos.p-1:pos.p/PX[i]-1;
+      if(ch<=-stop||ch>=tp){
+        var rr=(ch<=-stop)?-stop:tp, pnl=eq*rr;
+        eq+=pnl; closed++; fees+=eq*0.0006*2;
+        if(pnl>0){wins++;gp+=pnl;} else {losses++;gl+=Math.abs(pnl);}
+        rs.push(rr); pos=null; ch=null;
+      }
+    } else if(rule&&rule(i-1)){ pos={p:PX[i]}; }
+    var mtm=eq*(1+(pos?((dir>0)?PX[i]/pos.p-1:pos.p/PX[i]-1):0));
+    curve.push(mtm);
+    if(mtm>peak)peak=mtm; var dd=(peak-mtm)/peak; if(dd>mdd)mdd=dd;
+  }
+  var net=curve.length?curve[curve.length-1]/100-1:0;
+  var mean=0; for(var k=0;k<rs.length;k++)mean+=rs[k]; mean=rs.length?mean/rs.length:0;
+  var sd=0; for(var k2=0;k2<rs.length;k2++)sd+=(rs[k2]-mean)*(rs[k2]-mean); sd=rs.length>1?Math.sqrt(sd/(rs.length-1)):0;
+  return {net:net,mdd:mdd,closed:closed,wins:wins,losses:losses,wr:closed?wins/closed:0,
+    pf:gl?gp/gl:(gp>0?99:0),gp:gp,gl:gl,fees:fees,exp:closed?(net*100)/closed:0,
+    sharpe:sd?mean/sd:0,curve:curve,stop:stopPct,rw:rw,dir:dir};
+}
+function spark(curve,w,h,color){
+  if(!curve||curve.length<2)return '';
+  var lo=Math.min.apply(null,curve),hi=Math.max.apply(null,curve); if(hi-lo<0.01){hi+=0.5;lo-=0.5;}
+  var pts=curve.map(function(v,i){return (i/(curve.length-1)*w).toFixed(1)+','+(h-(v-lo)/(hi-lo)*(h-2)-1).toFixed(1);}).join(' ');
+  return '<svg class="spk" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true">'
+    +'<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="1.4" vector-effect="non-scaling-stroke"/></svg>';
+}
+function sg(v,d){d=d==null?2:d;return (v>=0?'+':'\u2212')+Math.abs(v).toFixed(d);}
+function fmtN(v,d){return v.toLocaleString('en-US',{minimumFractionDigits:d==null?2:d,maximumFractionDigits:d==null?2:d});}
+
+var S_DATA=[{"rule": "rsi40up", "dir": 1, "stop": 2, "rw": 2}, {"rule": "rsi60dn", "dir": -1, "stop": 2, "rw": 2}, {"rule": "brkUp", "dir": 1, "stop": 2, "rw": 2.5}, {"rule": "brkDn", "dir": -1, "stop": 2, "rw": 2.5}, {"rule": "emaUp", "dir": 1, "stop": 3, "rw": 2}, {"rule": "emaDn", "dir": -1, "stop": 3, "rw": 2}, {"rule": "rsi30up", "dir": 1, "stop": 1.5, "rw": 2}, {"rule": "rsi70dn", "dir": -1, "stop": 1.5, "rw": 2}, {"rule": "macdUp", "dir": 1, "stop": 2, "rw": 2}, {"rule": "macdDn", "dir": -1, "stop": 2, "rw": 2}, {"rule": "bbUp", "dir": 1, "stop": 1, "rw": 1.5}, {"rule": "bbDn", "dir": -1, "stop": 1, "rw": 1.5}, {"rule": "volUp", "dir": 1, "stop": 1.5, "rw": 2}, {"rule": "divUp", "dir": 1, "stop": 2, "rw": 3}, {"rule": "divDn", "dir": -1, "stop": 2, "rw": 3}];
+
+var M=S_DATA.map(function(s){var b=runBT(s.rule,s.dir,s.stop,s.rw);return b;});
+var grid=$('#grid'), cnt=$('#cnt');
+M.forEach(function(b,k){
+  var el=document.querySelector('.mstrip[data-m="'+k+'"]'); if(!el)return;
+  el.innerHTML='<div class="mstrip__nums">'
+   +'<div class="mcell"><div class="k">Net</div><div class="v '+(b.net>=0?'up':'dn')+'">'+sg(b.net*100)+'%</div></div>'
+   +'<div class="mcell"><div class="k">Max DD</div><div class="v">−'+(b.mdd*100).toFixed(1)+'%</div></div>'
+   +'<div class="mcell"><div class="k">PF</div><div class="v">'+(b.pf>50?'—':b.pf.toFixed(2))+'</div></div>'
+   +'<div class="mcell"><div class="k">Trades</div><div class="v">'+b.closed+'</div></div></div>'
+   +spark(b.curve,300,24,(b.net>=0?getComputedStyle(document.documentElement).getPropertyValue('--brand').trim():getComputedStyle(document.documentElement).getPropertyValue('--short').trim()));
+});
+var fdir='all', ftf='any', sortKey='net';
+var cards=$$('.scard',grid);
+function apply(){
+  var n=0;
+  cards.forEach(function(c){var k=+c.getAttribute('data-i');
+    var ok=(fdir==='all'||c.getAttribute('data-dir')===fdir)&&(ftf==='any'||c.getAttribute('data-tf')===ftf);
+    c.style.display=ok?'':'none'; if(ok)n++;});
+  cnt.textContent=n+(n===1?' rule':' rules');
+  var vis=cards.slice().sort(function(a,b){
+    var x=M[+a.getAttribute('data-i')], y=M[+b.getAttribute('data-i')];
+    if(sortKey==='mdd')return x.mdd-y.mdd;
+    if(sortKey==='pf')return y.pf-x.pf;
+    if(sortKey==='sharpe')return y.sharpe-x.sharpe;
+    if(sortKey==='trades')return y.closed-x.closed;
+    return y.net-x.net;});
+  vis.forEach(function(c){grid.appendChild(c);});
+}
+$$('#dirseg button').forEach(function(b){b.addEventListener('click',function(){
+  $$('#dirseg button').forEach(function(x){x.setAttribute('aria-pressed','false');});b.setAttribute('aria-pressed','true');
+  var tx=b.textContent.toLowerCase(); fdir=tx.indexOf('long')>-1?'long':(tx.indexOf('short')>-1?'short':'all'); apply();});});
+$$('#tfseg button').forEach(function(b){b.addEventListener('click',function(){
+  $$('#tfseg button').forEach(function(x){x.setAttribute('aria-pressed','false');});b.setAttribute('aria-pressed','true');
+  var tx=b.textContent.trim(); ftf=tx==='Any'?'any':tx; apply();});});
+$('#sortsel').addEventListener('change',function(){sortKey=this.value;apply();});
+apply();
+
+})();
+</script>
+</body>
+</html>

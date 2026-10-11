@@ -1,0 +1,327 @@
+<main class="page">
+  <div class="page__hd">
+    <div class="hdrow">
+      <div style="min-width:0">
+        <nav class="crumb"><a href="#/trade">Home</a><span class="sep">/</span><span id="mkCrumb">Markets</span></nav>
+        <h1 id="mkTitle">Markets</h1>
+        <p class="sub" id="mkSub">2 of 21 pairs live · Perpetual · USDT-margined · <span class="warn">19 not listed</span></p>
+      </div>
+      <span class="sp"></span>
+      <div class="hdacts">
+        <div class="viewseg" id="mkView" role="group" aria-label="View">
+          <button type="button" aria-pressed="true">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 4h11.2M2.4 8h11.2M2.4 12h11.2"/></svg>
+            Table</button>
+          <button type="button" aria-pressed="false">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.4" y="2.4" width="4.6" height="4.6"/><rect x="9" y="2.4" width="4.6" height="4.6"/><rect x="2.4" y="9" width="4.6" height="4.6"/><rect x="9" y="9" width="4.6" height="4.6"/></svg>
+            Heatmap</button>
+        </div>
+        <div class="dd" id="ddScreen">
+          <button class="dd__btn" type="button">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 4.2h11.2M4.6 8h6.8M6.8 11.8h2.4"/></svg>
+            Screens <span class="cur" id="ddCur">My live pairs</span>
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+          </button>
+          <div class="dd__pop">
+            <div class="dd__lbl">Saved screens</div>
+            <button class="dd__i js-screen" type="button" data-s="live">My live pairs <span class="k">2</span></button>
+            <button class="dd__i js-screen" type="button" data-s="gain">Gainers only <span class="k">1</span></button>
+            <button class="dd__i js-screen" type="button" data-s="fav">Favorites <span class="k">2</span></button>
+            <div class="dd__sep"></div>
+            <div class="dd__lbl">Popular screens</div>
+            <button class="dd__i js-screen" type="button" data-s="all">All markets <span class="k">16</span></button>
+            <button class="dd__i js-screen" type="button" data-s="dead">Not listed on the exchange <span class="k">14</span></button>
+            <div class="dd__sep"></div>
+            <button class="dd__i" type="button" id="mkSaveScreen">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3.4 2.6h9.2v10.8L8 10.4l-4.6 3z"/></svg>
+              Save screen</button>
+            <button class="dd__i" type="button" id="mkCopyScreen">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5.4" y="5.4" width="8.2" height="8.2" rx="1.4"/><path d="M10.6 5.4V3.8a1.4 1.4 0 0 0-1.4-1.4H3.8a1.4 1.4 0 0 0-1.4 1.4v5.4a1.4 1.4 0 0 0 1.4 1.4h1.6"/></svg>
+              Make a copy</button>
+            <button class="dd__i" type="button" id="mkExport">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2.6v7.4M5 7.2 8 10.2l3-3M3 13h10"/></svg>
+              Export screen results (CSV)</button>
+            <div class="dd__sep"></div>
+            <button class="dd__i" type="button" id="mkAuto" aria-pressed="false">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2.6v2M8 11.4v2M2.6 8h2M11.4 8h2"/><circle cx="8" cy="8" r="2.4"/></svg>
+              Autosave <span class="k" id="mkAutoK">off</span></button>
+          </div>
+        </div>
+        <button class="sbtn" type="button" id="mkFilters">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 4.2h11.2M4.6 8h6.8M6.8 11.8h2.4"/></svg>
+          Filters <span id="mkFilterN" class="mono" style="font-size:10px">0</span></button>
+        <button class="sbtn" type="button" id="mkUndo" title="Undo" aria-label="Undo">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 7.4h6.4a3.3 3.3 0 1 1 0 6.6H6"/><path d="M5.6 4.6 2.8 7.4l2.8 2.8"/></svg></button>
+        <button class="sbtn" type="button" id="mkRedo" title="Redo" aria-label="Redo">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M13 7.4H6.6a3.3 3.3 0 1 0 0 6.6H10"/><path d="M10.4 4.6l2.8 2.8-2.8 2.8"/></svg></button>
+      </div>
+    </div>
+    <div class="routes" id="mkRoutes">
+      <button type="button" aria-pressed="true">Markets <span class="n">16</span></button>
+      <button type="button" aria-pressed="false">Market scanner</button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="main">
+
+      <!-- ================= MARKETS VIEW ================= -->
+      <div class="view" id="vMarkets">
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.4 13.6V8.4M6.4 13.6V4.2M10.4 13.6V9.8M14.4 13.6V2.6"/></svg>24h volume</div>
+            <div class="kpi__v">410.66M</div>
+            <div class="kpi__s">Across <span class="u">2</span> listed pairs</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8.6 1.8 3.4 8.8h3.2l-.6 5.4 5.2-7h-3.2z"/></svg>Gainers</div>
+            <div class="kpi__v">1 / 2</div>
+            <div class="kpi__s">Pairs with a positive 24h change</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 1.6 9.7 6l4.5.3-3.4 3 1 4.4L8 11.3 4.2 13.7l1-4.4-3.4-3L6.3 6z"/></svg>Biggest gainer · 24h</div>
+            <div class="kpi__v sm up" style="color:oklch(42% .11 175)">ETH/USDT · +6.44%</div>
+            <div class="kpi__s"><span class="u">$3,618.96</span></div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__k"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 2.2 14.6 13.4H1.4Z"/><path d="M8 6.4v3.2M8 11.4v.1"/></svg>Biggest loser · 24h</div>
+            <div class="kpi__v sm" style="color:oklch(45% .18 355)">BTC/USDT · −5.45%</div>
+            <div class="kpi__s"><span class="u">$64,294.00</span></div>
+          </div>
+        </div>
+
+        <section class="card">
+          <div class="card__hd">
+            <h2>All markets</h2>
+            <span class="sp"></span>
+            <div class="search">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+              <input id="mkSearch" placeholder="Search symbols…" aria-label="Search symbols">
+            </div>
+            <div class="ftabs" id="mkFtabs">
+              <button type="button" aria-pressed="true">All <span class="n">16</span></button>
+              <button type="button" aria-pressed="false">Favorites <span class="n" id="mkFavN">2</span></button>
+              <button type="button" aria-pressed="false">Gainers <span class="n">1</span></button>
+              <button type="button" aria-pressed="false">Losers <span class="n">1</span></button>
+              <button type="button" aria-pressed="false">New</button>
+            </div>
+            <div class="dd" id="ddCols">
+              <button class="dd__btn" type="button">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.4" y="3.4" width="11.2" height="9.2" rx="1.4"/><path d="M6.6 3.4v9.2M10.4 3.4v9.2"/></svg>
+                Columns <span class="cur" id="mkColCur">Overview</span>
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </button>
+              <div class="dd__pop">
+                <div class="dd__lbl">Column sets</div>
+                <button class="dd__i js-colset" type="button" data-c="overview">Overview</button>
+                <button class="dd__i js-colset" type="button" data-c="performance">Performance</button>
+                <button class="dd__i js-colset" type="button" data-c="volume">Volume &amp; range</button>
+                <div class="dd__sep"></div>
+                <div class="dd__lbl">Auto refresh</div>
+                <button class="dd__i js-refresh" type="button" data-r="10">Every 10 seconds</button>
+                <button class="dd__i js-refresh" type="button" data-r="60">Every 1 minute</button>
+                <button class="dd__i js-refresh" type="button" data-r="0">Never</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tblwrap">
+            <table class="tbl" id="mkTable">
+              <thead>
+                <tr>
+                  <th class="l" style="width:26px"><span style="position:absolute;left:-9999px">Favorite</span></th>
+                  <th class="l srt" data-k="sym" aria-sort="ascending">Pair <span class="car">▲</span></th>
+                  <th class="srt" data-k="price">Price <span class="car">▲</span></th>
+                  <th class="srt" data-k="chg">24h change <span class="car">▲</span></th>
+                  <th data-k="range">24h range</th>
+                  <th class="srt" data-k="vol">24h volume <span class="car">▲</span></th>
+                  <th data-k="tr">Trend</th>
+                  <th style="width:74px">Trade</th>
+                </tr>
+              </thead>
+              <tbody id="mkBody"></tbody>
+            </table>
+          </div>
+          <div class="tfoot">
+            <span id="mkCount">Showing <b>16</b> of <b>21</b> pairs</span>
+            <span class="sp"></span>
+            <span><b>2</b> live · <b>14</b> of the 19 unlisted pairs shown</span>
+            <span class="sp"></span>
+            <span id="mkRefreshLbl">Auto refresh · 10s</span>
+          </div>
+        </section>
+
+        <section class="card" id="mkHeatCard" hidden>
+          <div class="card__hd"><h2>Heatmap · 24h change</h2><span class="sp"></span><span class="foot-note">Tile size = 24h volume · colour = 24h change</span></div>
+          <div style="padding:11px"><div class="heat" id="mkHeat"></div></div>
+        </section>
+
+        <p class="foot-note">Trend column draws the 24h sparkline for listed pairs only. Rows marked <b>Not listed on the exchange</b> exist in the venue's symbol list but have no book on this account — no price, no range, no volume and no order entry, so the Trade button stays disabled rather than opening a screen that cannot fill.</p>
+      </div>
+
+      <!-- ================= SCANNER VIEW ================= -->
+      <div class="view" id="vScanner" hidden>
+
+        <div class="aiask">
+          <svg width="26" height="26" viewBox="0 0 16 16" fill="currentColor" style="color:var(--brand);flex:0 0 auto" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+          <div class="aiask__in">
+            <h3>Find coins by talking to CCAI</h3>
+            <p>Say what you are looking for — “uptrend dips on 1h”, “coins about to break out”, “shorts in a downtrend”. CCAI turns it into a condition, scans the market, shows the table here and explains the best ones.</p>
+          </div>
+          <button class="sbtn sbtn--brand" type="button" id="scAi" style="height:32px;flex:0 0 auto">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.8 5.9l4.7.4-3.6 3.1 1.1 4.6L8 11.5 4 14l1.1-4.6-3.6-3.1 4.7-.4Z"/></svg>
+            Build a scan with CCAI</button>
+        </div>
+
+        <section class="card">
+          <div class="card__hd">
+            <h2>Condition (signal rule formula)</h2>
+            <span class="sp"></span>
+            <span class="foot-note" id="scConds">0 conditions</span>
+          </div>
+          <div style="padding:11px;display:flex;flex-direction:column;gap:10px">
+            <div class="pills" id="scPills">
+              <button class="pill" type="button" data-p="up" aria-pressed="true"><span class="d d--up"></span>Uptrend pullback</button>
+              <button class="pill" type="button" data-p="brk"><span class="d d--up"></span>Breakout with volume</button>
+              <button class="pill" type="button" data-p="os"><span class="d d--up"></span>Oversold bounce</button>
+              <button class="pill" type="button" data-p="gold"><span class="d d--up"></span>EMA 20/50 golden cross</button>
+              <button class="pill" type="button" data-p="rally"><span class="d d--dn"></span>Downtrend rally to short</button>
+              <button class="pill" type="button" data-p="bd"><span class="d d--dn"></span>Breakdown</button>
+              <button class="pill" type="button" data-p="ob"><span class="d d--dn"></span>RSI overbought (&gt;70)</button>
+              <button class="pill" type="button" data-p="rsi30"><span class="d d--up"></span>RSI oversold (&lt;30)</button>
+              <button class="pill" type="button" data-p="vol"><span class="d" style="background:var(--text-tertiary)"></span>Volume spike (2×)</button>
+            </div>
+            <div class="formula">
+              <div class="txt" id="scFormula">Trend up (<code>EMA20</code> above <code>EMA50</code>) but RSI cooled below <code>45</code> — a dip inside an uptrend.</div>
+              <button class="sbtn sbtn--sm" type="button" id="scEdit">Edit formula</button>
+            </div>
+            <div class="fctl">
+              <div class="f"><label for="scTf">Timeframe</label>
+                <select id="scTf"><option selected>1h</option><option>15m</option><option>4h</option><option>1D</option></select></div>
+              <div class="f"><label for="scUni">Coins (by 24h volume)</label>
+                <select id="scUni"><option selected>All coins</option><option>Top 10</option><option>Top 50</option></select></div>
+              <div class="f"><label for="scBars">Within last bars</label>
+                <select id="scBars"><option selected>1</option><option>3</option><option>5</option></select></div>
+              <span style="flex:1 1 auto"></span>
+              <button class="sbtn sbtn--brand" type="button" id="scRun" style="height:28px">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+                Scan</button>
+            </div>
+          </div>
+          <div class="tfoot"><span id="scUniNote">Universe: all coins with a live 24h volume feed · <b>2</b> chartable on this account</span></div>
+        </section>
+
+        <section class="card">
+          <div class="card__hd">
+            <h2>Scan results</h2>
+            <span class="sp"></span>
+            <span class="foot-note" id="scMeta">not run yet</span>
+            <div class="dd" id="ddExplain">
+              <button class="dd__btn" type="button">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 7.4v3.2M8 5.6v.1"/></svg>
+                Explanation
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m4 6.5 4 4 4-4"/></svg>
+              </button>
+              <div class="dd__pop" style="min-width:268px">
+                <div class="dd__lbl">How this scan was built</div>
+                <div class="explain" data-open="true" style="border:0">
+                  <div class="explain__bd" id="scExplain"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tblwrap" id="scTblWrap" hidden>
+            <table class="tbl">
+              <thead><tr>
+                <th class="l">Symbol</th><th>Last</th><th>RSI14</th><th>Trend (EMA20/50)</th><th>Volume ×</th><th>ATR%</th><th>20-bar range</th><th>Match</th>
+              </tr></thead>
+              <tbody id="scBody"></tbody>
+            </table>
+          </div>
+          <div class="empty2" id="scEmpty">
+            <svg width="26" height="26" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+            <span class="t">No scan has run yet</span>
+            <span class="s">Pick a condition above and press <b>Scan</b>. Only coins with a live feed can be scanned — <b>2 of 21</b> on this account, so a scan can legitimately return 0, 1 or 2 rows. It never pads the table with coins it could not read.</span>
+          </div>
+          <div class="tfoot">
+            <span class="foot-note">Context on the last closed bar: RSI14 · trend = EMA20 vs EMA50 · volume × = vs 20-bar average · ATR% = typical bar move · 20-bar range 0 = low, 100 = high. Not investment advice.</span>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- ================= RIGHT RAIL ================= -->
+    <aside class="rail">
+      <div class="sec">
+        <div class="sec__t">Market breadth <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">24h</span></div>
+        <div class="breadth">
+          <i style="width:50%;background:oklch(52% .11 175)"></i>
+          <i style="width:50%;background:oklch(56% .2 355)"></i>
+        </div>
+        <div class="brow"><span class="k">Advancing</span><span class="sp"></span><span class="v" style="color:oklch(42% .11 175)">1</span></div>
+        <div class="brow"><span class="k">Declining</span><span class="sp"></span><span class="v" style="color:oklch(45% .18 355)">1</span></div>
+        <div class="brow"><span class="k">Chartable</span><span class="sp"></span><span class="v">2 / 21</span></div>
+        <div class="brow"><span class="k">Combined 24h vol</span><span class="sp"></span><span class="v">410.66M</span></div>
+        <p class="foot-note" style="margin:0">Breadth is computed over the 2 pairs that actually have a book. With 19 unlisted symbols it cannot represent the wider market — the split is shown as a ratio, not a percentage, on purpose.</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Listed pairs <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">live</span></div>
+        <div class="wlrow"><span>BTC/USDT</span><span class="sp"></span><span class="n" style="color:oklch(45% .18 355)">64,294.00 · −5.45%</span></div>
+        <div class="wlrow"><span>ETH/USDT</span><span class="sp"></span><span class="n" style="color:oklch(42% .11 175)">3,618.96 · +6.44%</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">AI screener <span class="sp"></span><span class="mono" style="text-transform:none;letter-spacing:0">natural language</span></div>
+        <div class="search" style="min-width:0">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>
+          <input id="mkAiQ" placeholder="e.g. uptrend dips on 1h" aria-label="Describe a screen">
+        </div>
+        <div class="pills" id="mkAiTpl">
+          <button class="pill" type="button">Highest volume</button>
+          <button class="pill" type="button">Gainers only</button>
+          <button class="pill" type="button">Uptrend dips on 1h</button>
+        </div>
+        <div class="explain" id="mkExplain" data-open="false">
+          <div class="explain__hd" id="mkExplainHd">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--text-tertiary)" aria-hidden="true"><circle cx="8" cy="8" r="5.6"/><path d="M8 7.4v3.2M8 5.6v.1"/></svg>
+            <span class="tt">Explanation</span><span class="sp"></span>
+            <span class="mono" style="font-size:10px;color:var(--text-disabled)" id="mkExplN">0</span>
+          </div>
+          <div class="explain__bd" id="mkExplBd"></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Applied filters <span class="sp"></span><button class="sbtn sbtn--sm" type="button" id="mkClearF">Clear</button></div>
+        <div id="mkFilterList" style="display:flex;flex-direction:column;gap:5px"></div>
+        <div class="pills" id="mkFilterAdd">
+          <button class="pill" type="button" data-f="live">Chartable only</button>
+          <button class="pill" type="button" data-f="up">24h change &gt; 0</button>
+          <button class="pill" type="button" data-f="vol">Volume &gt; 100M</button>
+          <button class="pill" type="button" data-f="fav">Favorites</button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Screen template <span class="sp"></span></div>
+        <div class="lay"><span class="k">Name</span><span class="sp"></span><span class="v" id="mkTplName">My live pairs</span></div>
+        <div class="lay"><span class="k">Columns</span><span class="sp"></span><span class="v" id="mkTplCols">Overview</span></div>
+        <div class="lay"><span class="k">Sort</span><span class="sp"></span><span class="v" id="mkTplSort">Pair ↑</span></div>
+        <div class="lay"><span class="k">View</span><span class="sp"></span><span class="v" id="mkTplView">Table</span></div>
+        <div class="lay"><span class="k">Autosave</span><span class="sp"></span><span class="v" id="mkTplAuto">off</span></div>
+        <p class="foot-note" style="margin:0">A saved screen stores its filters, columns, sorting and view mode together — loading one restores all four at once, and Autosave writes the change 2s after you stop editing.</p>
+      </div>
+
+      <div class="sec">
+        <div class="sec__t">Data integrity <span class="sp"></span></div>
+        <div class="lay"><span class="k">Pairs with a book</span><span class="sp"></span><span class="v">2</span></div>
+        <div class="lay"><span class="k">Unlisted symbols</span><span class="sp"></span><span class="v">19</span></div>
+        <div class="lay"><span class="k">Prices source</span><span class="sp"></span><span class="v">venue feed</span></div>
+        <p class="foot-note" style="margin:0">Every blank cell on this page is a field the venue does not publish for that symbol. Nothing is estimated, filled or back-filled to make the table look complete.</p>
+      </div>
+    </aside>
+  </div>
+</main>

@@ -1,0 +1,1191 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-brand="chartcontrol" data-density="comfortable" data-longshort="teal-magenta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChartControl AI — Operations console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  /* neutral scale — hue 240 */
+  --n-950:oklch(14% .012 240); --n-925:oklch(17% .013 240); --n-900:oklch(20% .014 240);
+  --n-850:oklch(24% .014 240); --n-800:oklch(28% .013 240); --n-700:oklch(38% .012 240);
+  --n-600:oklch(48% .010 240); --n-500:oklch(66% .008 240); --n-400:oklch(68% .006 240);
+  --n-300:oklch(78% .005 240); --n-200:oklch(86% .004 240); --n-100:oklch(92% .003 240);
+  --n-050:oklch(97% .002 240); --n-000:oklch(100% 0 0);
+
+  /* brand — 328.33deg */
+  --brand-300:oklch(75% .200 328.33); --brand-400:oklch(71% .260 328.33);
+  --brand-500:oklch(69% .3048 328.33); --brand-600:oklch(56% .240 328.33);
+  --brand-700:oklch(46% .190 328.33);
+
+  /* surfaces (light theme — the product's default) */
+  --bg-app:oklch(98% .003 240);
+  --bg-surface:oklch(100% 0 0);
+  --bg-panel:oklch(99% .002 240);
+  --bg-elevated:oklch(100% 0 0);
+  --bg-hover:oklch(94% .006 240);
+  --bg-active:oklch(90% .008 240);
+  --bg-input:oklch(100% 0 0);
+  --bg-sunken:oklch(96.5% .004 240);
+
+  --text-primary:oklch(20% .014 240);
+  --text-secondary:oklch(38% .014 240);
+  --text-tertiary:oklch(48% .012 240);
+  --text-disabled:oklch(72% .008 240);
+  --text-inverse:oklch(98% .003 240);
+
+  --border-subtle:oklch(90% .006 240);
+  --border-default:oklch(82% .008 240);
+  --border-strong:oklch(68% .010 240);
+
+  /* semantic */
+  --brand:oklch(48% .190 328.33);
+  --brand-hover:oklch(40% .190 328.33);
+  --brand-subtle:oklch(48% .190 328.33 / .12);
+  --long:oklch(52.1% .099 175);
+  --long-600:oklch(44% .090 175);
+  --short:oklch(56.1% .200 355);
+  --ai:oklch(55.1% .190 285);
+  --success:oklch(52.1% .150 145);
+  --warning:oklch(54.1% .115 75);
+  --danger:oklch(64% .20 25);
+  --on-trade:rgb(10,14,20);
+
+  /* chart */
+  --chart-grid:oklch(88% .006 240 / .7);
+  --chart-axis:oklch(48% .012 240);
+  --chart-crosshair:oklch(38% .014 240 / .5);
+  --chart-up:oklch(52.1% .099 175);
+  --chart-dn:oklch(56.1% .200 355);
+  --chart-ma1:oklch(54.1% .115 75);
+  --chart-ma2:oklch(55.1% .190 285);
+  --chart-ma3:oklch(52.8% .106 230);
+  --chart-vol-up:oklch(39.3% .049 175 / .6);
+  --chart-vol-dn:oklch(42.7% .106 355 / .6);
+
+  --shadow-1:0 1px 2px rgba(15,20,28,.06);
+  --shadow-2:0 4px 12px rgba(15,20,28,.08);
+  --shadow-3:0 12px 32px rgba(15,20,28,.14);
+
+  /* type */
+  --font-ui:'Pretendard Variable',pretendard,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'IBM Plex Sans',var(--font-ui);
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+
+  --r-sm:3px; --r-md:4px; --r-lg:6px; --r-xl:8px;
+  --header-h:48px;
+  --rail-w:44px; --watch-w:226px; --order-w:262px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  height:100vh;overflow:hidden;display:flex;flex-direction:column;
+  background:var(--bg-app);color:var(--text-primary);
+  font-family:var(--font-ui);font-size:13px;line-height:1.45;
+  font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+::selection{background:var(--brand-subtle)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:1px;border-radius:2px}
+
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-feature-settings:"zero" 1}
+.up{color:var(--long)} .dn{color:var(--short)}
+.eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:.44px;text-transform:uppercase;
+  color:var(--text-tertiary);
+}
+
+/* ---------- scrollbars: thin, quiet ---------- */
+.scroll{overflow:auto;scrollbar-width:thin;scrollbar-color:var(--border-default) transparent}
+.scroll::-webkit-scrollbar{width:9px;height:9px}
+.scroll::-webkit-scrollbar-thumb{background:var(--border-default);border-radius:9px;border:2px solid transparent;background-clip:content-box}
+.scroll::-webkit-scrollbar-thumb:hover{background:var(--border-strong);background-clip:content-box}
+.scroll::-webkit-scrollbar-track{background:transparent}
+
+/* ==========================================================================
+   Header — 48px, pure white, hairline bottom border
+   ========================================================================== */
+.hdr{
+  height:var(--header-h);flex:0 0 var(--header-h);
+  display:flex;align-items:center;gap:8px;
+  padding:0 16px 0 12px;
+  background:var(--bg-surface);border-bottom:1px solid var(--border-subtle);
+  position:relative;z-index:40;
+}
+.brand{display:flex;align-items:center;gap:9px;padding-right:20px;height:47px;
+  border-right:1px solid var(--border-subtle);flex:0 0 auto}
+.brand svg{display:block;flex:0 0 auto}
+.brand__word{
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  letter-spacing:.26px;color:var(--text-primary);white-space:nowrap;
+}
+.seg{
+  display:flex;gap:2px;padding:2px;border:1px solid var(--border-subtle);
+  border-radius:var(--r-md);background:var(--bg-surface);flex:0 0 auto;
+}
+.seg button{
+  height:26px;padding:0 12px;border-radius:var(--r-sm);border:1px solid transparent;
+  font-size:12.5px;font-weight:500;color:var(--text-secondary);
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .12s,color .12s;
+}
+.seg button:hover{background:var(--bg-hover);color:var(--text-primary)}
+.seg button[aria-pressed="true"]{
+  background:var(--bg-elevated);border-color:var(--border-subtle);
+  color:var(--text-primary);font-weight:600;box-shadow:var(--shadow-1);
+}
+.hdr__links{display:flex;align-items:center;gap:2px;margin-left:4px;flex:0 1 auto;min-width:0;overflow:hidden}
+.hdr__links a{
+  display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 9px;border-radius:var(--r-md);
+  font-size:12.5px;color:var(--text-secondary);text-decoration:none;white-space:nowrap;transition:background .12s,color .12s;
+}
+.hdr__links a:hover{background:var(--bg-hover);color:var(--text-primary)}
+.hdr__links svg{opacity:.62;flex:0 0 auto}
+.hdr__links a:hover svg{opacity:.9}
+.hdr__spacer{flex:1 1 auto;min-width:8px}
+.hdr__tools{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.iconbtn{
+  width:28px;height:28px;border-radius:var(--r-md);display:grid;place-items:center;
+  color:var(--text-secondary);transition:background .12s,color .12s;position:relative;
+}
+.iconbtn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.iconbtn[aria-pressed="true"]{background:var(--bg-active);color:var(--text-primary)}
+.iconbtn .dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;
+  background:var(--brand);box-shadow:0 0 0 2px var(--bg-surface)}
+.langbtn{
+  height:28px;padding:0 8px;border-radius:var(--r-md);font-size:12.5px;font-weight:500;
+  color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px;
+}
+.langbtn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.avatar{
+  width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700;margin-left:4px;
+  font-family:var(--font-display);letter-spacing:.3px;flex:0 0 auto;
+}
+
+.panel{
+  background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);
+  display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;
+}
+.panel__hd{
+  flex:0 0 auto;height:30px;display:flex;align-items:center;gap:8px;padding:0 10px;
+  border-bottom:1px solid var(--border-subtle);background:var(--bg-panel);
+}
+.panel__hd .ttl{font-size:11.5px;font-weight:600;letter-spacing:.2px;color:var(--text-secondary);white-space:nowrap}
+.panel__hd .sp{flex:1 1 auto}
+.panel__bd{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+
+.foot{
+  flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:4px 12px;
+  font-size:10.5px;color:var(--text-tertiary);background:var(--bg-surface);
+  border-top:1px solid var(--border-subtle);
+}
+.foot .sp{flex:1 1 auto}
+.foot a{color:var(--text-tertiary);text-decoration:none}
+.foot a:hover{color:var(--text-secondary);text-decoration:underline;text-underline-offset:2px}
+.foot .mode{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.foot .mode .d{width:6px;height:6px;border-radius:50%;background:var(--long)}
+.foot .mode.paper .d{background:var(--warning)}
+
+.desk-guard{display:none}
+@media (max-width:1279px){
+  .desk-guard{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    background:var(--bg-app);padding:32px;text-align:center;
+  }
+  .desk-guard__in{max-width:420px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .desk-guard h2{margin:0;font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.2px}
+  .desk-guard p{margin:0;font-size:12.5px;color:var(--text-tertiary);line-height:1.6}
+}
+
+/* ===================== frame ===================== */
+.page{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:212px minmax(0,1fr) 292px;overflow:hidden;background:var(--bg-app)}
+.arail{min-height:0;overflow-y:auto;border-right:1px solid var(--border-subtle);background:var(--bg-panel);padding:8px;display:flex;flex-direction:column;gap:9px}
+.agrp{font-size:8.5px;font-weight:700;letter-spacing:.55px;text-transform:uppercase;color:var(--text-tertiary);padding:7px 7px 3px}
+.aitem{display:flex;align-items:center;gap:7px;width:100%;padding:6px 7px;border-radius:var(--r-md);font-size:11.5px;
+  font-weight:500;color:var(--text-secondary);text-align:left;transition:.1s}
+.aitem:hover{background:var(--bg-hover);color:var(--text-primary)}
+.aitem[aria-selected="true"]{background:var(--brand-subtle);color:var(--brand);font-weight:600;box-shadow:inset 2px 0 0 var(--brand)}
+.aitem .sp{flex:1 1 auto}
+.aitem .n{font-family:var(--font-mono);font-size:9.5px;color:var(--text-tertiary)}
+.aitem[aria-selected="true"] .n{color:var(--brand)}
+.abadge{font-size:7.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:3px;padding:1px 3px;
+  border:1px solid var(--border-subtle);color:var(--text-tertiary);flex:0 0 auto}
+.abadge--ops{border-color:color-mix(in oklab,var(--brand) 34%,transparent);color:var(--brand)}
+
+.acol{min-width:0;min-height:0;overflow-y:auto;padding:12px 14px 20px;display:flex;flex-direction:column;gap:11px}
+.aright{min-height:0;overflow-y:auto;border-left:1px solid var(--border-subtle);background:var(--bg-panel);padding:11px;display:flex;flex-direction:column;gap:11px}
+
+/* ===================== header ===================== */
+.crumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-tertiary);margin-bottom:5px}
+.crumb a{color:var(--text-tertiary);text-decoration:none}.crumb a:hover{color:var(--brand)}
+.hd{display:flex;align-items:flex-start;gap:12px}
+.hd .sp{flex:1 1 auto}
+.hd h1{margin:0;font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:-.3px;line-height:1.2;display:flex;align-items:center;gap:7px}
+.hd .sub{margin:3px 0 0;font-size:11px;color:var(--text-tertiary)}
+.hdacts{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tagadm{font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:3px;padding:2px 5px;
+  background:var(--brand-subtle);color:var(--brand);border:1px solid color-mix(in oklab,var(--brand) 28%,transparent)}
+.sbtn{height:28px;padding:0 10px;border:1px solid var(--border-default);border-radius:var(--r-md);background:var(--bg-surface);
+  font-size:11.5px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:.12s}
+.sbtn:hover{border-color:var(--border-strong);color:var(--text-primary);background:var(--bg-hover)}
+.sbtn--brand{background:var(--brand);border-color:var(--brand);color:#fff}
+.sbtn--brand:hover{background:var(--brand-hover);border-color:var(--brand-hover);color:#fff}
+.sbtn--sm{height:24px;padding:0 8px;font-size:10.5px}
+.sbtn[disabled]{opacity:.45;cursor:not-allowed}
+.cmdk{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px;border:1px solid var(--border-subtle);
+  border-radius:var(--r-md);background:var(--bg-sunken);font-size:11px;color:var(--text-tertiary)}
+.cmdk kbd{font-family:var(--font-mono);font-size:9.5px;border:1px solid var(--border-default);border-radius:3px;
+  padding:1px 4px;background:var(--bg-surface);color:var(--text-secondary)}
+
+/* ===================== blocks ===================== */
+.gate{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-radius:var(--r-md);
+  background:color-mix(in oklab,var(--warning) 10%,var(--bg-panel));border:1px solid color-mix(in oklab,var(--warning) 30%,transparent)}
+.gate svg{color:oklch(46% .115 75);flex:0 0 auto;margin-top:1px}
+.gate .in{flex:1 1 auto;min-width:0}
+.gate p{margin:0;font-size:11.5px;line-height:1.55;color:var(--text-secondary)}
+.gate b{color:var(--text-primary);font-weight:600}
+.gate .code{font-family:var(--font-mono);font-size:10px;color:oklch(42% .115 75);background:color-mix(in oklab,var(--warning) 14%,transparent);
+  border-radius:3px;padding:1px 5px;margin-left:5px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.kpi{position:relative;background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);
+  padding:10px 11px 10px 13px;display:flex;flex-direction:column;gap:3px;min-width:0;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border-subtle)}
+.kpi[data-a="brand"]::before{background:var(--brand)}
+.kpi[data-a="warn"]::before{background:oklch(58% .115 75)}
+.kpi[data-a="long"]::before{background:var(--long)}
+.kpi__k{font-size:9px;font-weight:600;letter-spacing:.45px;text-transform:uppercase;color:var(--text-tertiary)}
+.kpi__v{font-family:var(--font-mono);font-size:22px;font-weight:600;letter-spacing:-.5px;line-height:1.12;color:var(--text-primary)}
+.kpi__v.dash{color:var(--text-tertiary)}
+.kpi__s{font-size:10px;color:var(--text-tertiary);line-height:1.4}
+.kpi__s .u{font-family:var(--font-mono);font-weight:600}
+
+.card{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-lg);overflow:hidden}
+.card__hd{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--border-subtle);min-height:40px;flex-wrap:wrap}
+.card__hd h2{margin:0;font-family:var(--font-display);font-size:12.5px;font-weight:600;letter-spacing:-.1px}
+.card__hd .sp{flex:1 1 auto}
+.card__hd .n{font-family:var(--font-mono);font-size:10.5px;color:var(--text-tertiary)}
+.card__bd{padding:11px;display:flex;flex-direction:column;gap:10px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:11px;align-items:start}
+.foot-note{font-size:10px;line-height:1.55;color:var(--text-tertiary)}
+.foot-note b{color:var(--text-secondary);font-weight:600}
+
+/* table */
+.tblwrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+.tbl thead th{position:sticky;top:0;z-index:5;background:var(--bg-sunken);border-bottom:1px solid var(--border-subtle);
+  padding:7px 9px;text-align:right;font-size:9.5px;font-weight:600;letter-spacing:.45px;text-transform:uppercase;
+  color:var(--text-tertiary);white-space:nowrap}
+.tbl thead th.l{text-align:left}
+.tbl tbody td{padding:7px 9px;border-bottom:1px solid var(--border-subtle);text-align:right;white-space:nowrap;color:var(--text-secondary)}
+.tbl tbody td.l{text-align:left}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tbody tr[data-hi="true"]{background:color-mix(in oklab,var(--warning) 8%,transparent)}
+.tbl tbody tr[data-hi="true"] td:first-child{box-shadow:inset 2px 0 0 oklch(58% .115 75)}
+.mono{font-family:var(--font-mono)}
+.nodata{padding:16px 13px;text-align:center;font-size:11.5px;color:var(--text-tertiary);
+  background-image:repeating-linear-gradient(-45deg,color-mix(in oklab,var(--brand) 4%,transparent) 0 1px,transparent 1px 9px)}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;letter-spacing:.35px;text-transform:uppercase;white-space:nowrap}
+.st .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+.st--ok{color:oklch(40% .1 175)}
+.st--deg{color:oklch(44% .115 75)}
+.st--down{color:oklch(45% .18 355)}
+.st--off{color:var(--text-tertiary)}
+.pillst{display:inline-flex;align-items:center;gap:5px;height:18px;padding:0 7px;border-radius:9px;font-size:9px;
+  font-weight:700;letter-spacing:.35px;text-transform:uppercase;white-space:nowrap;background:var(--bg-sunken);color:var(--text-tertiary)}
+.pillst--live{background:color-mix(in oklab,var(--long) 14%,transparent);color:oklch(40% .1 175)}
+.pillst--mock{background:color-mix(in oklab,var(--info) 14%,transparent);color:oklch(44% .16 250)}
+.pillst--part{background:color-mix(in oklab,var(--warning) 15%,transparent);color:oklch(42% .115 75)}
+.toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.search{display:flex;align-items:center;gap:6px;height:27px;padding:0 8px;background:var(--bg-input);
+  border:1px solid var(--border-subtle);border-radius:var(--r-md);min-width:186px}
+.search:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-subtle)}
+.search input{border:0;outline:0;background:none;width:100%;font-size:11.5px;font-family:inherit}
+.search input::placeholder{color:var(--text-disabled)}
+.sel{height:27px;padding:0 7px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);
+  font-size:11px;font-family:inherit;color:var(--text-secondary);outline:0}
+.sel:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-subtle)}
+.ftabs{display:inline-flex;gap:2px}
+.ftabs button{height:24px;padding:0 9px;border-radius:var(--r-md);font-size:11px;font-weight:500;color:var(--text-tertiary);border:1px solid transparent;transition:.12s}
+.ftabs button:hover{background:var(--bg-hover);color:var(--text-primary)}
+.ftabs button[aria-pressed="true"]{background:var(--brand-subtle);color:var(--brand);border-color:color-mix(in oklab,var(--brand) 26%,transparent);font-weight:600}
+.ftabs button .n{font-family:var(--font-mono);font-size:9.5px;opacity:.7;margin-left:3px}
+.frule{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--r-md);background:var(--bg-sunken);
+  font-size:10.5px;color:var(--text-secondary)}
+.frule .k{font-family:var(--font-mono);font-size:10px;color:var(--brand);font-weight:600}
+.frule .sp{flex:1 1 auto}
+.frule button{font-size:10px;color:var(--text-tertiary);border:1px solid var(--border-subtle);border-radius:3px;padding:1px 5px}
+.frule button:hover{color:var(--text-primary);border-color:var(--border-strong)}
+.actrow{display:flex;gap:4px;justify-content:flex-end}
+.actb{height:22px;padding:0 7px;border:1px solid var(--border-subtle);border-radius:var(--r-sm);background:var(--bg-surface);
+  font-size:10px;font-weight:600;color:var(--text-tertiary);transition:.12s;white-space:nowrap}
+.actb:hover{border-color:var(--border-strong);color:var(--text-primary);background:var(--bg-hover)}
+.actb--warn:hover{border-color:oklch(58% .115 75);color:oklch(44% .115 75);background:color-mix(in oklab,var(--warning) 10%,transparent)}
+.actb--danger:hover{border-color:oklch(56% .2 355);color:oklch(45% .18 355);background:color-mix(in oklab,var(--short) 10%,transparent)}
+.empty{padding:15px 13px;text-align:center;font-size:11.5px;color:var(--text-tertiary);
+  background-image:repeating-linear-gradient(-45deg,color-mix(in oklab,var(--brand) 4%,transparent) 0 1px,transparent 1px 9px)}
+
+/* rail bits */
+.sec{display:flex;flex-direction:column;gap:7px}
+.sec__t{font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-tertiary);display:flex;align-items:center;gap:6px}
+.sec__t .sp{flex:1 1 auto}
+.lay{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--r-md);background:var(--bg-sunken);font-size:11px}
+.lay .k{color:var(--text-tertiary)}
+.lay .sp{flex:1 1 auto}
+.lay .v{font-family:var(--font-mono);font-size:10.5px;font-weight:600;color:var(--text-secondary)}
+.legrow{display:flex;align-items:center;gap:7px;font-size:10.5px;color:var(--text-tertiary)}
+.legrow .sw{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.auditline{display:grid;grid-template-columns:auto 1fr;gap:7px;font-size:10.5px;padding:5px 0;border-bottom:1px dashed var(--border-subtle)}
+.auditline:last-child{border-bottom:0}
+.auditline .t{font-family:var(--font-mono);font-size:9.5px;color:var(--text-tertiary)}
+.auditline .m{color:var(--text-tertiary);line-height:1.45}
+.auditline .m b{color:var(--text-secondary);font-weight:600}
+.cmdk-pop{position:fixed;inset:0;z-index:80;background:color-mix(in oklab,oklch(20% .014 240) 34%,transparent);
+  display:none;align-items:flex-start;justify-content:center;padding-top:12vh}
+.cmdk-pop[data-open="true"]{display:flex}
+.cmdk-box{width:min(520px,92vw);background:var(--bg-surface);border:1px solid var(--border-default);
+  border-radius:var(--r-lg);box-shadow:0 22px 60px rgba(10,14,20,.28);overflow:hidden}
+.cmdk-box input{width:100%;height:40px;padding:0 12px;border:0;border-bottom:1px solid var(--border-subtle);
+  background:none;font-size:13px;font-family:inherit;outline:0}
+.cmdk-list{max-height:288px;overflow-y:auto;padding:4px}
+.cmdk-i{display:flex;align-items:center;gap:8px;width:100%;padding:7px 9px;border-radius:var(--r-md);font-size:12px;
+  color:var(--text-secondary);text-align:left}
+.cmdk-i:hover,.cmdk-i[aria-selected="true"]{background:var(--bg-hover);color:var(--text-primary)}
+.cmdk-i .sp{flex:1 1 auto}
+.cmdk-i .r{font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--text-disabled)}
+
+:root{--ai:oklch(55.1% .190 285);--info:oklch(55% .16 250)}
+.up{color:oklch(42% .11 175)} .dn{color:oklch(45% .18 355)}
+.mono{font-family:var(--font-mono)}
+.sep{color:var(--text-disabled)}
+.page > *{min-width:0}
+
+:root{
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="brand">
+    <svg width="46" height="22" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/>
+        <path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <circle cx="4.4" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <circle cx="25.6" cy="3.4" r="1.5" fill="oklch(20% .014 240)"/>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <span class="brand__word">ChartControl AI</span>
+  </div>
+
+  <div class="seg" role="group" aria-label="Account mode">
+    <button type="button" aria-pressed="false">Spot</button>
+    <button type="button" aria-pressed="true">Futures</button>
+    <button type="button" aria-pressed="false">Paper</button>
+  </div>
+
+  <div class="seg" role="group" aria-label="Exchange">
+    <button type="button" aria-pressed="true">KuCoin</button>
+    <button type="button" aria-pressed="false">Bybit</button>
+    <button type="button" aria-pressed="false">Bitget</button>
+  </div>
+
+  <nav class="hdr__links" aria-label="Community">
+    <a href="#/help"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.2 2.5h9.6a1.2 1.2 0 0 1 1.2 1.2v6.6a1.2 1.2 0 0 1-1.2 1.2H7.6L4.4 14v-2.5H3.2A1.2 1.2 0 0 1 2 10.3V3.7a1.2 1.2 0 0 1 1.2-1.2Z"/></svg>YouTube</a>
+    <a href="#/help"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M14 2.6 12.1 13c-.1.6-.5.8-1 .5l-2.8-2-1.4 1.3c-.2.2-.3.3-.6.3l.2-2.8 5.1-4.6c.2-.2 0-.3-.3-.1L5.3 9.4 2.5 8.5c-.6-.2-.6-.6.1-.9l10.6-4.1c.5-.2.9.1.8 1.1Z"/></svg>Telegram</a>
+    <a href="#/points"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.2 9.7 5.6l4.7.3-3.6 3 1.1 4.6L8 11.2 4.1 13.5l1.1-4.6-3.6-3 4.7-.3Z"/></svg>KuCoin campaign</a>
+    <a href="#/referral"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.6a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 7.6c3 0 5.4 1.7 5.4 3.8v1.4H2.6V13c0-2.1 2.4-3.8 5.4-3.8Z"/></svg>Join KuCoin</a>
+  </nav>
+
+  <div class="hdr__spacer"></div>
+
+  <div class="hdr__tools">
+    <button class="iconbtn" type="button" aria-label="Notifications"><span class="dot"></span>
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 6.5a4 4 0 1 1 8 0v3l1 1.6H3l1-1.6v-3Z"/><path d="M6.4 12.6a1.7 1.7 0 0 0 3.2 0"/></svg></button>
+    <button class="iconbtn" type="button" id="themeBtn" aria-label="Toggle theme" aria-pressed="false">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="3.1"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9 13 13M13 3l-1.1 1.1M4.1 11.9 3 13"/></svg></button>
+    <button class="iconbtn" type="button" id="fsBtn" aria-label="Toggle fullscreen">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></button>
+    <button class="langbtn" type="button">EN
+      <svg width="9" height="9" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.5 6h9L8 11.5Z"/></svg></button>
+    <button class="avatar" type="button" aria-label="Signed in as super_1791709600000@example.com — click to sign out">SU</button>
+  </div>
+</header>
+
+<main class="page">
+  <aside class="arail" aria-label="Admin routes">
+    <div class="agrp">Overview</div>
+    <button class="aitem" type="button" data-r="0" aria-selected="true"><span>Admin Home</span><span class="sp"></span><span class="abadge abadge--ops">ops</span></button>
+    <div class="agrp">Money</div>
+    <button class="aitem" type="button" data-r="1"><span>Fees &amp; Rebates</span></button>
+    <button class="aitem" type="button" data-r="5"><span>Deposits</span></button>
+    <button class="aitem" type="button" data-r="6"><span>Withdrawals</span></button>
+    <button class="aitem" type="button" data-r="7"><span>Assets</span></button>
+    <div class="agrp">Risk &amp; trading</div>
+    <button class="aitem" type="button" data-r="3"><span>Trade Monitor</span><span class="sp"></span><span class="abadge">admin</span></button>
+    <button class="aitem" type="button" data-r="4"><span>Risk</span></button>
+    <button class="aitem" type="button" data-r="14"><span>Auto trading</span></button>
+    <button class="aitem" type="button" data-r="19"><span>Leaderboard</span><span class="sp"></span><span class="abadge">admin</span></button>
+    <div class="agrp">Content &amp; comms</div>
+    <button class="aitem" type="button" data-r="9"><span>Notices &amp; CS</span></button>
+    <button class="aitem" type="button" data-r="10"><span>Broadcast</span></button>
+    <button class="aitem" type="button" data-r="13"><span>Legal</span></button>
+    <button class="aitem" type="button" data-r="8"><span>AI Ops</span></button>
+    <div class="agrp">Growth</div>
+    <button class="aitem" type="button" data-r="11"><span>Referral</span></button>
+    <button class="aitem" type="button" data-r="12"><span>Points</span></button>
+    <div class="agrp">Platform</div>
+    <button class="aitem" type="button" data-r="2"><span>Users</span><span class="sp"></span><span class="abadge abadge--ops">ops</span></button>
+    <button class="aitem" type="button" data-r="16"><span>System</span></button>
+    <button class="aitem" type="button" data-r="17"><span>Audit</span></button>
+    <button class="aitem" type="button" data-r="15"><span>Activity</span></button>
+    <button class="aitem" type="button" data-r="18"><span>Design ops</span></button>
+    <p class="foot-note" style="margin:6px 7px 0">Every route here is a real one from the product. A route whose read is denied by the server shows that refusal — it never renders a stand-in.</p>
+  </aside>
+
+  <div class="acol" id="admCol"></div>
+
+  <aside class="aright">
+    <div class="sec">
+      <div class="sec__t">Data source legend <span class="sp"></span></div>
+      <div class="legrow"><span class="sw" style="background:oklch(52% .11 175)"></span><b style="color:var(--text-secondary);font-weight:600">LIVE</b>&nbsp;read from the venue or database</div>
+      <div class="legrow"><span class="sw" style="background:oklch(54% .115 75)"></span><b style="color:var(--text-secondary);font-weight:600">PARTIAL</b>&nbsp;some fields refused</div>
+      <div class="legrow"><span class="sw" style="background:oklch(55% .16 250)"></span><b style="color:var(--text-secondary);font-weight:600">MOCK</b>&nbsp;seeded data, actions still work</div>
+      <p class="foot-note" style="margin:0">This console runs against the same server as the terminal. When a read fails, the affected panel says so and the rest of the page keeps working.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec__t">Your access <span class="sp"></span></div>
+      <div class="lay"><span class="k">Role</span><span class="sp"></span><span class="v">super</span></div>
+      <div class="lay"><span class="k">Can read users</span><span class="sp"></span><span class="v" id="admReadUsers">yes</span></div>
+      <div class="lay"><span class="k">Can move funds</span><span class="sp"></span><span class="v" style="color:oklch(44% .115 75)">no</span></div>
+      <div class="lay"><span class="k">Can publish notices</span><span class="sp"></span><span class="v">yes</span></div>
+      <div class="lay"><span class="k">Can impersonate</span><span class="sp"></span><span class="v" style="color:oklch(44% .115 75)">no</span></div>
+      <p class="foot-note" style="margin:0">Fund-moving and impersonation are deliberately off even for a super role. Those two actions need a second operator, so they are not a checkbox here.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec__t">Audit trail <span class="sp"></span><span class="n mono">this session</span></div>
+      <div id="admAudit"></div>
+      <p class="foot-note" style="margin:0">Every write on this console is appended to the audit log with actor, target and before/after. Reads are not logged.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec__t">Environment <span class="sp"></span></div>
+      <div class="lay"><span class="k">Mode</span><span class="sp"></span><span class="v">MOCK_REPLAY</span></div>
+      <div class="lay"><span class="k">Trading</span><span class="sp"></span><span class="v">MOCK</span></div>
+      <div class="lay"><span class="k">Venues</span><span class="sp"></span><span class="v">KuCoin · Bybit</span></div>
+      <div class="lay"><span class="k">Regions</span><span class="sp"></span><span class="v">—</span></div>
+      <p class="foot-note" style="margin:0">Region is not configured, so it reads as a dash rather than a guess. The badge in the bottom bar shows the same three states as the legend above.</p>
+    </div>
+  </aside>
+
+  <div class="cmdk-pop" id="cmdkPop">
+    <div class="cmdk-box">
+      <input id="cmdkQ" placeholder="Jump to a route or run an action…" aria-label="Command menu">
+      <div class="cmdk-list" id="cmdkList"></div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <span>© 2026 ChartControl AI · Crypto trading involves substantial risk. Not investment advice.</span>
+  <span class="sp"></span>
+  <span class="mode"><span class="d"></span>Live market data</span>
+  <span>·</span>
+  <span class="mode paper"><span class="d"></span>Orders: paper</span>
+  <span>·</span>
+  <a href="#/company">Business information</a>
+  <span>·</span>
+  <a href="#/terms">Terms</a>
+  <a href="#/privacy">Privacy</a>
+  <a href="#/refund">Refund policy</a>
+</footer>
+
+<div class="desk-guard">
+  <div class="desk-guard__in">
+    <svg width="46" height="22" viewBox="0 0 46 22" aria-hidden="true">
+      <g fill="none" stroke="oklch(69% .3048 328.33)" stroke-width="3.4" stroke-linecap="round">
+        <path d="M9.6 2.2a9 9 0 0 0 0 17.6"/><path d="M20.4 2.2a9 9 0 0 1 0 17.6"/>
+      </g>
+      <text x="27" y="17.4" font-family="IBM Plex Sans, sans-serif" font-size="16.5" font-weight="700" fill="oklch(20% .014 240)">AI</text>
+    </svg>
+    <h2>Please use a desktop computer</h2>
+    <p>The trading workspace needs at least 1280px of width. Open this page on a desktop browser to place and review orders.</p>
+  </div>
+</div>
+
+
+<script>
+(function(){'use strict';
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
+$$('.seg button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.parentNode; $$('button',p).forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.chip').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.parentNode; $$('button',p).forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.btab').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('.btab').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.watch__row').forEach(function(r){
+  r.addEventListener('click',function(){
+    $$('.watch__row').forEach(function(x){x.setAttribute('aria-selected','false');});
+    r.setAttribute('aria-selected','true');
+  });
+});
+$$('.rail button').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(b.getAttribute('aria-label')==='Collapse sidebar') return;
+    $$('.rail button').forEach(function(x){if(x.getAttribute('aria-label')!=='Collapse sidebar')x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.drawrail button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('.drawrail button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('#oeType button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('#oeType button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('#cpTabs button').forEach(function(b){
+  b.addEventListener('click',function(){
+    $$('#cpTabs button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+  });
+});
+$$('.cp-quick .grid button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var on=b.getAttribute('aria-pressed')==='true';
+    $$('.cp-quick .grid button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed',on?'false':'true');
+  });
+});
+
+/* theme toggle — the product ships both themes */
+var tb=$('#themeBtn');
+tb.addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var next=cur==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',next);
+  tb.setAttribute('aria-pressed',next==='dark'?'true':'false');
+  applyTheme(next); draw();
+});
+var DARK={ '--bg-app':'oklch(14% .012 240)','--bg-surface':'oklch(17% .013 240)','--bg-panel':'oklch(20% .014 240)',
+  '--bg-elevated':'oklch(24% .014 240)','--bg-hover':'oklch(28% .014 240 / .6)','--bg-active':'oklch(32% .016 240 / .7)',
+  '--bg-input':'oklch(17% .013 240)','--bg-sunken':'oklch(19% .013 240)',
+  '--text-primary':'oklch(97% .002 240)','--text-secondary':'oklch(78% .005 240)','--text-tertiary':'oklch(66% .008 240)',
+  '--text-disabled':'oklch(38% .012 240)',
+  '--border-subtle':'oklch(28% .014 240 / .6)','--border-default':'oklch(38% .014 240 / .7)','--border-strong':'oklch(48% .014 240 / .9)',
+  '--brand':'oklch(69% .3048 328.33)','--brand-hover':'oklch(71% .260 328.33)','--brand-subtle':'oklch(67.25% .3048 328.33 / .14)',
+  '--long':'oklch(72% .14 175)','--long-600':'oklch(64% .15 175)','--short':'oklch(68% .22 355)',
+  '--ai':'oklch(72% .15 285)','--on-trade':'oklch(18% .02 220)',
+  '--chart-grid':'oklch(28% .014 240 / .5)','--chart-axis':'oklch(66% .008 240)','--chart-crosshair':'oklch(78% .005 240 / .45)',
+  '--chart-up':'oklch(72% .14 175)','--chart-dn':'oklch(68% .22 355)',
+  '--chart-ma1':'oklch(78% .14 75)','--chart-ma2':'oklch(76% .13 285)','--chart-ma3':'oklch(74% .11 230)',
+  '--chart-vol-up':'oklch(72% .14 175 / .5)','--chart-vol-dn':'oklch(68% .22 355 / .5)',
+  '--shadow-1':'0 1px 2px rgba(0,0,0,.4)','--shadow-2':'0 4px 12px rgba(0,0,0,.45)','--shadow-3':'0 12px 32px rgba(0,0,0,.55)'};
+var LIGHT={};
+function applyTheme(mode){
+  var r=document.documentElement, set=mode==='dark'?DARK:LIGHT;
+  if(mode==='light'){Object.keys(DARK).forEach(function(k){r.style.removeProperty(k);});return;}
+  Object.keys(set).forEach(function(k){r.style.setProperty(k,set[k]);});
+}
+/* ===================== routes ===================== */
+var R=[
+ {n:'Admin Home',p:'/admin',t:'Admin Dashboard',badge:'ADMIN',sub:'Live platform status · anomalies · risk · AI · system'},
+ {n:'Fees & Rebates',p:'/fees',t:'Fees & Rebates',sub:'Fee schedule · broker rebate · payback programme'},
+ {n:'Users',p:'/admin/users',t:'User Management',badge:'OPS',sub:'customers · plan · payments · exchange · KuCoin campaign · status'},
+ {n:'Trade Monitor',p:'/admin/trades',t:'Trade Monitor',badge:'ADMIN',sub:'Live fills · flagged activity · auto-review'},
+ {n:'Risk',p:'/admin/risk',t:'Risk',badge:'OPS',sub:'Margin queue · liquidation watch · exposure'},
+ {n:'Deposits',p:'/admin/deposits',t:'Deposits',sub:'Inbound transfers · confirmations · credits'},
+ {n:'Withdrawals',p:'/admin/withdrawals',t:'Withdrawals',sub:'Review queue · limits · two-operator approval'},
+ {n:'Assets',p:'/admin/assets',t:'Assets',sub:'Venue balances · hot / warm / cold · reconciliation'},
+ {n:'AI Ops',p:'/admin/ai-ops',t:'AI Ops',sub:'Model health · credit consumption · refusal rate'},
+ {n:'Notices & CS',p:'/admin/notices',t:'Notices & CS',sub:'Platform notices · support queue'},
+ {n:'Broadcast',p:'/admin/broadcast',t:'Broadcast',sub:'In-app and email announcements'},
+ {n:'Referral',p:'/admin/referral',t:'Referral',sub:'Codes · attribution · rebate payouts'},
+ {n:'Points',p:'/admin/points',t:'Points',sub:'Ledger · accrual rules · redemptions'},
+ {n:'Legal',p:'/admin/legal',t:'Legal',sub:'Policy versions · acceptance records'},
+ {n:'Auto trading',p:'/admin/autotrade',t:'Auto trading',sub:'Strategy runs · paper phase · safety rails'},
+ {n:'Activity',p:'/admin/activity',t:'Activity',sub:'Operator sessions · sensitive reads'},
+ {n:'System',p:'/admin/system',t:'System',sub:'Service health · latency · uptime'},
+ {n:'Audit',p:'/admin/audit',t:'Audit log',sub:'Every write · actor · target · before / after'},
+ {n:'Design ops',p:'/admin/design-ops',t:'Design ops',sub:'Token coverage · contrast budget · component inventory'},
+ {n:'Leaderboard',p:'/leaderboard',t:'Leaderboard',badge:'ADMIN',sub:'Ranking rules · eligibility · payout windows'}
+];
+/* ===================== helpers ===================== */
+var LIVE='<span class="pillst pillst--live">live</span>';
+var PART='<span class="pillst pillst--part">partial</span>';
+var MOCK='<span class="pillst pillst--mock">mock</span>';
+function kpi(k,v,s,a,isdash){
+ var acc=a?' data-a="'+a+'"':'';
+ var cls=isdash?'kpi__v dash':'kpi__v';
+ return '<div class="kpi"'+acc+'><div class="kpi__k">'+k+'</div><div class="'+cls+'">'+v+'</div><div class="kpi__s">'+s+'</div></div>';
+}
+function kpis(a){return '<div class="kpis">'+a.join('')+'</div>';}
+function card(hd,n,body,extra){
+ var head='<div class="card__hd"><h2>'+hd+'</h2><span class="sp"></span>';
+ if(n){head=head+'<span class="n">'+n+'</span>';}
+ head=head+(extra||'')+'</div>';
+ return '<section class="card">'+head+body+'</section>';
+}
+function table(cols,rows,empty){
+ var th='<tr>';
+ var i;
+ for(i=0;i<cols.length;i++){th=th+'<th class="'+(cols[i].l?'l':'')+'">'+cols[i].t+'</th>';}
+ th=th+'</tr>';
+ var head='<div class="tblwrap"><table class="tbl"><thead>'+th+'</thead>';
+ if(!rows||!rows.length){return head+'</table></div><div class="empty">'+empty+'</div>';}
+ var tb='';
+ var r,x,j;
+ for(i=0;i<rows.length;i++){
+  r=rows[i];
+  tb=tb+'<tr'+(r.hi?' data-hi="true"':'')+'>';
+  for(j=0;j<r.c.length;j++){tb=tb+'<td class="'+(cols[j].l?'l':'')+'">'+r.c[j]+'</td>';}
+  tb=tb+'</tr>';
+ }
+ return head+'<tbody>'+tb+'</tbody></table></div>';
+}
+function gate(msg,code){
+ var svg='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2.2 14.6 13.4H1.4Z"/><path d="M8 6.4v3.2M8 11.4v.1"/></svg>';
+ var c=code?'<span class="code">'+code+'</span>':'';
+ return '<div class="gate">'+svg+'<div class="in"><p>'+msg+c+'</p></div><button class="sbtn sbtn--sm js-retry" type="button">Retry</button></div>';
+}
+function st(kind,label){return '<span class="st st--'+kind+'"><span class="d"></span>'+label+'</span>';}
+function toolbar(){
+ var svg='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7" cy="7" r="4.6"/><path d="m10.6 10.6 3 3"/></svg>';
+ var s='<div style="padding:9px 11px;border-bottom:1px solid var(--border-subtle)" class="toolbar">';
+ s=s+'<div class="search">'+svg+'<input placeholder="Search name · email · ID" aria-label="Search"></div>';
+ s=s+'<select class="sel"><option>All statuses</option><option>Active</option><option>Pending</option><option>Suspended</option></select>';
+ s=s+'<select class="sel"><option>All exchanges</option><option>KuCoin</option><option>Bybit</option><option>None</option></select>';
+ s=s+'<select class="sel"><option>Newest</option><option>Oldest</option><option>Volume 30d</option></select>';
+ return s+'</div>';
+}
+function tabs(list){
+ var s='<div style="padding:0 11px 9px" class="toolbar"><div class="ftabs">';
+ var i;
+ for(i=0;i<list.length;i++){
+  s=s+'<button type="button" aria-pressed="'+(i===0)+'">'+list[i][0]+' <span class="n">'+list[i][1]+'</span></button>';
+ }
+ return s+'</div></div>';
+}
+function rule(k,v){return '<div class="frule"><span class="k">'+k+'</span><span>'+v+'</span><span class="sp"></span><button class="js-rmf" type="button">Remove</button></div>';}
+/* ===================== system rows ===================== */
+var SYS=[
+ ['WebSocket Gateway','ok','OK','12ms','99.984%',''],
+ ['Matching Engine','ok','OK','4ms','99.999%',''],
+ ['Risk Engine','ok','OK','8ms','99.980%',''],
+ ['AI Analyst Model','deg','DEGRADED','1240ms','99.640%','<span class="foot-note">response latency observed</span>'],
+ ['DB · Hot Shard','ok','OK','2ms','99.998%',''],
+ ['DB · Analytics','ok','OK','6ms','99.960%',''],
+ ['Static CDN','ok','OK','24ms','99.999%',''],
+ ['Nightly Batch','ok','OK','<span class="mono">—</span>','99.900%','<span class="foot-note">next run 03:00 UTC</span>'],
+ ['KYC Provider','ok','OK','840ms','99.920%','']
+];
+function bodySystem(){
+ var cols=[{t:'Service',l:1},{t:'Status',l:1},{t:'Latency'},{t:'Uptime'},{t:'Note',l:1}];
+ var rows=[];var i;
+ for(i=0;i<SYS.length;i++){
+  var r=SYS[i];
+  rows.push({c:[r[0],st(r[1],r[2]),'<span class="mono">'+r[3]+'</span>','<span class="mono">'+r[4]+'</span>',r[5]],hi:r[1]==='deg'});
+ }
+ var t=table(cols,rows,'No data');
+ return card('Real-time service status','9 services · click for detail',t,LIVE);
+}
+/* ===================== builders ===================== */
+function bodyHome(){
+ var k=kpis([
+  kpi('Total users','0','0 active · 0 pending · 0 suspended','brand'),
+  kpi('24h volume','<span class="mono">$0.00</span>','<span class="u">▲ 8.40%</span> vs yesterday'),
+  kpi('Flagged trades','0','0 tracked · Auto-review active','warn'),
+  kpi('Critical risk','0','0 positions in queue')
+ ]);
+ var g=gate('Overview figures could not be read, so none are shown. Revenue and signal counts are never estimated here.','overview read failed');
+ var lt=table([{t:'Time',l:1},{t:'User',l:1},{t:'Symbol',l:1},{t:'Side',l:1},{t:'Size'},{t:'Price'},{t:'Notional'},{t:'Flag',l:1}],[],
+  'No data');
+ var c1=card('Live trades','0 events in last minute · click row to inspect',lt,LIVE);
+ var c2=card('Risk queue','0 positions require attention',
+  '<div class="card__bd"><div class="empty">Nothing is queued. A position enters this queue only when the risk engine reads a margin ratio above the threshold — it is never pre-filled to look busy.</div></div>','');
+ var grid='<div class="grid2">'+c1+c2+'</div>';
+ return k+g+grid+bodySystem();
+}
+function bodyFees(){
+ var k=kpis([
+  kpi('Maker fee','0.020%','Base tier','brand'),
+  kpi('Taker fee','0.060%','Base tier'),
+  kpi('Broker rebate','—','Payback programme has not started',null,true),
+  kpi('Rebate paid 30d','<span class="mono">$0.00</span>','0 payouts','warn')
+ ]);
+ var rows=[
+  {c:['Base','<span class="mono">&lt; 50k</span>','<span class="mono">0.020%</span>','<span class="mono">0.060%</span>','<span class="mono">—</span>',st('ok','active')]},
+  {c:['Silver','<span class="mono">50k – 250k</span>','<span class="mono">0.018%</span>','<span class="mono">0.055%</span>','<span class="mono">—</span>',st('off','not enabled')]},
+  {c:['Gold','<span class="mono">250k – 1M</span>','<span class="mono">0.015%</span>','<span class="mono">0.050%</span>','<span class="mono">—</span>',st('off','not enabled')]},
+  {c:['Platinum','<span class="mono">&gt; 1M</span>','<span class="mono">0.012%</span>','<span class="mono">0.045%</span>','<span class="mono">—</span>',st('off','not enabled')]}
+ ];
+ var t=table([{t:'Tier',l:1},{t:'30d volume',l:1},{t:'Maker'},{t:'Taker'},{t:'Rebate share'},{t:'Status',l:1}],rows,'No data');
+ var c=card('Fee schedule','4 tiers',t,LIVE);
+ var g=gate('The rebate column reads <b>—</b> on every tier because the payback programme has not started. The schedule itself is live and enforced on order entry.','');
+ return k+c+g;
+}
+function bodyUsers(){
+ var g=gate('Your account does not have permission to read this. Nothing is shown rather than a stand-in.','admin access denied');
+ var k=kpis([
+  kpi('Customers','0','0 active · 0 pending · 0 suspended','brand'),
+  kpi('Paid subscribers','—','Needs a payments provider','long',true),
+  kpi('Exchange connected','—','No key connected yet',null,true),
+  kpi('KuCoin campaign participants','—','Campaign has not started','warn',true)
+ ]);
+ var cols=[{t:'ID',l:1},{t:'Customer',l:1},{t:'Plan',l:1},{t:'Points'},{t:'Payments'},{t:'Exchange',l:1},
+  {t:'KuCoin campaign',l:1},{t:'Volume 30d'},{t:'Last activity'},{t:'Flags',l:1},{t:'Status',l:1}];
+ var t=table(cols,[],'No data — the read was refused, so the table stays empty. It is not filled with placeholder customers.');
+ var tb=toolbar()+tabs([['All',0],['Active',0],['Pending',0],['Suspended',0]])+t;
+ var c=card('Users','All 0',tb,'<button class="sbtn sbtn--sm" type="button" disabled>+ Invite user · soon</button>');
+ return g+k+c;
+}
+function bodyTrades(){
+ var g=gate('Trade monitor reads the venue-side fill stream. No venue is connected, so there is nothing to stream and no sample feed is substituted.','no venue connected');
+ var k=kpis([
+  kpi('Events last minute','0','Live trades · 0 tracked','brand'),
+  kpi('Flagged trades','0','Auto-review active','warn'),
+  kpi('Auto-review actions','0','0 cleared · 0 escalated','long'),
+  kpi('Notional 24h','<span class="mono">$0.00</span>','Across 0 fills')
+ ]);
+ var cols=[{t:'Time',l:1},{t:'User',l:1},{t:'Symbol',l:1},{t:'Side',l:1},{t:'Size'},{t:'Price'},{t:'Notional'},{t:'Flag',l:1}];
+ var c=card('Live trades','0 events in last minute',table(cols,[],'No data — click a row to inspect once fills arrive.'),LIVE);
+ return g+k+c;
+}
+function bodyRisk(){
+ var k=kpis([
+  kpi('Critical risk','0','0 positions in queue','warn'),
+  kpi('Positions monitored','0','Across 2 chartable pairs'),
+  kpi('Auto-liquidations 24h','0','Risk engine active','long'),
+  kpi('Margin calls sent','—','Needs a live margin feed',null,true)
+ ]);
+ var c1=card('Risk queue','0 positions require attention',
+  '<div class="card__bd">'+rule('queue','positions with margin ratio ≥ 80%')
+  +'<div class="empty">Nothing is queued. A position enters this queue only when the risk engine reads a margin ratio above the threshold — it is never pre-filled to look busy.</div></div>',LIVE);
+ var rows=[
+  {c:['KuCoin','<span class="mono">0.00</span>','<span class="mono">0.00</span>','<span class="mono">—</span>',st('off','no keys')]},
+  {c:['Bybit','<span class="mono">0.00</span>','<span class="mono">0.00</span>','<span class="mono">—</span>',st('off','no keys')]}
+ ];
+ var t=table([{t:'Venue',l:1},{t:'Open notional'},{t:'Margin used'},{t:'Margin ratio'},{t:'Status',l:1}],rows,'No data');
+ var c2=card('Exposure by venue','2 venues',t,PART);
+ return k+c1+c2;
+}
+function bodyMoney(kind){
+ var cfg={
+  deposits:{t:'Deposits',k:[
+    kpi('Deposits 24h','0','0 credited','brand'),
+    kpi('Awaiting confirmations','0','Nothing pending'),
+    kpi('Value credited 24h','<span class="mono">$0.00</span>','Across 0 deposits'),
+    kpi('Rejected / returned','0','0 this week','warn')],
+   g:'Deposit reads come from the venue ledger. With no key connected the ledger is empty — we do not show seeded deposits in a money screen.',
+   cols:['Time','User','Venue','Asset','Amount','Confirmations','Tx']},
+  withdrawals:{t:'Withdrawals',k:[
+    kpi('Withdrawals 24h','0','0 paid','brand'),
+    kpi('Awaiting approval','0','0 of 2 operators signed'),
+    kpi('Value paid 24h','<span class="mono">$0.00</span>','Across 0 withdrawals'),
+    kpi('Blocked by limits','0','0 this week','warn')],
+   g:'Withdrawal payout needs two operators. This role holds one signature, so the queue can be read but never self-approved.',
+   cols:['Time','User','Venue','Asset','Amount','Address','Approvals','Status']},
+  assets:{t:'Assets',k:[
+    kpi('Hot wallet','<span class="mono">—</span>','No venue keys','brand',true),
+    kpi('Warm wallet','<span class="mono">—</span>','No venue keys',null,true),
+    kpi('Cold wallet','<span class="mono">—</span>','Held offline, not readable from here',null,true),
+    kpi('Reconcile drift','0','0 assets out of balance','long')],
+   g:'Wallet balances are read from the venue. Cold storage is deliberately not readable from the app, so its row stays a dash on purpose.',
+   cols:['Venue','Wallet','Asset','Balance','Reserved','Available','Last reconcile']}
+ };
+ var c=cfg[kind];
+ var cols=[];var i;
+ for(i=0;i<c.cols.length;i++){cols.push({t:c.cols[i],l:i===0||i===1});}
+ var t=table(cols,[],'No data — this screen reads the venue ledger directly. With no key connected there is nothing to show and nothing is invented to fill the space.');
+ var card1=card(c.t,'0 rows',t,LIVE);
+ return gate(c.g,'')+kpis(c.k)+card1;
+}
+function bodyAi(){
+ var k=kpis([
+  kpi('Model status','<span style="font-size:15px">DEGRADED</span>','Latency 1240ms · threshold 900ms','warn'),
+  kpi('Questions 24h','0','0 answered'),
+  kpi('Credits consumed','0','300 per question · 150 if nothing drawn','brand'),
+  kpi('Refusal rate','—','Needs answered questions',null,true)
+ ]);
+ var rows=[
+  {c:['AI Analyst','chart analysis + levels','<span class="mono">1240ms</span>',st('deg','degraded'),'<span class="foot-note">response latency observed</span>'],hi:true},
+  {c:['Embedding','context retrieval','<span class="mono">38ms</span>',st('ok','ok'),'']},
+  {c:['Classifier','flag triage','<span class="mono">21ms</span>',st('ok','ok'),'']}
+ ];
+ var t1=table([{t:'Model',l:1},{t:'Role',l:1},{t:'Latency'},{t:'Status',l:1},{t:'Note',l:1}],rows,'No data');
+ var c1=card('Model health','1 degraded',t1,PART);
+ var c2=card('Credit ledger','0 rows','<div class="card__bd"><div class="empty">No questions have been asked, so there is no ledger to show. Credits are charged per question and halved when nothing is drawn — the rule is enforced server-side, not by this screen.</div></div>','');
+ return k+c1+c2;
+}
+function bodyNotices(){
+ var k=kpis([
+  kpi('Open tickets','0','0 unassigned','brand'),
+  kpi('First reply median','—','No tickets yet',null,true),
+  kpi('Published notices','3','Legal set published','long'),
+  kpi('Scheduled','0','Nothing queued')
+ ]);
+ var t1=table([{t:'Opened',l:1},{t:'User',l:1},{t:'Subject',l:1},{t:'Age'},{t:'Assignee',l:1},{t:'Status',l:1}],[],
+  'No data — tickets appear here as they are opened.');
+ var c1=card('Support queue','0 open',t1,LIVE);
+ var rows=[
+  {c:['Terms of Service','legal','<span class="mono">v1</span>','all users',st('ok','published')]},
+  {c:['Privacy Policy','legal','<span class="mono">v1</span>','all users',st('ok','published')]},
+  {c:['Risk Disclosure','legal','<span class="mono">v1</span>','all users',st('ok','published')]}
+ ];
+ var t2=table([{t:'Notice',l:1},{t:'Kind',l:1},{t:'Published'},{t:'Audience',l:1},{t:'Status',l:1}],rows,'No data');
+ var c2=card('Platform notices','3 published',t2,'');
+ return k+c1+c2;
+}
+function bodyBroadcast(){
+ var k=kpis([
+  kpi('Sent 30d','0','0 announcements','brand'),
+  kpi('Delivered','—','Needs a verified email domain',null,true),
+  kpi('In-app reach','0','0 sessions'),
+  kpi('Drafts','0','Nothing staged')
+ ]);
+ var ta='<textarea style="width:100%;min-height:74px;padding:9px;border:1px solid var(--border-subtle);border-radius:var(--r-md);font-family:inherit;font-size:12px;background:var(--bg-input);outline:0" placeholder="Announcement body…"></textarea>';
+ var body='<div class="card__bd">'
+  +'<div class="frule"><span class="k">audience</span><span>all users</span><span class="sp"></span><button class="js-rmf" type="button">Change</button></div>'
+  +ta
+  +'<div style="display:flex;gap:7px"><button class="sbtn sbtn--brand js-act" type="button">Send in-app</button><button class="sbtn js-act" type="button">Save draft</button></div>'
+  +'<p class="foot-note" style="margin:0">Email delivery is disabled until the sending domain is verified, so the email option is not offered. In-app delivery works now.</p></div>';
+ var c1=card('Compose','in-app only',body,'');
+ var t=table([{t:'Sent',l:1},{t:'Subject',l:1},{t:'Channel',l:1},{t:'Audience',l:1},{t:'Read rate'}],[],
+  'No data');
+ var c2=card('History','0 sent',t,'');
+ return k+c1+c2;
+}
+function bodyReferral(){
+ var k=kpis([
+  kpi('Codes issued','2','1 per partner venue','brand'),
+  kpi('Attributed signups','0','0 converted'),
+  kpi('Rebate accrued','<span class="mono">$0.00</span>','Payback not started','warn'),
+  kpi('Paid out','<span class="mono">$0.00</span>','0 payouts')
+ ]);
+ var rows=[
+  {c:['<span class="mono">CXEEBJ8L</span>','KuCoin','platform','<span class="mono">0</span>','<span class="mono">0.00</span>','<span class="mono">0.00</span>',st('ok','active')]},
+  {c:['<span class="mono">Be001195</span>','Bybit','platform','<span class="mono">0</span>','<span class="mono">0.00</span>','<span class="mono">0.00</span>',st('ok','active')]}
+ ];
+ var t=table([{t:'Code',l:1},{t:'Venue',l:1},{t:'Owner',l:1},{t:'Signups'},{t:'Accrued'},{t:'Paid'},{t:'Status',l:1}],rows,'No data');
+ var c=card('Referral codes','2 active',t,LIVE);
+ var g=gate('<b>Be001195</b> is a Bybit API broker id, not a public campaign code. It is listed here for operations only and is shown to users on the Wallet card with that caveat attached.','');
+ return k+c+g;
+}
+function bodyPoints(){
+ var k=kpis([
+  kpi('Points outstanding','0','Across 0 accounts','brand'),
+  kpi('Accrued 30d','0','0 events'),
+  kpi('Redeemed 30d','0','0 redemptions'),
+  kpi('Accrual rule','—','No accrual code is deployed',null,true)
+ ]);
+ var t=table([{t:'Time',l:1},{t:'User',l:1},{t:'Event',l:1},{t:'Points'},{t:'Balance after'},{t:'Rule',l:1}],[],
+  'No data — the points ledger is empty and there is no accrual rule in the deployed build. We show the empty ledger rather than a rule that does not exist yet.');
+ var c=card('Points ledger','0 rows',t,MOCK);
+ return k+c;
+}
+function bodyLegal(){
+ var k=kpis([
+  kpi('Published documents','5','Terms · Privacy · Risk · Refund · Legal','brand'),
+  kpi('Acceptance records','0','0 users have accepted'),
+  kpi('Placeholders open','7','Business info 5 · transfer 2','warn'),
+  kpi('Next review','—','No date set',null,true)
+ ]);
+ var rows=[
+  {c:['Terms of Service','<span class="mono">v1</span>','<span class="mono">—</span>','<span class="mono">0</span>','<span class="mono">5</span>',st('deg','placeholders')],hi:true},
+  {c:['Privacy Policy','<span class="mono">v1</span>','<span class="mono">—</span>','<span class="mono">0</span>','<span class="mono">2</span>',st('deg','placeholders')],hi:true},
+  {c:['Risk Disclosure','<span class="mono">v1</span>','<span class="mono">—</span>','<span class="mono">0</span>','<span class="mono">0</span>',st('ok','complete')]},
+  {c:['Refund Policy','<span class="mono">v1</span>','<span class="mono">—</span>','<span class="mono">0</span>','<span class="mono">0</span>',st('ok','complete')]},
+  {c:['Legal notice','<span class="mono">v1</span>','<span class="mono">—</span>','<span class="mono">0</span>','<span class="mono">0</span>',st('ok','complete')]}
+ ];
+ var t=table([{t:'Document',l:1},{t:'Version',l:1},{t:'Effective'},{t:'Accepted'},{t:'Open placeholders',l:1},{t:'Status',l:1}],rows,'No data');
+ var c=card('Policy versions','5 documents',t,'');
+ var g=gate('Seven placeholders remain before these documents can be published as final: <b>5</b> business identity fields in Terms §16 and <b>2</b> cross-border transfer details in Privacy §5. They are flagged here so they cannot ship by accident.','');
+ return k+c+g;
+}
+function bodyAutotrade(){
+ var k=kpis([
+  kpi('Running strategies','0','Paper phase 1','brand'),
+  kpi('Paper fills 24h','0','0 fills'),
+  kpi('Rails tripped 24h','0','0 paused','long'),
+  kpi('Live strategies','0','Live trading is off','warn')
+ ]);
+ var t=table([{t:'Strategy',l:1},{t:'Symbol',l:1},{t:'TF',l:1},{t:'Bot',l:1},{t:'Buying',l:1},{t:'Selling',l:1},{t:'Net'},{t:'Status',l:1}],[],
+  'No data — a run appears here once an operator starts a strategy. Nothing is auto-started.');
+ var c1=card('Strategy runs','0 running',t,MOCK);
+ var body='<div class="card__bd" style="gap:7px">'
+  +rule('positions per strategy','3 max')
+  +rule('orders per day','50 max')
+  +rule('daily loss stop','pauses the strategy')
+  +rule('order routing','paper only')
+  +'<p class="foot-note" style="margin:0">A strategy that trips a rail is paused and logged. It is never silently skipped, and rails cannot be raised from this console.</p></div>';
+ var c2=card('Safety rails','enforced server-side',body,'');
+ return k+c1+c2;
+}
+function bodyActivity(){
+ var k=kpis([
+  kpi('Operator sessions','1','This session only','brand'),
+  kpi('Writes 24h','0','0 audited actions'),
+  kpi('Sensitive reads','0','Reads are not logged by default','warn'),
+  kpi('Blocked actions','0','0 permission refusals')
+ ]);
+ var rows=[
+  {c:['<span class="mono">design_1791706987515@example.com</span>','super','<span class="mono">just now</span>','<span class="mono">now</span>','<span class="mono">0</span>',st('ok','active')]}
+ ];
+ var t1=table([{t:'Operator',l:1},{t:'Role',l:1},{t:'Started'},{t:'Last seen'},{t:'Writes'},{t:'Status',l:1}],rows,'No data');
+ var c1=card('Operator sessions','1 active',t1,'');
+ var c2=card('Sensitive reads','not logged','<div class="card__bd"><div class="empty">Reads are not written to the activity log — only writes are. Turning read logging on would need a retention policy first, so it is off and stated here rather than silently absent.</div></div>','');
+ return k+c1+c2;
+}
+function bodyAudit(){
+ var k=kpis([
+  kpi('Entries 24h','0','0 writes'),
+  kpi('Actors','0','No writes yet'),
+  kpi('Reversals','0','0 undone actions','long'),
+  kpi('Retention','—','No policy configured',null,true)
+ ]);
+ var t=table([{t:'Time',l:1},{t:'Actor',l:1},{t:'Action',l:1},{t:'Target',l:1},{t:'Before',l:1},{t:'After',l:1},{t:'Result',l:1}],[],
+  'No data — every write on this console lands here with actor, target and the before/after values. Nothing has been written yet.');
+ var c=card('Audit log','0 entries',t,LIVE);
+ return k+c;
+}
+function bodyDesignOps(){
+ var k=kpis([
+  kpi('Tokens defined','323','16 selector blocks','brand'),
+  kpi('Components inventoried','0','Not yet catalogued',null,true),
+  kpi('Contrast failures','0','All audited pairs ≥ 5.3:1','long'),
+  kpi('Drift since last sync','—','No baseline stored',null,true)
+ ]);
+ var rows1=[
+  {c:['text-secondary on bg-panel','<span class="mono">9.93</span>','4.5','body copy',st('ok','pass')]},
+  {c:['text-tertiary on bg-panel','<span class="mono">6.31</span>','4.5','labels, meta',st('ok','pass')]},
+  {c:['brand on bg-surface','<span class="mono">6.41</span>','4.5','links, active',st('ok','pass')]},
+  {c:['long / short on bg-panel','<span class="mono">5.88</span>','3.0','table cells',st('ok','pass')]},
+  {c:['table header on bg-sunken','<span class="mono">5.88</span>','4.5','9.5px caps',st('ok','pass')]}
+ ];
+ var t1=table([{t:'Pair',l:1},{t:'Ratio'},{t:'Target'},{t:'Where',l:1},{t:'Status',l:1}],rows1,'No data');
+ var c1=card('Contrast budget','audited pairs',t1,'');
+ var rows2=[
+  {c:['surface','<span class="mono">6</span>','all screens','<span class="mono">0</span>',st('ok','clean')]},
+  {c:['text','<span class="mono">4</span>','all screens','<span class="mono">0</span>',st('ok','clean')]},
+  {c:['border','<span class="mono">3</span>','all screens','<span class="mono">0</span>',st('ok','clean')]},
+  {c:['brand scale','<span class="mono">10</span>','CTAs, links','<span class="mono">0</span>',st('ok','clean')]},
+  {c:['chart palette','<span class="mono">21</span>','charts only','<span class="mono">0</span>',st('ok','clean')]},
+  {c:['neutrals','<span class="mono">14</span>','all screens','<span class="mono">0</span>',st('ok','clean')]}
+ ];
+ var t2=table([{t:'Group',l:1},{t:'Tokens'},{t:'Used in',l:1},{t:'Orphans'},{t:'Status',l:1}],rows2,'No data');
+ var c2=card('Token coverage','323 tokens',t2,'');
+ return k+c1+c2;
+}
+function bodyLeaderboard(){
+ var k=kpis([
+  kpi('Ranked traders','0','0 eligible'),
+  kpi('Ranking metric','—','No rule configured',null,true),
+  kpi('Payout window','—','Not scheduled',null,true),
+  kpi('Disqualified','0','0 flagged','warn')
+ ]);
+ var t=table([{t:'Rank'},{t:'Trader',l:1},{t:'Metric'},{t:'Volume 30d'},{t:'Eligibility',l:1},{t:'Status',l:1}],[],
+  'No data — ranking needs a configured metric and at least one eligible account. Neither exists yet, so the table is empty rather than seeded with names.');
+ var c=card('Ranking','0 rows',t,PART);
+ var g=gate('This route is not in the public menu — it is reachable by URL for admins only. Publishing a ranking without a fixed metric and payout rule would invite disputes, so both are gated here first.','');
+ return k+c+g;
+}
+/* ===================== render ===================== */
+var BUILDERS=[bodyHome,bodyFees,bodyUsers,bodyTrades,bodyRisk,
+ function(){return bodyMoney('deposits');},
+ function(){return bodyMoney('withdrawals');},
+ function(){return bodyMoney('assets');},
+ bodyAi,bodyNotices,bodyBroadcast,bodyReferral,bodyPoints,bodyLegal,bodyAutotrade,
+ bodyActivity,bodySystem,bodyAudit,bodyDesignOps,bodyLeaderboard];
+var AUDIT=[];
+var CUR=0;
+function audit(action,target){
+ AUDIT.unshift({t:new Date().toTimeString().slice(0,8),a:action,g:target});
+ renderAudit();
+}
+function renderAudit(){
+ var h=document.getElementById('admAudit');
+ if(!h)return;
+ if(!AUDIT.length){h.innerHTML='<p class="foot-note" style="margin:0">No writes this session.</p>';return;}
+ var out='';var i;
+ for(i=0;i<Math.min(7,AUDIT.length);i++){
+  out=out+'<div class="auditline"><span class="t">'+AUDIT[i].t+'</span><span class="m"><b>'+AUDIT[i].a+'</b> → '+AUDIT[i].g+'</span></div>';
+ }
+ h.innerHTML=out;
+}
+function render(i){
+ CUR=i;
+ var items=document.querySelectorAll('.aitem');var k;
+ for(k=0;k<items.length;k++){
+  items[k].setAttribute('aria-selected',(+items[k].dataset.r===i)?'true':'false');
+ }
+ var r=R[i];
+ var svg='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="5.6"/><path d="M8 7.4v3.2M8 5.6v.1"/></svg>';
+ var hd='<div class="hd"><div style="min-width:0">'
+  +'<nav class="crumb"><a href="#/trade">Home</a><span class="sep">/</span><span>Admin</span><span class="sep">/</span><span>'+r.n+'</span></nav>'
+  +'<h1>'+r.t+(r.badge?' <span class="tagadm">'+r.badge+'</span>':'')+'</h1>'
+  +'<p class="sub">'+r.sub+'</p></div><span class="sp"></span>'
+  +'<div class="hdacts"><span class="cmdk" id="admCmdk">'+svg+'Search or jump… <kbd>Ctrl</kbd><kbd>K</kbd></span>'
+  +'<span class="foot-note" style="white-space:nowrap">Last refresh · just now</span>'
+  +'<button class="sbtn js-refresh" type="button">Refresh</button></div></div>'
+  +'<p class="foot-note" style="margin:-4px 0 0"><span class="mono">'+r.p+'</span></p>';
+ document.getElementById('admCol').innerHTML=hd+BUILDERS[i]();
+ wire();
+}
+function wire(){
+ var acts=document.querySelectorAll('.js-act');var i;
+ for(i=0;i<acts.length;i++){
+  (function(b){
+   b.addEventListener('click',function(){
+    var t=b.textContent.trim();
+    b.textContent='Done';b.style.color='var(--brand)';b.style.borderColor='var(--brand)';
+    audit(t,R[CUR].t);
+    setTimeout(function(){b.textContent=t;b.style.color='';b.style.borderColor='';},1400);
+   });
+  })(acts[i]);
+ }
+ var rms=document.querySelectorAll('.js-rmf');
+ for(i=0;i<rms.length;i++){
+  (function(b){
+   b.addEventListener('click',function(){
+    var row=b.closest('.frule');
+    if(row){row.style.opacity='.42';}
+    audit('filter removed',R[CUR].t);
+   });
+  })(rms[i]);
+ }
+ var rts=document.querySelectorAll('.js-retry');
+ for(i=0;i<rts.length;i++){
+  (function(b){
+   b.addEventListener('click',function(){
+    b.textContent='Refused again';b.style.color='oklch(44% .115 75)';
+    setTimeout(function(){b.textContent='Retry';b.style.color='';},1500);
+   });
+  })(rts[i]);
+ }
+ var rfs=document.querySelectorAll('.js-refresh');
+ for(i=0;i<rfs.length;i++){
+  (function(b){
+   b.addEventListener('click',function(){
+    b.textContent='Refreshed';
+    setTimeout(function(){b.textContent='Refresh';},1200);
+   });
+  })(rfs[i]);
+ }
+ var ck=document.getElementById('admCmdk');
+ if(ck){ck.addEventListener('click',openCmdk);}
+ var ft=document.querySelectorAll('.ftabs button');
+ for(i=0;i<ft.length;i++){
+  (function(b){
+   b.addEventListener('click',function(){
+    var sib=b.closest('.ftabs').querySelectorAll('button');var j;
+    for(j=0;j<sib.length;j++){sib[j].setAttribute('aria-pressed','false');}
+    b.setAttribute('aria-pressed','true');
+   });
+  })(ft[i]);
+ }
+}
+/* ===================== command menu ===================== */
+var cmdkSel=0;
+function cmdkItems(q){
+ var out=[];var i;
+ for(i=0;i<R.length;i++){out.push({i:i,t:R[i].t,r:'route',s:R[i].p});}
+ out.push({t:'Refresh current view',r:'action',s:'no write'});
+ out.push({t:'Export current table (CSV)',r:'action',s:'read only'});
+ if(!q){return out;}
+ q=q.toLowerCase();
+ var f=[];var x;
+ for(i=0;i<out.length;i++){
+  x=out[i];
+  if(x.t.toLowerCase().indexOf(q)>-1||x.s.toLowerCase().indexOf(q)>-1){f.push(x);}
+ }
+ return f;
+}
+function renderCmdk(q){
+ var items=cmdkItems(q);
+ var h=document.getElementById('cmdkList');
+ cmdkSel=0;
+ if(!items.length){h.innerHTML='<div class="foot-note" style="padding:12px">Nothing matched that.</div>';return;}
+ var out='';var i,x;
+ for(i=0;i<items.length;i++){
+  x=items[i];
+  var di=(x.i!=null)?x.i:'';
+  out=out+'<button class="cmdk-i" type="button" data-i="'+di+'" data-t="'+x.t+'" aria-selected="'+(i===0)+'">'
+   +'<span>'+x.t+'</span><span class="sp"></span><span class="r">'+x.r+'</span>'
+   +'<span class="mono" style="font-size:9.5px;color:var(--text-tertiary)">'+x.s+'</span></button>';
+ }
+ h.innerHTML=out;
+ var bs=h.querySelectorAll('.cmdk-i');
+ for(i=0;i<bs.length;i++){
+  (function(b){
+   b.addEventListener('click',function(){
+    var di2=b.dataset.i;
+    if(di2!==''){render(+di2);}else{audit(b.dataset.t,R[CUR].t);}
+    closeCmdk();
+   });
+  })(bs[i]);
+ }
+}
+function openCmdk(){
+ document.getElementById('cmdkPop').setAttribute('data-open','true');
+ var q=document.getElementById('cmdkQ');
+ q.value='';renderCmdk('');q.focus();
+}
+function closeCmdk(){document.getElementById('cmdkPop').setAttribute('data-open','false');}
+/* ===================== boot ===================== */
+var its=document.querySelectorAll('.aitem');var bi;
+for(bi=0;bi<its.length;bi++){
+ (function(b){b.addEventListener('click',function(){render(+b.dataset.r);});})(its[bi]);
+}
+document.getElementById('cmdkQ').addEventListener('input',function(){renderCmdk(this.value);});
+document.getElementById('cmdkPop').addEventListener('click',function(e){if(e.target===this){closeCmdk();}});
+document.addEventListener('keydown',function(e){
+ var pop=document.getElementById('cmdkPop');
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCmdk();return;}
+ if(e.key==='Escape'){closeCmdk();}
+ if(pop.getAttribute('data-open')==='true'&&e.key==='Enter'){
+  var sel=document.querySelector('.cmdk-i[aria-selected="true"]');
+  if(sel){sel.click();}
+  return;
+ }
+ if(pop.getAttribute('data-open')==='true'&&(e.key==='ArrowDown'||e.key==='ArrowUp')){
+  e.preventDefault();
+  var all=document.querySelectorAll('.cmdk-i');
+  if(!all.length){return;}
+  all[cmdkSel].setAttribute('aria-selected','false');
+  cmdkSel=(cmdkSel+(e.key==='ArrowDown'?1:-1)+all.length)%all.length;
+  all[cmdkSel].setAttribute('aria-selected','true');
+  all[cmdkSel].scrollIntoView({block:'nearest'});
+ }
+});
+render(0);renderAudit();
+
+})();
+</script>
+</body>
+</html>
