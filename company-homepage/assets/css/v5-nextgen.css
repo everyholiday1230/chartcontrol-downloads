@@ -1,0 +1,415 @@
+/* =========================================================
+   BEOMONNURI v5 — NEXTGEN
+   Builds on v4 (ai-frontier.css). Adds:
+   - GPU neural activation viz layer
+   - 3D cylinder partner marquee
+   - Live LLM hero terminal
+   - Mouse trail particle layer
+   - Chromatic aberration SVG filter
+   - Sound toggle
+   - Advanced scroll-linked transforms
+   ========================================================= */
+
+/* ===== Chromatic aberration filter wrapper ===== */
+.chroma-shift {
+  filter: url(#chroma);
+  transition: filter 0.2s;
+}
+
+/* ============================================================
+   CROSS-DOCUMENT VIEW TRANSITIONS (Chrome 126+)
+   When the browser navigates between pages on the same origin,
+   the browser automatically snapshots the old page and animates
+   into the new page. Shared elements (matching view-transition-name)
+   morph from one position/size to the other.
+   ============================================================ */
+@view-transition {
+  navigation: auto;
+}
+
+/* Default root transition — soft crossfade + scale */
+::view-transition-old(root) {
+  animation: vt-out 0.45s cubic-bezier(.7, 0, .2, 1) both;
+}
+::view-transition-new(root) {
+  animation: vt-in 0.55s cubic-bezier(.4, 0, .1, 1) both;
+}
+@keyframes vt-out {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-12px) scale(0.985); filter: blur(3px); }
+}
+@keyframes vt-in {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.99); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* Named shared elements — these morph from page to page */
+.brand               { view-transition-name: brand; }
+.partner-marquee     { view-transition-name: partner-marquee; }
+nav.top              { view-transition-name: nav-top; }
+footer               { view-transition-name: footer; }
+.scroll-progress     { view-transition-name: scroll-progress; }
+
+/* Smooth morph for shared elements */
+::view-transition-old(brand),
+::view-transition-new(brand),
+::view-transition-old(nav-top),
+::view-transition-new(nav-top),
+::view-transition-old(partner-marquee),
+::view-transition-new(partner-marquee),
+::view-transition-old(footer),
+::view-transition-new(footer),
+::view-transition-old(ai-widget),
+::view-transition-new(ai-widget),
+::view-transition-old(status-orb),
+::view-transition-new(status-orb),
+::view-transition-old(scroll-progress),
+::view-transition-new(scroll-progress) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Make the morphing extra smooth */
+@media all {
+  ::view-transition-group(brand),
+  ::view-transition-group(nav-top),
+  ::view-transition-group(partner-marquee),
+  ::view-transition-group(footer),
+  ::view-transition-group(ai-widget),
+  ::view-transition-group(status-orb) {
+    animation-duration: 0.55s;
+    animation-timing-function: cubic-bezier(.4, 0, .1, 1);
+  }
+}
+
+/* Reduced motion: instant */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+/* ===== Sound + theme toggle bar (floating top-left of hero {
+  position: absolute; top: 24px; right: 50%; transform: translateX(50%);
+  z-index: 50;
+  display: flex; gap: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ===== Hero LLM Terminal ===== */
+
+
+/* ===== Neural activation overlay (canvas) =====
+   2026-09-21 운영 요청: 랜덤 빨간 점 깜빡임이 산만하다 — 다시 비활성화.
+   마우스 반응 배경은 liquid-hero(z-index:2)와 GPU 입자가 담당한다. */
+#neural-grid {
+  display: none;
+}
+
+/* ===== Global GPU particles (covers full viewport on all pages) ===== */
+#gpu-particles {
+  opacity: 0.85;          /* default — appropriate over hero */
+  transition: opacity 0.6s ease;
+}
+/* On non-home pages, particles are subtler */
+body:not(.has-hero) #gpu-particles {
+  opacity: 0.55;
+}
+/* Mobile: turn down */
+@media (max-width: 700px) {
+  #gpu-particles { opacity: 0.4; }
+}
+@media (hover: none) {
+  /* On touch devices, particles only react to taps — keep them visible but subtle */
+  #gpu-particles { opacity: 0.35; }
+}
+
+/* ===== GLSL Liquid Hero Layer ===== */
+#liquid-hero {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.8;
+  mix-blend-mode: multiply;
+  display: block;
+}
+
+/* ===== Three.js Refraction Glass Orbs ===== */
+#glass-orbs {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+#glass-orbs canvas { width: 100%; height: 100%; display: block; }
+
+/* ===== Mouse trail canvas ===== */
+#mouse-trail {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+  mix-blend-mode: multiply;
+  display: none !important;
+}
+@media (hover: none) { #mouse-trail { display: none; } }
+
+/* ===== 3D Cylinder Partner Marquee ===== */
+.partner-cylinder {
+  position: relative;
+  height: 260px;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(146,18,48,0.04), transparent 70%),
+    var(--bg);
+  border-top: 1px solid var(--paper);
+  border-bottom: 1px solid var(--paper);
+  overflow: hidden;
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+}
+.partner-cylinder::before,
+.partner-cylinder::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 180px;
+  z-index: 4; pointer-events: none;
+}
+.partner-cylinder::before { left: 0; background: linear-gradient(90deg, var(--bg) 25%, transparent); }
+.partner-cylinder::after  { right: 0; background: linear-gradient(-90deg, var(--bg) 25%, transparent); }
+
+.partner-cylinder-head {
+  position: absolute; left: 32px; top: 50%; transform: translateY(-50%);
+  z-index: 5;
+  background: var(--bg);
+  padding: 8px 14px 8px 0;
+  border-right: 1px solid var(--mute-line);
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--acid);
+  display: flex; align-items: center; gap: 10px;
+}
+.partner-cylinder-head::before {
+  content: ''; width: 7px; height: 7px; background: var(--acid); border-radius: 50%;
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+.cylinder-stage {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) rotateY(0deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.cylinder-face {
+  position: absolute;
+  width: 260px; height: 140px;
+  left: -130px; top: -70px;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 22px;
+  background: linear-gradient(180deg, rgba(246,244,239,0.95), rgba(236,232,223,0.85));
+  border: 1px solid var(--paper);
+  box-shadow:
+    0 20px 40px -10px rgba(13,13,13,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: box-shadow 0.3s;
+}
+.cylinder-face::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+.cylinder-face .logo-mark {
+  width: auto;
+  height: 46px;
+  max-width: 210px;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  /* 3D perspective 변환(translateZ)이 걸린 조상 요소 안에서 이미지가
+     서브픽셀 확대/블러로 렌더링되는 것을 완화 (모바일에서 두드러짐) */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ---- Per-logo optical normalization (aspect ratio preserved) ----
+   Square/symbol-over-text logos read small at a shared height,
+   so they get a larger height. Wide wordmarks get a smaller height
+   plus a max-width cap so nothing overpowers the row. */
+
+/* Square / vertical (symbol + text stacked) — boost height */
+.cylinder-face .logo-mark.logo-mss,
+.cylinder-face .logo-mark.logo-moel,
+.cylinder-face .logo-mark.logo-edu-dku {
+  height: 72px;
+  max-width: 150px;
+}
+.cylinder-face .logo-mark.logo-lab-knl {
+  height: 64px;
+  max-width: 160px;
+}
+
+/* Wide wordmarks — constrain by width, modest height */
+.cylinder-face .logo-mark.logo-gov-gg,
+.cylinder-face .logo-mark.logo-startup,
+.cylinder-face .logo-mark.logo-inv-posco,
+.cylinder-face .logo-mark.logo-fin-nh {
+  height: 40px;
+  max-width: 196px;
+}
+/* 청년재단: 별 심볼 + 글자 세로 구성 → 조금 더 크게 */
+.cylinder-face .logo-mark.logo-youth-foundation {
+  height: 80px;
+  max-width: 185px;
+}
+
+/* Extra-wide wordmarks — cap width tighter, smaller height */
+.cylinder-face .logo-mark.logo-kiss {
+  height: 34px;
+  max-width: 210px;
+}
+.cylinder-face .logo-mark.logo-localmotive {
+  height: 40px;
+  max-width: 180px;
+}
+
+/* 대한상공회의소 로고 원본 외곽 네모(배경 박스) 시각 최소화 */
+/* 2026-09-21: 공식 CI 벡터에서 추출한 여백 없는 고해상본(1596x787, 비율 2.03)으로
+   교체됨. 구판 흐린 네모 여백을 잘라내던 clip-path 불필요 — 가로형 wordmark
+   사이즈 규격(gov 계열 40px)과 동일 레벨로 맞춰 다른 로고와 크기 균형을 맞춘다. */
+/* 2026-09-21 운영 요청: 대한상의 로고를 다른 가로형보다 크게 — 52px (기존 사이즈) */
+/* 2026-09-21: 세로형 로고(중기부·고용노동부 72px)와 동일 높이로 맞춰
+   실린더 안에서 크기 균형 확대 — 가로형이므로 폭은 자연히 넓어 균형이 맞다. */
+.cylinder-face .logo-mark.logo-korcham {
+  height: 72px;
+  max-width: 150px;
+}
+
+.cylinder-face .meta,
+.cylinder-face .meta .cat,
+.cylinder-face .meta .name {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .partner-cylinder { height: 140px; perspective: 900px; }
+  .cylinder-face { width: 160px; height: 70px; left: -80px; top: -35px; padding: 0 12px; }
+  .cylinder-face .logo-mark { width: 120px; height: 34px; max-width: none; max-height: none; object-fit: contain; object-position: center; }
+  .cylinder-face .logo-mark.logo-edu-dku,
+  .cylinder-face .logo-mark.logo-lab-knl,
+  .cylinder-face .logo-mark.logo-youth-foundation,
+  .cylinder-face .logo-mark.logo-moel,
+  .cylinder-face .logo-mark.logo-korcham {
+    transform: scale(1.2);
+  }
+
+  /* two-logo rework: youth-foundation + localmotive */
+  .cylinder-face .logo-mark.logo-youth-foundation {
+    transform: scale(1.28);
+  }
+
+  .cylinder-face .logo-mark.logo-localmotive {
+    width: 112px;
+    height: 30px;
+    transform: none;
+  }
+  .partner-cylinder-head { display: none; }
+}
+
+/* ===== System status orb (bottom-left floating live indicator) ===== */
+
+@keyframes pulse-orb {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(16,185,129,0.3), 0 0 12px rgba(16,185,129,0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(16,185,129,0.1), 0 0 20px rgba(16,185,129,0.8); }
+}
+
+/* ===== Section transition slabs ===== */
+.slab-divider {
+  height: 80px;
+  background:
+    linear-gradient(180deg, var(--bg), var(--bg-deep)),
+    repeating-linear-gradient(90deg, transparent 0, transparent 60px, rgba(146,18,48,0.05) 60px, rgba(146,18,48,0.05) 61px);
+  position: relative;
+  overflow: hidden;
+}
+.slab-divider::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--acid), transparent);
+  transform: translateY(-50%);
+  animation: slab-shine 4s ease-in-out infinite;
+}
+@keyframes slab-shine {
+  0%, 100% { transform: translateY(-50%) translateX(-100%); }
+  50% { transform: translateY(-50%) translateX(100%); }
+}
+
+/* ===== Tilt / parallax cards ===== */
+.tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(.2,.7,.2,1);
+}
+
+/* ===== Live "thinking" log ticker (subtle {
+  background: rgba(13,13,13,0.95);
+  color: var(--bg);
+  padding: 10px 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(246,244,239,0.1);
+  border-bottom: 1px solid rgba(246,244,239,0.1);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+@keyframes thinking-scroll {
+  to { transform: translateX(-50%); }
+}
+
+/* ===== Container quary based fluid sizing ===== */
+@container (max-width: 700px) {
+  .svc h3 { font-size: 22px; }
+}
+.svc, .prod-detail .pd-cell { container-type: inline-size; }
+
+/* ===== Animated CSS variable accent for sections ===== */
+@property --acc-x { syntax: '<percentage>'; initial-value: 50%; inherits: false; }
+@property --acc-y { syntax: '<percentage>'; initial-value: 50%; inherits: false; }
+
+.svc {
+  background:
+    radial-gradient(circle at var(--acc-x) var(--acc-y), rgba(146,18,48,0.02), transparent 60%),
+    var(--bg);
+  transition: --acc-x 0.6s ease, --acc-y 0.6s ease, background 0.4s;
+}
+
+/* ===== Scroll progress bar at the very top ===== */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: transparent;
+  z-index: 200;
+  pointer-events: none;
+}
+.scroll-progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--acid), var(--acid-bright), var(--plasma));
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+  transition: transform 0.06s linear;
+  box-shadow: 0 0 12px rgba(146,18,48,0.6);
+}
+
+/* =========================================================
+   모션 OFF 훅 (WCAG 2.3.1 경계 / 2.3.3)
+   ai-frontier.js의 BN_MOTION이 <html data-motion="off">를 설정하면 이 파일의
+   점멸(blink) 애니메이션(약 3회/초 포함)을 정지한다.
+   ========================================================= */
+
